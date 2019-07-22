@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ico">
+      <UniqueIdentifier>{96a3589f-7ea3-4f16-84e1-fea054a3f369}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MainForm.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CheckBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MainForm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CheckBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\BottomCenter.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\BottomLeft.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\BottomRight.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Close.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Left.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Right.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\TopCenter_s.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\TopLeft_s.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\TopRight_s.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="ico\cb.bmp">
+      <Filter>ico</Filter>
+    </Image>
+    <Image Include="ico\cb_2.bmp">
+      <Filter>ico</Filter>
+    </Image>
+    <Image Include="ico\rb.bmp">
+      <Filter>ico</Filter>
+    </Image>
+    <Image Include="ico\rb_2.bmp">
+      <Filter>ico</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MainForm.resx">
+      <Filter>Resource Files</Filter>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
