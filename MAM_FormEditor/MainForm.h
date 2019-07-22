@@ -250,6 +250,7 @@ private: System::Void pbDrawWindow_MouseMove(System::Object^  sender, System::Wi
 }
 private: System::Void pbDrawWindow_MouseUp(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
 	window->MouseUp(e);
+	propertyGrid->Refresh();
 }
 private: System::Void pbDrawWindow_MouseDown(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
 	window->MouseDown(e);

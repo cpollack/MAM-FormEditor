@@ -1,5 +1,15 @@
 #pragma once
 
+enum DragMode {
+	dmNone,
+	dmDrag,
+	dmW,
+	dmE,
+	dmN,
+	dmS,
+	//corner drag?
+};
+
 public ref class CWindow {
 public: //Properties
 	property int Width;
@@ -20,6 +30,7 @@ public:
 private:
 	System::Drawing::Point position;
 	bool dragging = false;
+	int dragMode = dmNone;
 	System::Drawing::Point dragOffset;
 
 	System::Drawing::Image ^top, ^bottom, ^left, ^right;

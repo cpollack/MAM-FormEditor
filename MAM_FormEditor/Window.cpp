@@ -76,20 +76,65 @@ Cursor^ CWindow::MouseMove(System::Windows::Forms::MouseEventArgs^ e) {
 	}
 
 	if (dragging) {
-		position = Point(e->X - dragOffset.X, e->Y - dragOffset.Y);
+		int adjustWidth, adjustHeight;
+		switch (dragMode) {
+		case dmDrag: 
+			position = Point(e->X - dragOffset.X, e->Y - dragOffset.Y);
+			break;
+		case dmN:
+			adjustHeight = e->Y - position.Y - dragOffset.Y;
+			position = Point(position.X, position.Y + adjustHeight);
+			Height -= adjustHeight;
+			dragOffset.Y = e->Y - position.Y;
+			break;
+		case dmS:
+			adjustHeight = e->Y - position.Y - dragOffset.Y;
+			Height += adjustHeight;
+			dragOffset.Y += adjustHeight;
+			break;
+		case dmW:
+			adjustWidth = e->X - position.X - dragOffset.X;
+			position = Point(position.X + adjustWidth, position.Y);
+			Width -= adjustWidth;
+			dragOffset.X = e->X - position.X;
+			break;
+		case dmE:
+			adjustWidth = e->X - position.X - dragOffset.X;
+			Width += adjustWidth;
+			dragOffset.X += adjustWidth;
+			break;
+		}
 	}
 
 	return cursor;
 }
 
 void CWindow::MouseDown(System::Windows::Forms::MouseEventArgs^ e) {
-	if (e->Y < position.Y || e->Y > position.Y + top->Height) return;
-	dragOffset = Point(e->X - position.X, e->Y - position.Y);
-	dragging = true;
+	if (e->X >= position.X && e->X <= position.X + 2) {
+		dragMode = dmW;
+	} 
+	else if (e->X >= position.X + Width - 2 && e->X <= position.X + Width) {
+		dragMode = dmE;
+	}
+	else if (e->Y >= position.Y && e->Y <= position.Y + 2) {
+		dragMode = dmN;
+	}
+	else if (e->Y >= position.Y + Height - 2 && e->Y <= position.Y + Height) {
+		dragMode = dmS;
+	}
+	else if (e->Y > position.Y + 2 && e->Y <= position.Y + top->Height) {
+		dragMode = dmDrag;
+	}
+
+	if (dragMode != dmNone) {
+		dragOffset = Point(e->X - position.X, e->Y - position.Y);
+		dragging = true;
+	}
 }
 
 void CWindow::MouseUp(System::Windows::Forms::MouseEventArgs^ e) {
 	dragging = false;
+	dragMode = dmNone;
 }
 
 /*private: System::Void LogoutForm_MouseDown(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
