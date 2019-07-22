@@ -1,6 +1,7 @@
 #include "Window.h"
 #include "MainForm.h"
 
+using namespace System::Windows::Forms;
 using namespace System::Drawing;
 using namespace MAM_FormEditor;
 
@@ -58,3 +59,50 @@ void CWindow::Draw(PictureBox ^drawable) {
 	RectangleF bottomRightRect = RectangleF(position.X + (Width - bottomRight->Width), position.Y + (Height - bottomRight->Height), bottomRight->Width, bottomRight->Height);
 	gr->DrawImage(bottomRight, bottomRightRect);
 }
+
+Cursor^ CWindow::MouseMove(System::Windows::Forms::MouseEventArgs^ e) {
+	Cursor^ cursor = Cursors::Default;
+
+	if (e->X >= position.X && e->X <= position.X + Width 
+		&& e->Y >= position.Y && e->Y <= position.Y + Height) {
+
+		if (e->X >= position.X && e->X <= position.X + 2
+			|| e->X >= position.X + Width - 2 && e->X <= position.X + Width) {
+			cursor = Cursors::SizeWE;
+		} else if (e->Y >= position.Y && e->Y <= position.Y + 2
+			|| e->Y >= position.Y + Height - 2 && e->Y <= position.Y + Height) {
+			cursor = Cursors::SizeNS;
+		}
+	}
+
+	if (dragging) {
+		position = Point(e->X - dragOffset.X, e->Y - dragOffset.Y);
+	}
+
+	return cursor;
+}
+
+void CWindow::MouseDown(System::Windows::Forms::MouseEventArgs^ e) {
+	if (e->Y < position.Y || e->Y > position.Y + top->Height) return;
+	dragOffset = Point(e->X - position.X, e->Y - position.Y);
+	dragging = true;
+}
+
+void CWindow::MouseUp(System::Windows::Forms::MouseEventArgs^ e) {
+	dragging = false;
+}
+
+/*private: System::Void LogoutForm_MouseDown(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
+	if (e->Y > 25) return;
+	dragOffset = Point(e->X, e->Y);
+	dragging = true;
+}
+private: System::Void LogoutForm_MouseMove(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
+	if (!dragging) return;
+
+	Point currentScreenPos = PointToScreen(e->Location);
+	Location = Point(currentScreenPos.X - dragOffset.X, currentScreenPos.Y - dragOffset.Y);
+}
+private: System::Void LogoutForm_MouseUp(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
+	dragging = false;
+	}*/
