@@ -10,6 +10,8 @@ CWindow::CWindow() {
 	Height = 200;
 	position = Point(10, 10);
 
+	widgets = gcnew ArrayList();
+	
 	top = Image::FromFile("res\\TopCenter_s.bmp");
 	bottom = Image::FromFile("res\\BottomCenter.bmp");
 	left = Image::FromFile("res\\Left.bmp");
@@ -137,17 +139,20 @@ void CWindow::MouseUp(System::Windows::Forms::MouseEventArgs^ e) {
 	dragMode = dmNone;
 }
 
-/*private: System::Void LogoutForm_MouseDown(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
-	if (e->Y > 25) return;
-	dragOffset = Point(e->X, e->Y);
-	dragging = true;
-}
-private: System::Void LogoutForm_MouseMove(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
-	if (!dragging) return;
+Object^ CWindow::Click(System::Windows::Forms::MouseEventArgs^ e, int addMode) {
+	if (dragging) return nullptr;
+	if (e->X < position.X || e->X > position.X + Width || e->Y < position.Y || e->Y > position.Y + Height) return nullptr;
 
-	Point currentScreenPos = PointToScreen(e->Location);
-	Location = Point(currentScreenPos.X - dragOffset.X, currentScreenPos.Y - dragOffset.Y);
-}
-private: System::Void LogoutForm_MouseUp(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
-	dragging = false;
+	//Iterate widgets and see if one was clicked.
+	/*for each (Widget^ w in widgets) {
+		//return w;
 	}*/
+
+	//If no widget was clicked, check if in add mode
+	if (addMode != amNone) {
+		//add the new widget at pos;
+		//return newWidget;
+	}
+
+	return this;
+}

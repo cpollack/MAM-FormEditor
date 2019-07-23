@@ -29,18 +29,27 @@ namespace MAM_FormEditor {
 			//propertyGrid
 
 			window = gcnew CWindow();
-			CCheckBox^ cb1 = gcnew CCheckBox(10, 12);
 			propertyGrid->SelectedObject = window;
+
+			//CCheckBox^ cb1 = gcnew CCheckBox(10, 12);
 		}
-	private: System::Windows::Forms::SplitContainer^  splitContainerEditor;
+	
 	public:
-
-	public:
-	private: System::Windows::Forms::PictureBox^  addLabel;
-	private: System::Windows::Forms::PictureBox^  addRadioButton;
-	private: System::Windows::Forms::PictureBox^  addCheckbox;
-
+	
 		CWindow^ window;
+	private: System::Windows::Forms::RadioButton^  addRadioButton;
+	private: System::Windows::Forms::RadioButton^  addCheckbox;
+	private: System::Windows::Forms::RadioButton^  addLabel;
+
+	private: System::Windows::Forms::SplitContainer^  splitContainerEditor;
+
+
+
+
+
+
+	private:
+		//void AddWidgetStartHover(PictureBox);
 
 	protected:
 		/// <summary>
@@ -77,9 +86,9 @@ namespace MAM_FormEditor {
 			this->propertyGrid = (gcnew System::Windows::Forms::PropertyGrid());
 			this->labelWidgetName = (gcnew System::Windows::Forms::Label());
 			this->splitContainerEditor = (gcnew System::Windows::Forms::SplitContainer());
-			this->addLabel = (gcnew System::Windows::Forms::PictureBox());
-			this->addRadioButton = (gcnew System::Windows::Forms::PictureBox());
-			this->addCheckbox = (gcnew System::Windows::Forms::PictureBox());
+			this->addRadioButton = (gcnew System::Windows::Forms::RadioButton());
+			this->addCheckbox = (gcnew System::Windows::Forms::RadioButton());
+			this->addLabel = (gcnew System::Windows::Forms::RadioButton());
 			this->pbDrawWindow = (gcnew System::Windows::Forms::PictureBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->splitContainer))->BeginInit();
 			this->splitContainer->Panel1->SuspendLayout();
@@ -89,9 +98,6 @@ namespace MAM_FormEditor {
 			this->splitContainerEditor->Panel1->SuspendLayout();
 			this->splitContainerEditor->Panel2->SuspendLayout();
 			this->splitContainerEditor->SuspendLayout();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->addLabel))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->addRadioButton))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->addCheckbox))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pbDrawWindow))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -153,9 +159,9 @@ namespace MAM_FormEditor {
 			// splitContainerEditor.Panel1
 			// 
 			this->splitContainerEditor->Panel1->BackColor = System::Drawing::SystemColors::Control;
-			this->splitContainerEditor->Panel1->Controls->Add(this->addLabel);
 			this->splitContainerEditor->Panel1->Controls->Add(this->addRadioButton);
 			this->splitContainerEditor->Panel1->Controls->Add(this->addCheckbox);
+			this->splitContainerEditor->Panel1->Controls->Add(this->addLabel);
 			// 
 			// splitContainerEditor.Panel2
 			// 
@@ -166,35 +172,38 @@ namespace MAM_FormEditor {
 			this->splitContainerEditor->SplitterWidth = 1;
 			this->splitContainerEditor->TabIndex = 1;
 			// 
-			// addLabel
-			// 
-			this->addLabel->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"addLabel.Image")));
-			this->addLabel->Location = System::Drawing::Point(3, 13);
-			this->addLabel->Name = L"addLabel";
-			this->addLabel->Size = System::Drawing::Size(16, 16);
-			this->addLabel->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
-			this->addLabel->TabIndex = 2;
-			this->addLabel->TabStop = false;
-			// 
 			// addRadioButton
 			// 
+			this->addRadioButton->Appearance = System::Windows::Forms::Appearance::Button;
 			this->addRadioButton->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"addRadioButton.Image")));
-			this->addRadioButton->Location = System::Drawing::Point(3, 57);
+			this->addRadioButton->Location = System::Drawing::Point(0, 69);
 			this->addRadioButton->Name = L"addRadioButton";
-			this->addRadioButton->Size = System::Drawing::Size(16, 16);
-			this->addRadioButton->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
-			this->addRadioButton->TabIndex = 1;
-			this->addRadioButton->TabStop = false;
+			this->addRadioButton->Size = System::Drawing::Size(23, 24);
+			this->addRadioButton->TabIndex = 9;
+			this->addRadioButton->TabStop = true;
+			this->addRadioButton->UseVisualStyleBackColor = true;
 			// 
 			// addCheckbox
 			// 
+			this->addCheckbox->Appearance = System::Windows::Forms::Appearance::Button;
 			this->addCheckbox->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"addCheckbox.Image")));
-			this->addCheckbox->Location = System::Drawing::Point(3, 35);
+			this->addCheckbox->Location = System::Drawing::Point(0, 39);
 			this->addCheckbox->Name = L"addCheckbox";
-			this->addCheckbox->Size = System::Drawing::Size(16, 16);
-			this->addCheckbox->SizeMode = System::Windows::Forms::PictureBoxSizeMode::StretchImage;
-			this->addCheckbox->TabIndex = 0;
-			this->addCheckbox->TabStop = false;
+			this->addCheckbox->Size = System::Drawing::Size(23, 24);
+			this->addCheckbox->TabIndex = 8;
+			this->addCheckbox->TabStop = true;
+			this->addCheckbox->UseVisualStyleBackColor = true;
+			// 
+			// addLabel
+			// 
+			this->addLabel->Appearance = System::Windows::Forms::Appearance::Button;
+			this->addLabel->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"addLabel.Image")));
+			this->addLabel->Location = System::Drawing::Point(0, 9);
+			this->addLabel->Name = L"addLabel";
+			this->addLabel->Size = System::Drawing::Size(23, 24);
+			this->addLabel->TabIndex = 7;
+			this->addLabel->TabStop = true;
+			this->addLabel->UseVisualStyleBackColor = true;
 			// 
 			// pbDrawWindow
 			// 
@@ -203,9 +212,10 @@ namespace MAM_FormEditor {
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->pbDrawWindow->Location = System::Drawing::Point(0, 0);
 			this->pbDrawWindow->Name = L"pbDrawWindow";
-			this->pbDrawWindow->Size = System::Drawing::Size(448, 361);
+			this->pbDrawWindow->Size = System::Drawing::Size(444, 361);
 			this->pbDrawWindow->TabIndex = 0;
 			this->pbDrawWindow->TabStop = false;
+			this->pbDrawWindow->Click += gcnew System::EventHandler(this, &MainForm::pbDrawWindow_Click);
 			this->pbDrawWindow->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MainForm::pbDrawWindow_Paint);
 			this->pbDrawWindow->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MainForm::pbDrawWindow_MouseDown);
 			this->pbDrawWindow->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &MainForm::pbDrawWindow_MouseMove);
@@ -229,22 +239,19 @@ namespace MAM_FormEditor {
 			this->splitContainerEditor->Panel2->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->splitContainerEditor))->EndInit();
 			this->splitContainerEditor->ResumeLayout(false);
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->addLabel))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->addRadioButton))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->addCheckbox))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pbDrawWindow))->EndInit();
 			this->ResumeLayout(false);
 
 		}
 #pragma endregion
 
-		public:
-		System::Windows::Forms::Control^ getDrawableControl() {
-			return splitContainer->Panel2;
-		}
-	private: System::Void pbDrawWindow_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e) {
-		window->Draw(pbDrawWindow);
+	public:
+	System::Windows::Forms::Control^ getDrawableControl() {
+		return splitContainer->Panel2;
 	}
+private: System::Void pbDrawWindow_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e) {
+	window->Draw(pbDrawWindow);
+}
 private: System::Void pbDrawWindow_MouseMove(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
 	Cursor = window->MouseMove(e);
 }
@@ -254,6 +261,15 @@ private: System::Void pbDrawWindow_MouseUp(System::Object^  sender, System::Wind
 }
 private: System::Void pbDrawWindow_MouseDown(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
 	window->MouseDown(e);
+}
+
+private: System::Void pbDrawWindow_Click(System::Object^  sender, System::EventArgs^  e) {
+	Control focus;
+	int addMode = 0;
+	if (addLabel->Checked) addMode = amLabel;
+	else if (addCheckbox->Checked) addMode = amCheckbox;
+	else if (addRadioButton->Checked) addMode = amRadio;
+	focus = window->Click(e, addMode);
 }
 };
 }

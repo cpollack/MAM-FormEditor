@@ -10,6 +10,13 @@ enum DragMode {
 	//corner drag?
 };
 
+enum AddMode {
+	amNone,
+	amLabel,
+	amCheckbox,
+	amRadio
+};
+
 public ref class CWindow {
 public: //Properties
 	property int Width;
@@ -26,6 +33,9 @@ public:
 	System::Windows::Forms::Cursor^ CWindow::MouseMove(System::Windows::Forms::MouseEventArgs^ e);
 	void CWindow::MouseDown(System::Windows::Forms::MouseEventArgs^ e);
 	void CWindow::MouseUp(System::Windows::Forms::MouseEventArgs^ e);
+	System::Object^ CWindow::Click(System::Windows::Forms::MouseEventArgs^ e, int addMode);
+
+	System::Collections::ArrayList ^widgets;
 
 private:
 	System::Drawing::Point position;

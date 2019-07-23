@@ -118,17 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="addLabel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wwAADsMBx2+oZAAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMS42/U4J6AAAARdJREFUKFOVka9O
-        w1AUxu+fNTSBpAuZYAluEsMLIEiGwvAYqwdJsmVziD0AYk2QCHCIicnJPcJExQSGNyi/c3sOqSAhNPn1
-        3PPd78u5t3VN0/ybX8W/cFVVxbIsvQpShaCY3iVYKDjnJvDU2fT0K1hrHf/oZuLZKWcdba/1HD7hhL4N
-        ee+vEJ7hMYTwoCGZZKEMamhDHM9jXMUYbxBHsFNjhD1sQKa8QU/3XA5fTFtQZyCGS0ghNfXgBSZpEs8d
-        k96ZdC3Qz2Gp5hRS4xTuLfRaFMUtTfrE9AM46NqOt4UPGCRd7sQnlwvaf7F/I+cXLU1S2qmEQl3XOWRw
-        DF4RLRmp4rHQkbwyiJDDEGTzFC50LR7Z13XT/wa3+VdeTOIUGAAAAABJRU5ErkJggg==
-</value>
-  </data>
   <data name="addRadioButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         Qk3mAQAAAAAAADYAAAAoAAAADAAAAAwAAAABABgAAAAAAAAAAADEDgAAxA4AAAAAAAAAAAAA////////
@@ -154,6 +143,17 @@
         ////////////////////////////AAAA////4+Pj////AKCgoGlpaf//////////////////////////
         /////////+Pj4////wCgoKBpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWlpaWnj4+P///8AoKCgoKCg
         oKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCg////AA==
+</value>
+  </data>
+  <data name="addLabel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMS42/U4J6AAAARdJREFUKFOVka9O
+        w1AUxu+fNTSBpAuZYAluEsMLIEiGwvAYqwdJsmVziD0AYk2QCHCIicnJPcJExQSGNyi/c3sOqSAhNPn1
+        3PPd78u5t3VN0/ybX8W/cFVVxbIsvQpShaCY3iVYKDjnJvDU2fT0K1hrHf/oZuLZKWcdba/1HD7hhL4N
+        ee+vEJ7hMYTwoCGZZKEMamhDHM9jXMUYbxBHsFNjhD1sQKa8QU/3XA5fTFtQZyCGS0ghNfXgBSZpEs8d
+        k96ZdC3Qz2Gp5hRS4xTuLfRaFMUtTfrE9AM46NqOt4UPGCRd7sQnlwvaf7F/I+cXLU1S2qmEQl3XOWRw
+        DF4RLRmp4rHQkbwyiJDDEGTzFC50LR7Z13XT/wa3+VdeTOIUGAAAAABJRU5ErkJggg==
 </value>
   </data>
 </root>
