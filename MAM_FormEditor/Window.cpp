@@ -1,6 +1,8 @@
 #include "Window.h"
 #include "MainForm.h"
 
+#include "CheckBox.h"
+
 using namespace System::Windows::Forms;
 using namespace System::Drawing;
 using namespace MAM_FormEditor;
@@ -60,6 +62,10 @@ void CWindow::Draw(PictureBox ^drawable) {
 
 	RectangleF bottomRightRect = RectangleF(position.X + (Width - bottomRight->Width), position.Y + (Height - bottomRight->Height), bottomRight->Width, bottomRight->Height);
 	gr->DrawImage(bottomRight, bottomRightRect);
+
+	for each(CWidget^ w in widgets) {
+		w->Draw(gr, position);
+	}
 }
 
 Cursor^ CWindow::MouseMove(System::Windows::Forms::MouseEventArgs^ e) {
@@ -143,15 +149,22 @@ Object^ CWindow::Click(System::Windows::Forms::MouseEventArgs^ e, int addMode) {
 	if (dragging) return nullptr;
 	if (e->X < position.X || e->X > position.X + Width || e->Y < position.Y || e->Y > position.Y + Height) return nullptr;
 
+	Point click(e->X - position.X, e->Y - position.Y);
+
 	//Iterate widgets and see if one was clicked.
-	/*for each (Widget^ w in widgets) {
+	for each (CWidget^ w in widgets) {
 		//return w;
-	}*/
+	}
 
 	//If no widget was clicked, check if in add mode
 	if (addMode != amNone) {
-		//add the new widget at pos;
-		//return newWidget;
+		switch (addMode) {
+		case amCheckbox:
+			CCheckBox ^cbNew = gcnew CCheckBox("cbOne", click.X, click.Y);
+			cbNew->Text = "Test";
+			widgets->Add(cbNew);
+			return cbNew;
+		}
 	}
 
 	return this;

@@ -29,9 +29,11 @@ namespace MAM_FormEditor {
 			//propertyGrid
 
 			window = gcnew CWindow();
-			propertyGrid->SelectedObject = window;
 
+			//test
 			//CCheckBox^ cb1 = gcnew CCheckBox(10, 12);
+
+			propertyGrid->SelectedObject = window;
 		}
 	
 	public:
@@ -132,7 +134,7 @@ namespace MAM_FormEditor {
 			this->propertyGrid->BackColor = System::Drawing::SystemColors::Control;
 			this->propertyGrid->Location = System::Drawing::Point(3, 25);
 			this->propertyGrid->Name = L"propertyGrid";
-			this->propertyGrid->Size = System::Drawing::Size(205, 283);
+			this->propertyGrid->Size = System::Drawing::Size(205, 333);
 			this->propertyGrid->TabIndex = 1;
 			// 
 			// labelWidgetName
@@ -212,7 +214,7 @@ namespace MAM_FormEditor {
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->pbDrawWindow->Location = System::Drawing::Point(0, 0);
 			this->pbDrawWindow->Name = L"pbDrawWindow";
-			this->pbDrawWindow->Size = System::Drawing::Size(447, 361);
+			this->pbDrawWindow->Size = System::Drawing::Size(450, 361);
 			this->pbDrawWindow->TabIndex = 0;
 			this->pbDrawWindow->TabStop = false;
 			this->pbDrawWindow->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MainForm::pbDrawWindow_Paint);
@@ -270,6 +272,7 @@ private: System::Void pbDrawWindow_MouseClick(System::Object^  sender, System::W
 	else if (addCheckbox->Checked) addMode = amCheckbox;
 	else if (addRadioButton->Checked) addMode = amRadio;
 	focus = window->Click(e, addMode);
+	if (focus) propertyGrid->SelectedObject = focus;
 }
 
 };
