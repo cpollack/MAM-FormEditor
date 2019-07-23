@@ -212,11 +212,11 @@ namespace MAM_FormEditor {
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->pbDrawWindow->Location = System::Drawing::Point(0, 0);
 			this->pbDrawWindow->Name = L"pbDrawWindow";
-			this->pbDrawWindow->Size = System::Drawing::Size(444, 361);
+			this->pbDrawWindow->Size = System::Drawing::Size(447, 361);
 			this->pbDrawWindow->TabIndex = 0;
 			this->pbDrawWindow->TabStop = false;
-			this->pbDrawWindow->Click += gcnew System::EventHandler(this, &MainForm::pbDrawWindow_Click);
 			this->pbDrawWindow->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MainForm::pbDrawWindow_Paint);
+			this->pbDrawWindow->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &MainForm::pbDrawWindow_MouseClick);
 			this->pbDrawWindow->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MainForm::pbDrawWindow_MouseDown);
 			this->pbDrawWindow->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &MainForm::pbDrawWindow_MouseMove);
 			this->pbDrawWindow->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &MainForm::pbDrawWindow_MouseUp);
@@ -263,13 +263,14 @@ private: System::Void pbDrawWindow_MouseDown(System::Object^  sender, System::Wi
 	window->MouseDown(e);
 }
 
-private: System::Void pbDrawWindow_Click(System::Object^  sender, System::EventArgs^  e) {
-	Control focus;
+private: System::Void pbDrawWindow_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
+	Object^ focus;
 	int addMode = 0;
 	if (addLabel->Checked) addMode = amLabel;
 	else if (addCheckbox->Checked) addMode = amCheckbox;
 	else if (addRadioButton->Checked) addMode = amRadio;
 	focus = window->Click(e, addMode);
 }
+
 };
 }
