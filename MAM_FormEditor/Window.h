@@ -17,6 +17,8 @@ enum AddMode {
 	amRadio
 };
 
+ref class CWidget;
+
 public ref class CWindow {
 public: //Properties
 	property int Width;
@@ -36,6 +38,7 @@ public:
 	System::Object^ CWindow::Click(System::Windows::Forms::MouseEventArgs^ e, int addMode);
 
 	System::Collections::ArrayList ^widgets;
+	CWidget^ focus;
 
 private:
 	System::Drawing::Point position;

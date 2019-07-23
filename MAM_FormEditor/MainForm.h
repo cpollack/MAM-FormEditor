@@ -268,11 +268,18 @@ private: System::Void pbDrawWindow_MouseDown(System::Object^  sender, System::Wi
 private: System::Void pbDrawWindow_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
 	Object^ focus;
 	int addMode = 0;
+
 	if (addLabel->Checked) addMode = amLabel;
 	else if (addCheckbox->Checked) addMode = amCheckbox;
 	else if (addRadioButton->Checked) addMode = amRadio;
+
 	focus = window->Click(e, addMode);
 	if (focus) propertyGrid->SelectedObject = focus;
+
+	//Uncheck all radio buttons to prevent accidental multi-add
+	for each (RadioButton^ rb in splitContainerEditor->Panel1->Controls) {
+		rb->Checked = false;
+	}
 }
 
 };

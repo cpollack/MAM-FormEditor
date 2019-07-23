@@ -3,6 +3,7 @@
 using namespace System::Drawing;
 
 CCheckBox::CCheckBox(System::String^ name, int x, int y) {
+	widgetType = wtCheckBox;
 	Name = name;
 	X = x;
 	Y = y;

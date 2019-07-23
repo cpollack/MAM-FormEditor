@@ -20,6 +20,6 @@ public:
 	virtual void Draw(System::Drawing::Graphics^ gr, System::Drawing::Point pos) override;
 
 private:
-	const int DEFAULT_WIDTH = 20;
-	const int DEFAULT_HEIGHT = 8;
+	const int DEFAULT_WIDTH = 50;
+	const int DEFAULT_HEIGHT = 14;
 };

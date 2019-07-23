@@ -2,7 +2,13 @@
 
 using namespace System::ComponentModel;
 
-public ref class CWidget abstract {
+enum WidgetType {
+	wtLabel,
+	wtCheckBox,
+	wtRadioButton
+};
+
+public ref class CWidget {
 public: //Properties
 	[Category("Main"), Description("The indentifying name of the widget")]
 	property System::String^ Name;
@@ -17,5 +23,9 @@ public: //Properties
 	//[DisplayName("Test Property")]
 
 public:
+	int widgetType;
+
 	virtual void Draw(System::Drawing::Graphics^ gr, System::Drawing::Point pos) abstract;
+
+	virtual bool DoesPointIntersect(System::Drawing::Point point);
 };

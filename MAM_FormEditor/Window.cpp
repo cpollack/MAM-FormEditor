@@ -66,6 +66,11 @@ void CWindow::Draw(PictureBox ^drawable) {
 	for each(CWidget^ w in widgets) {
 		w->Draw(gr, position);
 	}
+
+	if (focus) {
+		SolidBrush ^bgColor = gcnew SolidBrush(Color::FromArgb(50, 255, 255, 153));
+		gr->FillRectangle(bgColor, Rectangle(position.X + focus->X, position.Y + focus->Y, focus->Width, focus->Height));
+	}
 }
 
 Cursor^ CWindow::MouseMove(System::Windows::Forms::MouseEventArgs^ e) {
@@ -150,10 +155,14 @@ Object^ CWindow::Click(System::Windows::Forms::MouseEventArgs^ e, int addMode) {
 	if (e->X < position.X || e->X > position.X + Width || e->Y < position.Y || e->Y > position.Y + Height) return nullptr;
 
 	Point click(e->X - position.X, e->Y - position.Y);
+	focus = nullptr;
 
 	//Iterate widgets and see if one was clicked.
 	for each (CWidget^ w in widgets) {
-		//return w;
+		if (w->DoesPointIntersect(click)) {
+			focus = w;
+			return w;
+		}
 	}
 
 	//If no widget was clicked, check if in add mode
@@ -163,6 +172,7 @@ Object^ CWindow::Click(System::Windows::Forms::MouseEventArgs^ e, int addMode) {
 			CCheckBox ^cbNew = gcnew CCheckBox("cbOne", click.X, click.Y);
 			cbNew->Text = "Test";
 			widgets->Add(cbNew);
+			focus = cbNew;
 			return cbNew;
 		}
 	}
