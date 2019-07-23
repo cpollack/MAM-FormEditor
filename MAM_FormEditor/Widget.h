@@ -28,4 +28,11 @@ public:
 	virtual void Draw(System::Drawing::Graphics^ gr, System::Drawing::Point pos) abstract;
 
 	virtual bool DoesPointIntersect(System::Drawing::Point point);
+	int MouseDown(System::Windows::Forms::MouseEventArgs^ e, System::Drawing::Point wPos);
+	System::Windows::Forms::Cursor^ MouseMove(System::Windows::Forms::MouseEventArgs^ e, System::Drawing::Point wPos);
+	System::Drawing::Point MouseDrag(System::Windows::Forms::MouseEventArgs^ e, System::Drawing::Point wPos, System::Drawing::Point dragOffset, int dragMode);
+
+protected:
+	int MIN_HEIGHT = 2;
+	int MIN_WIDTH = 5;
 };

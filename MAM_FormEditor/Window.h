@@ -43,6 +43,7 @@ public:
 private:
 	System::Drawing::Point position;
 	bool dragging = false;
+	bool draggingWidget = false;
 	int dragMode = dmNone;
 	System::Drawing::Point dragOffset;
 

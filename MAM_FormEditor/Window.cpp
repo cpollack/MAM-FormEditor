@@ -76,46 +76,56 @@ void CWindow::Draw(PictureBox ^drawable) {
 Cursor^ CWindow::MouseMove(System::Windows::Forms::MouseEventArgs^ e) {
 	Cursor^ cursor = Cursors::Default;
 
-	if (e->X >= position.X && e->X <= position.X + Width 
-		&& e->Y >= position.Y && e->Y <= position.Y + Height) {
+	if (focus) {
+		cursor = focus->MouseMove(e, position);
+	}
 
-		if (e->X >= position.X && e->X <= position.X + 2
-			|| e->X >= position.X + Width - 2 && e->X <= position.X + Width) {
-			cursor = Cursors::SizeWE;
-		} else if (e->Y >= position.Y && e->Y <= position.Y + 2
-			|| e->Y >= position.Y + Height - 2 && e->Y <= position.Y + Height) {
-			cursor = Cursors::SizeNS;
+	if (cursor == Cursors::Default) {
+		if (e->X >= position.X && e->X <= position.X + Width
+			&& e->Y >= position.Y && e->Y <= position.Y + Height) {
+
+			if (e->X >= position.X && e->X <= position.X + 2
+				|| e->X >= position.X + Width - 2 && e->X <= position.X + Width) {
+				cursor = Cursors::SizeWE;
+			}
+			else if (e->Y >= position.Y && e->Y <= position.Y + 2
+				|| e->Y >= position.Y + Height - 2 && e->Y <= position.Y + Height) {
+				cursor = Cursors::SizeNS;
+			}
 		}
 	}
 
 	if (dragging) {
 		int adjustWidth, adjustHeight;
-		switch (dragMode) {
-		case dmDrag: 
-			position = Point(e->X - dragOffset.X, e->Y - dragOffset.Y);
-			break;
-		case dmN:
-			adjustHeight = e->Y - position.Y - dragOffset.Y;
-			position = Point(position.X, position.Y + adjustHeight);
-			Height -= adjustHeight;
-			dragOffset.Y = e->Y - position.Y;
-			break;
-		case dmS:
-			adjustHeight = e->Y - position.Y - dragOffset.Y;
-			Height += adjustHeight;
-			dragOffset.Y += adjustHeight;
-			break;
-		case dmW:
-			adjustWidth = e->X - position.X - dragOffset.X;
-			position = Point(position.X + adjustWidth, position.Y);
-			Width -= adjustWidth;
-			dragOffset.X = e->X - position.X;
-			break;
-		case dmE:
-			adjustWidth = e->X - position.X - dragOffset.X;
-			Width += adjustWidth;
-			dragOffset.X += adjustWidth;
-			break;
+		if (draggingWidget) dragOffset = focus->MouseDrag(e, position, dragOffset, dragMode);
+		else {
+			switch (dragMode) {
+			case dmDrag:
+				position = Point(e->X - dragOffset.X, e->Y - dragOffset.Y);
+				break;
+			case dmN:
+				adjustHeight = e->Y - position.Y - dragOffset.Y;
+				position = Point(position.X, position.Y + adjustHeight);
+				Height -= adjustHeight;
+				dragOffset.Y = e->Y - position.Y;
+				break;
+			case dmS:
+				adjustHeight = e->Y - position.Y - dragOffset.Y;
+				Height += adjustHeight;
+				dragOffset.Y += adjustHeight;
+				break;
+			case dmW:
+				adjustWidth = e->X - position.X - dragOffset.X;
+				position = Point(position.X + adjustWidth, position.Y);
+				Width -= adjustWidth;
+				dragOffset.X = e->X - position.X;
+				break;
+			case dmE:
+				adjustWidth = e->X - position.X - dragOffset.X;
+				Width += adjustWidth;
+				dragOffset.X += adjustWidth;
+				break;
+			}
 		}
 	}
 
@@ -123,6 +133,15 @@ Cursor^ CWindow::MouseMove(System::Windows::Forms::MouseEventArgs^ e) {
 }
 
 void CWindow::MouseDown(System::Windows::Forms::MouseEventArgs^ e) {
+	//Verify if mouse down happened within a focused widget
+	if (focus) {
+		Point click(e->X - position.X, e->Y - position.Y);
+		if (!focus->DoesPointIntersect(click)) {
+			focus = nullptr;
+		}
+	}
+
+	//Check for window drag conditions
 	if (e->X >= position.X && e->X <= position.X + 2) {
 		dragMode = dmW;
 	} 
@@ -139,14 +158,27 @@ void CWindow::MouseDown(System::Windows::Forms::MouseEventArgs^ e) {
 		dragMode = dmDrag;
 	}
 
+	//Window is not being dragged, check if the focused widget is
+	if (dragMode == dmNone && focus) {
+		dragMode = focus->MouseDown(e, position);
+		if (dragMode != dmNone) draggingWidget = true;
+	}
+
+	//Drag is occuring, record offset point
 	if (dragMode != dmNone) {
 		dragOffset = Point(e->X - position.X, e->Y - position.Y);
+		if (draggingWidget) {
+			dragOffset.X -= focus->X;
+			dragOffset.Y -= focus->Y;
+		}
 		dragging = true;
 	}
 }
 
 void CWindow::MouseUp(System::Windows::Forms::MouseEventArgs^ e) {
+	//Cancel all dragging rules on mouseup
 	dragging = false;
+	draggingWidget = false;
 	dragMode = dmNone;
 }
 
