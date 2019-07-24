@@ -1,5 +1,10 @@
 #pragma once
 
+#include "include/rapidjson/document.h"
+#include "include/rapidjson/prettywriter.h"
+#include "include/rapidjson/stringbuffer.h"
+#include "include/rapidjson/filewritestream.h"
+
 #include "Window.h"
 #include "CheckBox.h"
 
@@ -11,6 +16,8 @@ namespace MAM_FormEditor {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+
+	using namespace rapidjson;
 
 	/// <summary>
 	/// Summary for MainForm
@@ -29,16 +36,34 @@ namespace MAM_FormEditor {
 			//propertyGrid
 
 			window = gcnew CWindow();
-
 			//test
 			//CCheckBox^ cb1 = gcnew CCheckBox(10, 12);
 
 			propertyGrid->SelectedObject = window;
+
+			//Sample JSON Document handling
+			document = new Document();
+			document->SetObject();
+			Value vWin(kObjectType); {
+				Value vWidth(kNumberType);
+				vWidth.SetInt(window->Width);
+				vWin.AddMember("width", vWidth, document->GetAllocator());
+			}
+			document->AddMember("Window", vWin, document->GetAllocator());	
+
+			FILE* fp = fopen("output.json", "wb");
+			char writeBuffer[65536];
+			FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
+			Writer<FileWriteStream> writer(os);
+			document->Accept(writer);
+			fclose(fp);
 		}
 	
 	public:
 	
 		CWindow^ window;
+		Document* document;
+
 	private: System::Windows::Forms::RadioButton^  addRadioButton;
 	private: System::Windows::Forms::RadioButton^  addCheckbox;
 	private: System::Windows::Forms::RadioButton^  addLabel;
