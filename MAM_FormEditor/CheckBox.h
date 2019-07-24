@@ -4,14 +4,6 @@
 
 public ref class CCheckBox : public CWidget {
 public: 
-	/*[Category("Test"), Description("X coordinate of widget on form")]
-	//[DisplayName("Test Property")]
-	property int X;
-	[Category("Test"), Description("Y coordinate of widget on form")]
-	property int Y;
-	property int Width;
-	property int Height;*/
-
 	[Category("Main"), Description("Descriptive label of the checkbox")]
 	property System::String^ Text;
 
@@ -25,6 +17,4 @@ private:
 	System::Drawing::Image^ cb;
 
 	System::Drawing::StringFormat^ textFormat;
-	System::Drawing::Font ^textFont;
-	System::Drawing::SolidBrush ^textBrush;
 };

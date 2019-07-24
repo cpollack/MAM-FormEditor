@@ -14,7 +14,8 @@ enum AddMode {
 	amNone,
 	amLabel,
 	amCheckbox,
-	amRadio
+	amRadio,
+	amButton
 };
 
 ref class CWidget;

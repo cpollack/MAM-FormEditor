@@ -118,6 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="addButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMS42/U4J6AAAANJJREFUOE/VkCEO
+        hDAQRbkEV+Ec9STcAIFD4HA4BAm+AtGEU3AKBIIzIEgQfzOzQNjswO7Smv3Jo+1P+triAXCKWNogljaI
+        pQ388X0fLngR2uaPhW3bIooipGmKpmm401rzeJVTIUmIaZqQJAnPgyBAXdcwxqAsS8RxjL7v1x3PXArp
+        hmEYoqoq7khAKYqCXzAMAx92zMcbUpRSPB6FXddhHMe923Iq3P5hnufIsow7WtMht4RSlmXBPM/rSs5P
+        wm/yJnTBLnSJWNogljaI5X3gPQAeCLKq1HK8YgAAAABJRU5ErkJggg==
+</value>
+  </data>
   <data name="addRadioButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         Qk3mAQAAAAAAADYAAAAoAAAADAAAAAwAAAABABgAAAAAAAAAAADEDgAAxA4AAAAAAAAAAAAA////////

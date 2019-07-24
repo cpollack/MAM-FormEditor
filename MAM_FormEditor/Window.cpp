@@ -2,6 +2,7 @@
 #include "MainForm.h"
 
 #include "CheckBox.h"
+#include "Button.h"
 
 using namespace System::Windows::Forms;
 using namespace System::Drawing;
@@ -222,13 +223,21 @@ Object^ CWindow::Click(System::Windows::Forms::MouseEventArgs^ e, int addMode) {
 
 	//If no widget was clicked, check if in add mode
 	if (addMode != amNone) {
+		CWidget^ addWidget = nullptr;
 		switch (addMode) {
 		case amCheckbox:
-			CCheckBox ^cbNew = gcnew CCheckBox("cbOne", click.X, click.Y);
-			cbNew->Text = "Test";
-			widgets->Add(cbNew);
-			focus = cbNew;
-			return cbNew;
+			addWidget = gcnew CCheckBox("cb1", click.X, click.Y);
+			break;
+
+		case amButton:
+			addWidget = gcnew CButton("btn1", click.X, click.Y);
+			break;
+		}
+		
+		if (addWidget) {
+			widgets->Add(addWidget);
+			focus = addWidget;
+			return addWidget;
 		}
 	}
 

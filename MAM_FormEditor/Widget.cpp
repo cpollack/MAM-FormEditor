@@ -4,6 +4,11 @@
 using namespace System::Drawing;
 using namespace System::Windows::Forms;
 
+CWidget::CWidget() {
+	font = gcnew Font("Verdana", 8);
+	fontBrush = gcnew SolidBrush(Color::FromArgb(0xAD, 0xE9, 0xCD));
+}
+
 bool CWidget::DoesPointIntersect(Point point) {
 	if (point.X >= X && point.X <= X + Width && point.Y >= Y && point.Y <= Y + Height) return true;
 	return false;

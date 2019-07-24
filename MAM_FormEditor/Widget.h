@@ -5,7 +5,8 @@ using namespace System::ComponentModel;
 enum WidgetType {
 	wtLabel,
 	wtCheckBox,
-	wtRadioButton
+	wtRadioButton,
+	wtButton
 };
 
 public ref class CWidget {
@@ -25,14 +26,18 @@ public: //Properties
 public:
 	int widgetType;
 
+	CWidget();
 	virtual void Draw(System::Drawing::Graphics^ gr, System::Drawing::Point pos) abstract;
 
 	virtual bool DoesPointIntersect(System::Drawing::Point point);
 	int MouseDown(System::Windows::Forms::MouseEventArgs^ e, System::Drawing::Point wPos);
 	System::Windows::Forms::Cursor^ MouseMove(System::Windows::Forms::MouseEventArgs^ e, System::Drawing::Point wPos);
-	System::Drawing::Point MouseDrag(System::Drawing::Point dragPos, System::Drawing::Point wPos, System::Drawing::Point dragOffset, int dragMode);
+	virtual System::Drawing::Point MouseDrag(System::Drawing::Point dragPos, System::Drawing::Point wPos, System::Drawing::Point dragOffset, int dragMode);
 
 protected:
 	int MIN_HEIGHT = 2;
 	int MIN_WIDTH = 5;
+
+	System::Drawing::Font ^font;
+	System::Drawing::SolidBrush ^fontBrush;
 };
