@@ -41,15 +41,19 @@ void CWindow::Draw(PictureBox ^drawable) {
 
 	RectangleF topRect = RectangleF(position.X, position.Y, Width < top->Width ? Width : top->Width, top->Height);
 	gr->DrawImage(top, topRect);
+	MIN_TOP = top->Height + 2;
 
 	RectangleF bottomRect = RectangleF( position.X, position.Y + (Height - bottom->Height), Width < bottom->Width ? Width : bottom->Width, bottom->Height);
 	gr->DrawImage(bottom, bottomRect);
+	MAX_BOTTOM = Height - (bottom->Height + 2);
 
 	RectangleF leftRect = RectangleF(position.X, position.Y, left->Width, Height < left->Height ? Height : left->Height);
 	gr->DrawImage(left, leftRect);
+	MIN_LEFT = left->Width + 2;
 
 	RectangleF rightRect = RectangleF(position.X + (Width - right->Width), position.Y, right->Width, Height < right->Height ? Height : right->Height);
 	gr->DrawImage(right, rightRect);
+	MAX_RIGHT = Width - (right->Width + 2);
 
 	RectangleF topLeftRect = RectangleF(position.X, position.Y, topLeft->Width, topLeft->Height);
 	gr->DrawImage(topLeft, topLeftRect);
@@ -63,6 +67,17 @@ void CWindow::Draw(PictureBox ^drawable) {
 	RectangleF bottomRightRect = RectangleF(position.X + (Width - bottomRight->Width), position.Y + (Height - bottomRight->Height), bottomRight->Width, bottomRight->Height);
 	gr->DrawImage(bottomRight, bottomRightRect);
 
+	StringFormat^ format = gcnew StringFormat;
+	format->Alignment = StringAlignment::Center;
+	format->LineAlignment = StringAlignment::Center;
+	gr->DrawString(Title, gcnew Font("Verdana", 8), gcnew SolidBrush(Color::FromArgb(0xAD, 0xE9, 0xCD)), Point(position.X + (Width / 2), position.Y + 16), format);
+
+	if (CloseButton) {
+		RectangleF closeRect = RectangleF(position.X + (Width - close->Width - 9), position.Y + 9, close->Width, close->Height);
+		gr->DrawImage(close, closeRect);
+	}
+
+	//draw widgets
 	for each(CWidget^ w in widgets) {
 		w->Draw(gr, position);
 	}
@@ -97,7 +112,15 @@ Cursor^ CWindow::MouseMove(System::Windows::Forms::MouseEventArgs^ e) {
 
 	if (dragging) {
 		int adjustWidth, adjustHeight;
-		if (draggingWidget) dragOffset = focus->MouseDrag(e, position, dragOffset, dragMode);
+		if (draggingWidget) {
+			Point mousePos(e->X, e->Y);
+			if (e->X - dragOffset.X < MIN_LEFT + position.X) mousePos.X = MIN_LEFT + position.X + dragOffset.X;
+			if (e->X - dragOffset.X + focus->Width > MAX_RIGHT + position.X) mousePos.X = MAX_RIGHT + position.X + dragOffset.X - focus->Width;
+			if (e->Y - dragOffset.Y < MIN_TOP + position.Y) mousePos.Y = MIN_TOP + position.Y + dragOffset.Y;
+			if (e->Y - dragOffset.Y + focus->Height > MAX_BOTTOM + position.Y) mousePos.Y = MAX_BOTTOM + position.Y + dragOffset.Y - focus->Height;
+
+			dragOffset = focus->MouseDrag(mousePos, position, dragOffset, dragMode);
+		}
 		else {
 			switch (dragMode) {
 			case dmDrag:

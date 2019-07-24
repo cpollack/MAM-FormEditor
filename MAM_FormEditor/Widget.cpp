@@ -53,37 +53,37 @@ Cursor^ CWidget::MouseMove(MouseEventArgs^ e, Point wPos) {
 	return cursor;
 }
 
-Point CWidget::MouseDrag(MouseEventArgs^ e, Point wPos, Point dragOffset, int dragMode) {
+Point CWidget::MouseDrag(Point dragPos, Point wPos, Point dragOffset, int dragMode) {
 	Point position(wPos.X + X, wPos.Y + Y);
-	Point offset(e->X - dragOffset.X, e->Y - dragOffset.Y);
+	Point offset(dragPos.X - dragOffset.X, dragPos.Y - dragOffset.Y);
 
 	int adjustHeight, adjustWidth;
 
 	switch (dragMode) {
 	case dmDrag:
-		X = e->X - dragOffset.X - wPos.X;
-		Y = e->Y - dragOffset.Y - wPos.Y;
+		X = dragPos.X - dragOffset.X - wPos.X;
+		Y = dragPos.Y - dragOffset.Y - wPos.Y;
 		break;
 	case dmN:
-		adjustHeight = e->Y - dragOffset.Y - position.Y;
+		adjustHeight = dragPos.Y - dragOffset.Y - position.Y;
 		if (Height - adjustHeight < MIN_HEIGHT) adjustHeight = Height - MIN_HEIGHT;
 		Y = Y + adjustHeight;
 		Height -= adjustHeight;
 		break;
 	case dmS:
-		adjustHeight = e->Y - dragOffset.Y - position.Y;
+		adjustHeight = dragPos.Y - dragOffset.Y - position.Y;
 		if (Height + adjustHeight < MIN_HEIGHT) adjustHeight = MIN_HEIGHT - Height;
 		Height += adjustHeight;
 		dragOffset.Y += adjustHeight;
 		break;
 	case dmW:
-		adjustWidth = e->X - dragOffset.X - position.X;
+		adjustWidth = dragPos.X - dragOffset.X - position.X;
 		if (Width - adjustWidth < MIN_WIDTH) adjustWidth = Width - MIN_WIDTH;
 		X = X + adjustWidth;
 		Width -= adjustWidth;
 		break;
 	case dmE:
-		adjustWidth = e->X - dragOffset.X - position.X;
+		adjustWidth = dragPos.X - dragOffset.X - position.X;
 		if (Width + adjustWidth < MIN_WIDTH) adjustWidth = MIN_WIDTH - Width;
 		Width += adjustWidth;
 		dragOffset.X += adjustWidth;

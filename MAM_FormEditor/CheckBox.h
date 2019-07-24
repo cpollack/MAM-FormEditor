@@ -22,4 +22,9 @@ public:
 private:
 	const int DEFAULT_WIDTH = 50;
 	const int DEFAULT_HEIGHT = 14;
+	System::Drawing::Image^ cb;
+
+	System::Drawing::StringFormat^ textFormat;
+	System::Drawing::Font ^textFont;
+	System::Drawing::SolidBrush ^textBrush;
 };

@@ -24,7 +24,7 @@ public: //Properties
 	property int Width;
 	property int Height;
 	property System::String^ Name;
-	property System::String^ Caption;
+	property System::String^ Title;
 	property bool CloseButton;
 
 public:
@@ -50,4 +50,5 @@ private:
 	System::Drawing::Image ^top, ^bottom, ^left, ^right;
 	System::Drawing::Image ^topLeft, ^topRight, ^bottomLeft, ^bottomRight;
 	System::Drawing::Image ^close;
+	int MIN_LEFT, MAX_RIGHT, MIN_TOP, MAX_BOTTOM;
 };
