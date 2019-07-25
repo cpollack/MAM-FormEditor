@@ -16,3 +16,7 @@ void MainForm::SaveToFile() {
 	fclose(fp);
 }
 
+
+void MainForm::ViewPreviewMode() {
+	previewMode = previewModeToolStripMenuItem->Checked;
+}

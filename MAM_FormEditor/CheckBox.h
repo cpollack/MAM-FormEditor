@@ -17,4 +17,5 @@ private:
 	System::Drawing::Image^ cb;
 
 	System::Drawing::StringFormat^ textFormat;
+	System::Drawing::Pen^ dashedPen;
 };

@@ -28,55 +28,35 @@ namespace MAM_FormEditor {
 		MainForm(void)
 		{
 			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
 
-
-			//propertyGrid
-
+			document = new rapidjson::Document();
 			window = gcnew CWindow();
-			//test
 			//CCheckBox^ cb1 = gcnew CCheckBox(10, 12);
 
 			propertyGrid->SelectedObject = window;
-
-			//Sample JSON Document handling
-			document = new rapidjson::Document();
 		}
 	
 	public:
-	
 		CWindow^ window;
 		rapidjson::Document* document;
-	private: System::Windows::Forms::MenuStrip^  menuStripMain;
-	public:
+		String^ filename;
 
-	public:
+		void SaveToFile();
+		void ViewPreviewMode();
+
+	private: System::Windows::Forms::MenuStrip^  menuStripMain;
 	private: System::Windows::Forms::ToolStripMenuItem^  fileToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  newToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  loadToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  saveToolStripMenuItem;
-
-	public:
-		String^ filename;
-
-		void SaveToFile();
+	private: System::Windows::Forms::ToolStripMenuItem^  viewToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  previewModeToolStripMenuItem;
 
 	private: System::Windows::Forms::RadioButton^  addRadioButton;
 	private: System::Windows::Forms::RadioButton^  addCheckbox;
 	private: System::Windows::Forms::RadioButton^  addLabel;
 	private: System::Windows::Forms::RadioButton^  addButton;
-
 	private: System::Windows::Forms::SplitContainer^  splitContainerEditor;
-
-
-
-
-
-
-	private:
-		//void AddWidgetStartHover(PictureBox);
 
 	protected:
 		/// <summary>
@@ -90,7 +70,6 @@ namespace MAM_FormEditor {
 			}
 		}
 	private: System::Windows::Forms::SplitContainer^  splitContainer;
-	protected:
 	private: System::Windows::Forms::PropertyGrid^  propertyGrid;
 	private: System::Windows::Forms::Label^  labelWidgetName;
 	private: System::Windows::Forms::PictureBox^  pbDrawWindow;
@@ -123,6 +102,8 @@ namespace MAM_FormEditor {
 			this->newToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->loadToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->saveToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->viewToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->previewModeToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->splitContainer))->BeginInit();
 			this->splitContainer->Panel1->SuspendLayout();
 			this->splitContainer->Panel2->SuspendLayout();
@@ -170,6 +151,7 @@ namespace MAM_FormEditor {
 			this->propertyGrid->Name = L"propertyGrid";
 			this->propertyGrid->Size = System::Drawing::Size(205, 306);
 			this->propertyGrid->TabIndex = 1;
+			this->propertyGrid->SelectedObjectsChanged += gcnew System::EventHandler(this, &MainForm::propertyGrid_SelectedObjectsChanged);
 			// 
 			// labelWidgetName
 			// 
@@ -261,7 +243,7 @@ namespace MAM_FormEditor {
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->pbDrawWindow->Location = System::Drawing::Point(0, 0);
 			this->pbDrawWindow->Name = L"pbDrawWindow";
-			this->pbDrawWindow->Size = System::Drawing::Size(447, 334);
+			this->pbDrawWindow->Size = System::Drawing::Size(465, 334);
 			this->pbDrawWindow->TabIndex = 0;
 			this->pbDrawWindow->TabStop = false;
 			this->pbDrawWindow->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MainForm::pbDrawWindow_Paint);
@@ -272,7 +254,10 @@ namespace MAM_FormEditor {
 			// 
 			// menuStripMain
 			// 
-			this->menuStripMain->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->fileToolStripMenuItem });
+			this->menuStripMain->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->fileToolStripMenuItem,
+					this->viewToolStripMenuItem
+			});
 			this->menuStripMain->Location = System::Drawing::Point(0, 0);
 			this->menuStripMain->Name = L"menuStripMain";
 			this->menuStripMain->RenderMode = System::Windows::Forms::ToolStripRenderMode::Professional;
@@ -293,21 +278,36 @@ namespace MAM_FormEditor {
 			// newToolStripMenuItem
 			// 
 			this->newToolStripMenuItem->Name = L"newToolStripMenuItem";
-			this->newToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->newToolStripMenuItem->Size = System::Drawing::Size(100, 22);
 			this->newToolStripMenuItem->Text = L"New";
 			// 
 			// loadToolStripMenuItem
 			// 
 			this->loadToolStripMenuItem->Name = L"loadToolStripMenuItem";
-			this->loadToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->loadToolStripMenuItem->Size = System::Drawing::Size(100, 22);
 			this->loadToolStripMenuItem->Text = L"Load";
 			// 
 			// saveToolStripMenuItem
 			// 
 			this->saveToolStripMenuItem->Name = L"saveToolStripMenuItem";
-			this->saveToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->saveToolStripMenuItem->Size = System::Drawing::Size(100, 22);
 			this->saveToolStripMenuItem->Text = L"Save";
 			this->saveToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::saveToolStripMenuItem_Click);
+			// 
+			// viewToolStripMenuItem
+			// 
+			this->viewToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->previewModeToolStripMenuItem });
+			this->viewToolStripMenuItem->Name = L"viewToolStripMenuItem";
+			this->viewToolStripMenuItem->Size = System::Drawing::Size(44, 20);
+			this->viewToolStripMenuItem->Text = L"View";
+			// 
+			// previewModeToolStripMenuItem
+			// 
+			this->previewModeToolStripMenuItem->CheckOnClick = true;
+			this->previewModeToolStripMenuItem->Name = L"previewModeToolStripMenuItem";
+			this->previewModeToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->previewModeToolStripMenuItem->Text = L"Preview Mode";
+			this->previewModeToolStripMenuItem->CheckedChanged += gcnew System::EventHandler(this, &MainForm::previewModeToolStripMenuItem_CheckedChanged);
 			// 
 			// MainForm
 			// 
@@ -376,6 +376,13 @@ private: System::Void pbDrawWindow_MouseClick(System::Object^  sender, System::W
 
 private: System::Void saveToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 	SaveToFile();
+}
+private: System::Void previewModeToolStripMenuItem_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
+	ViewPreviewMode();
+}
+private: System::Void propertyGrid_SelectedObjectsChanged(System::Object^  sender, System::EventArgs^  e) {
+	if (propertyGrid->SelectedObject == window) labelWidgetName->Text = "Window";
+	else labelWidgetName->Text = ((CWidget^)propertyGrid->SelectedObject)->Name;
 }
 };
 }
