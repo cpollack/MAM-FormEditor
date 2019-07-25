@@ -1,5 +1,7 @@
 #pragma once
 
+#include "include/rapidjson/document.h"
+
 enum DragMode {
 	dmNone,
 	dmDrag,
@@ -31,6 +33,7 @@ public: //Properties
 public:
 	CWindow();
 	void CWindow::Draw(System::Windows::Forms::PictureBox^ drawable);
+	rapidjson::Document* CWindow::Save(rapidjson::Document* document);
 
 	//Events
 	System::Windows::Forms::Cursor^ CWindow::MouseMove(System::Windows::Forms::MouseEventArgs^ e);

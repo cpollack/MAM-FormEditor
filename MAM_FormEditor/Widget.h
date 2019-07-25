@@ -1,5 +1,7 @@
 #pragma once
 
+#include "include/rapidjson/document.h"
+
 using namespace System::ComponentModel;
 
 enum WidgetType {
@@ -28,6 +30,7 @@ public:
 
 	CWidget();
 	virtual void Draw(System::Drawing::Graphics^ gr, System::Drawing::Point pos) abstract;
+	virtual void Save(rapidjson::Document* document, rapidjson::Value* vWidget);
 
 	virtual bool DoesPointIntersect(System::Drawing::Point point);
 	int MouseDown(System::Windows::Forms::MouseEventArgs^ e, System::Drawing::Point wPos);

@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "GlobalLib.h"
 #include "MainForm.h"
 
 #include "CheckBox.h"
@@ -14,6 +15,7 @@ CWindow::CWindow() {
 	position = Point(10, 10);
 
 	widgets = gcnew ArrayList();
+	Title = "";
 	
 	top = Image::FromFile("res\\TopCenter_s.bmp");
 	bottom = Image::FromFile("res\\BottomCenter.bmp");
@@ -26,8 +28,43 @@ CWindow::CWindow() {
 	close = Image::FromFile("res\\Close.bmp");
 }
 
+rapidjson::Document* CWindow::Save(rapidjson::Document* document) {
+	document->SetObject();
+	Document::AllocatorType& allocator = document->GetAllocator();
+
+	Value vWin(kObjectType); {
+		Value vWidth(kNumberType);
+		vWidth.SetInt(Width);
+		vWin.AddMember("Width", vWidth, allocator);
+
+		Value vHeight(kNumberType);
+		vHeight.SetInt(Height);
+		vWin.AddMember("Height", vHeight, allocator);
+
+		Value vTitle(kStringType);
+		std::string strTitle = textToString(Title);
+		vTitle.SetString(strTitle.c_str(), strTitle.length(), allocator);
+		vWin.AddMember("Title", vTitle, allocator);
+
+		Value vClose(CloseButton);
+		vWin.AddMember("CloseButton", vClose, allocator);
+
+		Value vWidgets(kArrayType);
+		for each (CWidget^ w in widgets) {
+			Value* vWidget = new Value(kObjectType);
+			w->Save(document, vWidget);
+			vWidgets.PushBack(*vWidget, allocator);
+			delete vWidget;
+		}
+		vWin.AddMember("Widgets", vWidgets, allocator);
+	}
+	document->AddMember("Window", vWin, allocator);
+
+	return document;
+}
+
 void CWindow::Draw(PictureBox ^drawable) {
-	Rectangle drawRect;
+	System::Drawing::Rectangle drawRect;
 
 	//image should be min size of panel, but expand to max size of form plus buffer
 
@@ -38,7 +75,7 @@ void CWindow::Draw(PictureBox ^drawable) {
 
 	unsigned int uiColor = 0x3A5121;
 	SolidBrush ^bgColor = gcnew SolidBrush(Color::FromArgb(uiColor & 0xFF, (uiColor & 0xFF00) >> 8, (uiColor & 0xFF0000) >> 16));
-	gr->FillRectangle(bgColor, Rectangle(position.X, position.Y, Width, Height));
+	gr->FillRectangle(bgColor, System::Drawing::Rectangle(position.X, position.Y, Width, Height));
 
 	RectangleF topRect = RectangleF(position.X, position.Y, Width < top->Width ? Width : top->Width, top->Height);
 	gr->DrawImage(top, topRect);
@@ -85,7 +122,7 @@ void CWindow::Draw(PictureBox ^drawable) {
 
 	if (focus) {
 		SolidBrush ^bgColor = gcnew SolidBrush(Color::FromArgb(50, 255, 255, 153));
-		gr->FillRectangle(bgColor, Rectangle(position.X + focus->X, position.Y + focus->Y, focus->Width, focus->Height));
+		gr->FillRectangle(bgColor, System::Drawing::Rectangle(position.X + focus->X, position.Y + focus->Y, focus->Width, focus->Height));
 	}
 }
 

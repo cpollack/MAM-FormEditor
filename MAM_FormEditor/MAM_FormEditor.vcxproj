@@ -136,6 +136,7 @@
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CheckBox.cpp" />
+    <ClCompile Include="GlobalLib.cpp" />
     <ClCompile Include="MainForm.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Widget.cpp" />
@@ -144,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="CheckBox.h" />
+    <ClInclude Include="GlobalLib.h" />
     <ClInclude Include="MainForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>

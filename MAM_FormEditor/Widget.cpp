@@ -1,12 +1,34 @@
 #include "Widget.h"
 #include "Window.h"
+#include "GlobalLib.h"
 
 using namespace System::Drawing;
 using namespace System::Windows::Forms;
+using namespace rapidjson;
 
 CWidget::CWidget() {
 	font = gcnew Font("Verdana", 8);
 	fontBrush = gcnew SolidBrush(Color::FromArgb(0xAD, 0xE9, 0xCD));
+}
+
+void CWidget::Save(rapidjson::Document* document, rapidjson::Value* vWidget) {
+	Document::AllocatorType& allocator = document->GetAllocator();
+
+	Value vType(kNumberType);
+	vType.SetInt(widgetType);
+	vWidget->AddMember("Type", vType, allocator);
+
+	Value vName(kStringType);
+	vName.SetString(textToString(Name).c_str(), Name->Length, allocator);
+	vWidget->AddMember("Name", vName, allocator);
+
+	Value vWidth(kNumberType);
+	vWidth.SetInt(Width);
+	vWidget->AddMember("Width", vWidth, allocator);
+
+	Value vHeight(kNumberType);
+	vHeight.SetInt(Height);
+	vWidget->AddMember("Height", vHeight, allocator);
 }
 
 bool CWidget::DoesPointIntersect(Point point) {

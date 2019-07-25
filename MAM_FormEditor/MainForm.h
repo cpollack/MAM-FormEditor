@@ -42,27 +42,26 @@ namespace MAM_FormEditor {
 			propertyGrid->SelectedObject = window;
 
 			//Sample JSON Document handling
-			document = new Document();
-			document->SetObject();
-			Value vWin(kObjectType); {
-				Value vWidth(kNumberType);
-				vWidth.SetInt(window->Width);
-				vWin.AddMember("width", vWidth, document->GetAllocator());
-			}
-			document->AddMember("Window", vWin, document->GetAllocator());	
-
-			FILE* fp = fopen("output.json", "wb");
-			char writeBuffer[65536];
-			FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
-			Writer<FileWriteStream> writer(os);
-			document->Accept(writer);
-			fclose(fp);
+			document = new rapidjson::Document();
 		}
 	
 	public:
 	
 		CWindow^ window;
-		Document* document;
+		rapidjson::Document* document;
+	private: System::Windows::Forms::MenuStrip^  menuStripMain;
+	public:
+
+	public:
+	private: System::Windows::Forms::ToolStripMenuItem^  fileToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  newToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  loadToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  saveToolStripMenuItem;
+
+	public:
+		String^ filename;
+
+		void SaveToFile();
 
 	private: System::Windows::Forms::RadioButton^  addRadioButton;
 	private: System::Windows::Forms::RadioButton^  addCheckbox;
@@ -114,11 +113,16 @@ namespace MAM_FormEditor {
 			this->propertyGrid = (gcnew System::Windows::Forms::PropertyGrid());
 			this->labelWidgetName = (gcnew System::Windows::Forms::Label());
 			this->splitContainerEditor = (gcnew System::Windows::Forms::SplitContainer());
+			this->addButton = (gcnew System::Windows::Forms::RadioButton());
 			this->addRadioButton = (gcnew System::Windows::Forms::RadioButton());
 			this->addCheckbox = (gcnew System::Windows::Forms::RadioButton());
 			this->addLabel = (gcnew System::Windows::Forms::RadioButton());
 			this->pbDrawWindow = (gcnew System::Windows::Forms::PictureBox());
-			this->addButton = (gcnew System::Windows::Forms::RadioButton());
+			this->menuStripMain = (gcnew System::Windows::Forms::MenuStrip());
+			this->fileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->newToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->loadToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->saveToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->splitContainer))->BeginInit();
 			this->splitContainer->Panel1->SuspendLayout();
 			this->splitContainer->Panel2->SuspendLayout();
@@ -128,14 +132,17 @@ namespace MAM_FormEditor {
 			this->splitContainerEditor->Panel2->SuspendLayout();
 			this->splitContainerEditor->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pbDrawWindow))->BeginInit();
+			this->menuStripMain->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// splitContainer
 			// 
-			this->splitContainer->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->splitContainer->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
+				| System::Windows::Forms::AnchorStyles::Left)
+				| System::Windows::Forms::AnchorStyles::Right));
 			this->splitContainer->FixedPanel = System::Windows::Forms::FixedPanel::Panel1;
 			this->splitContainer->IsSplitterFixed = true;
-			this->splitContainer->Location = System::Drawing::Point(0, 0);
+			this->splitContainer->Location = System::Drawing::Point(0, 27);
 			this->splitContainer->Name = L"splitContainer";
 			// 
 			// splitContainer.Panel1
@@ -149,7 +156,7 @@ namespace MAM_FormEditor {
 			this->splitContainer->Panel2->AutoScroll = true;
 			this->splitContainer->Panel2->BackColor = System::Drawing::SystemColors::Control;
 			this->splitContainer->Panel2->Controls->Add(this->splitContainerEditor);
-			this->splitContainer->Size = System::Drawing::Size(684, 361);
+			this->splitContainer->Size = System::Drawing::Size(684, 334);
 			this->splitContainer->SplitterDistance = 211;
 			this->splitContainer->TabIndex = 0;
 			// 
@@ -161,7 +168,7 @@ namespace MAM_FormEditor {
 			this->propertyGrid->BackColor = System::Drawing::SystemColors::Control;
 			this->propertyGrid->Location = System::Drawing::Point(3, 25);
 			this->propertyGrid->Name = L"propertyGrid";
-			this->propertyGrid->Size = System::Drawing::Size(205, 333);
+			this->propertyGrid->Size = System::Drawing::Size(205, 306);
 			this->propertyGrid->TabIndex = 1;
 			// 
 			// labelWidgetName
@@ -197,10 +204,22 @@ namespace MAM_FormEditor {
 			// 
 			this->splitContainerEditor->Panel2->BackColor = System::Drawing::SystemColors::ActiveBorder;
 			this->splitContainerEditor->Panel2->Controls->Add(this->pbDrawWindow);
-			this->splitContainerEditor->Size = System::Drawing::Size(470, 361);
+			this->splitContainerEditor->Size = System::Drawing::Size(470, 334);
 			this->splitContainerEditor->SplitterDistance = 25;
 			this->splitContainerEditor->SplitterWidth = 1;
 			this->splitContainerEditor->TabIndex = 1;
+			// 
+			// addButton
+			// 
+			this->addButton->Appearance = System::Windows::Forms::Appearance::Button;
+			this->addButton->BackgroundImageLayout = System::Windows::Forms::ImageLayout::None;
+			this->addButton->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"addButton.Image")));
+			this->addButton->Location = System::Drawing::Point(0, 99);
+			this->addButton->Name = L"addButton";
+			this->addButton->Size = System::Drawing::Size(23, 24);
+			this->addButton->TabIndex = 10;
+			this->addButton->TabStop = true;
+			this->addButton->UseVisualStyleBackColor = true;
 			// 
 			// addRadioButton
 			// 
@@ -242,7 +261,7 @@ namespace MAM_FormEditor {
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->pbDrawWindow->Location = System::Drawing::Point(0, 0);
 			this->pbDrawWindow->Name = L"pbDrawWindow";
-			this->pbDrawWindow->Size = System::Drawing::Size(453, 361);
+			this->pbDrawWindow->Size = System::Drawing::Size(447, 334);
 			this->pbDrawWindow->TabIndex = 0;
 			this->pbDrawWindow->TabStop = false;
 			this->pbDrawWindow->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MainForm::pbDrawWindow_Paint);
@@ -251,24 +270,53 @@ namespace MAM_FormEditor {
 			this->pbDrawWindow->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &MainForm::pbDrawWindow_MouseMove);
 			this->pbDrawWindow->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &MainForm::pbDrawWindow_MouseUp);
 			// 
-			// addButton
+			// menuStripMain
 			// 
-			this->addButton->Appearance = System::Windows::Forms::Appearance::Button;
-			this->addButton->BackgroundImageLayout = System::Windows::Forms::ImageLayout::None;
-			this->addButton->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"addButton.Image")));
-			this->addButton->Location = System::Drawing::Point(0, 99);
-			this->addButton->Name = L"addButton";
-			this->addButton->Size = System::Drawing::Size(23, 24);
-			this->addButton->TabIndex = 10;
-			this->addButton->TabStop = true;
-			this->addButton->UseVisualStyleBackColor = true;
+			this->menuStripMain->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->fileToolStripMenuItem });
+			this->menuStripMain->Location = System::Drawing::Point(0, 0);
+			this->menuStripMain->Name = L"menuStripMain";
+			this->menuStripMain->RenderMode = System::Windows::Forms::ToolStripRenderMode::Professional;
+			this->menuStripMain->Size = System::Drawing::Size(684, 24);
+			this->menuStripMain->TabIndex = 1;
+			this->menuStripMain->Text = L"menuStrip1";
+			// 
+			// fileToolStripMenuItem
+			// 
+			this->fileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
+				this->newToolStripMenuItem,
+					this->loadToolStripMenuItem, this->saveToolStripMenuItem
+			});
+			this->fileToolStripMenuItem->Name = L"fileToolStripMenuItem";
+			this->fileToolStripMenuItem->Size = System::Drawing::Size(37, 20);
+			this->fileToolStripMenuItem->Text = L"File";
+			// 
+			// newToolStripMenuItem
+			// 
+			this->newToolStripMenuItem->Name = L"newToolStripMenuItem";
+			this->newToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->newToolStripMenuItem->Text = L"New";
+			// 
+			// loadToolStripMenuItem
+			// 
+			this->loadToolStripMenuItem->Name = L"loadToolStripMenuItem";
+			this->loadToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->loadToolStripMenuItem->Text = L"Load";
+			// 
+			// saveToolStripMenuItem
+			// 
+			this->saveToolStripMenuItem->Name = L"saveToolStripMenuItem";
+			this->saveToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->saveToolStripMenuItem->Text = L"Save";
+			this->saveToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::saveToolStripMenuItem_Click);
 			// 
 			// MainForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(684, 361);
+			this->ClientSize = System::Drawing::Size(684, 362);
+			this->Controls->Add(this->menuStripMain);
 			this->Controls->Add(this->splitContainer);
+			this->MainMenuStrip = this->menuStripMain;
 			this->MinimumSize = System::Drawing::Size(700, 400);
 			this->Name = L"MainForm";
 			this->Text = L"MAM Form Editor";
@@ -282,7 +330,10 @@ namespace MAM_FormEditor {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->splitContainerEditor))->EndInit();
 			this->splitContainerEditor->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pbDrawWindow))->EndInit();
+			this->menuStripMain->ResumeLayout(false);
+			this->menuStripMain->PerformLayout();
 			this->ResumeLayout(false);
+			this->PerformLayout();
 
 		}
 #pragma endregion
@@ -323,5 +374,8 @@ private: System::Void pbDrawWindow_MouseClick(System::Object^  sender, System::W
 	}
 }
 
+private: System::Void saveToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+	SaveToFile();
+}
 };
 }
