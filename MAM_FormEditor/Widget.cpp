@@ -2,12 +2,27 @@
 #include "Window.h"
 #include "GlobalLib.h"
 
+using namespace System;
 using namespace System::Drawing;
 using namespace System::Windows::Forms;
 using namespace rapidjson;
 
 CWidget::CWidget() {
-	font = gcnew Font("Verdana", 8);
+	font = gcnew Font("Verdana", 12, GraphicsUnit::Pixel);
+	fontBrush = gcnew SolidBrush(Color::FromArgb(0xAD, 0xE9, 0xCD));
+}
+
+CWidget::CWidget(rapidjson::Value* vWidget) {
+	if (!vWidget->IsObject()) return;
+	//Value widget = vWidget->GetObject();
+
+	if (vWidget->HasMember("Name")) Name = gcnew String((*vWidget)["Name"].GetString());
+	if (vWidget->HasMember("X")) X = (*vWidget)["X"].GetInt();
+	if (vWidget->HasMember("Y")) Y = (*vWidget)["Y"].GetInt();
+	if (vWidget->HasMember("Width")) Width = (*vWidget)["Width"].GetInt();
+	if (vWidget->HasMember("Height")) Height = (*vWidget)["Height"].GetInt();
+
+	font = gcnew Font("Verdana", 12, GraphicsUnit::Pixel);
 	fontBrush = gcnew SolidBrush(Color::FromArgb(0xAD, 0xE9, 0xCD));
 }
 
@@ -29,6 +44,14 @@ void CWidget::Save(rapidjson::Document* document, rapidjson::Value* vWidget) {
 	Value vHeight(kNumberType);
 	vHeight.SetInt(Height);
 	vWidget->AddMember("Height", vHeight, allocator);
+
+	Value vX(kNumberType);
+	vX.SetInt(X);
+	vWidget->AddMember("X", vX, allocator);
+
+	Value vY(kNumberType);
+	vY.SetInt(Y);
+	vWidget->AddMember("Y", vY, allocator);
 }
 
 bool CWidget::DoesPointIntersect(Point point) {

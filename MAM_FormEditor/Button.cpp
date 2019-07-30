@@ -1,6 +1,8 @@
 #include "Button.h"
+#include "GlobalLib.h"
 
 using namespace System::Drawing;
+using namespace rapidjson;
 
 CButton::CButton(System::String^ name, int x, int y) {
 	widgetType = wtButton;
@@ -29,8 +31,17 @@ void CButton::CreateButtonImage() {
 	if (btn) delete btn;
 	btn = gcnew Bitmap(Width, Height);
 	Graphics^ gr = Graphics::FromImage(btn);
-	gr->FillRectangle(buttonColor, Rectangle(0, 0, Width, Height));
-	gr->DrawRectangle(borderColor, Rectangle(0, 0, Width-1, Height-1));
+	gr->FillRectangle(buttonColor, System::Drawing::Rectangle(0, 0, Width, Height));
+	gr->DrawRectangle(borderColor, System::Drawing::Rectangle(0, 0, Width-1, Height-1));
+}
+
+void CButton::Save(rapidjson::Document* document, rapidjson::Value* vWidget) {
+	CWidget::Save(document, vWidget);
+	Document::AllocatorType& allocator = document->GetAllocator();
+
+	Value vtext(kStringType);
+	vtext.SetString(textToString(Text).c_str(), Text->Length, allocator);
+	vWidget->AddMember("Text", vtext, allocator);
 }
 
 void CButton::Draw(Graphics^ gr, Point pos) {

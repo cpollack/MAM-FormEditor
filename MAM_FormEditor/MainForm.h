@@ -1,9 +1,9 @@
 #pragma once
 
-#include "include/rapidjson/document.h"
-#include "include/rapidjson/prettywriter.h"
-#include "include/rapidjson/stringbuffer.h"
-#include "include/rapidjson/filewritestream.h"
+#include "rapidjson/document.h"
+#include "rapidjson/prettywriter.h"
+#include "rapidjson/filewritestream.h"
+#include "rapidjson/filereadstream.h"
 
 #include "Window.h"
 #include "CheckBox.h"
@@ -29,19 +29,31 @@ namespace MAM_FormEditor {
 		{
 			InitializeComponent();
 
-			document = new rapidjson::Document();
-			window = gcnew CWindow();
+			//document = new rapidjson::Document();
+			//window = gcnew CWindow();
 			//CCheckBox^ cb1 = gcnew CCheckBox(10, 12);
 
-			propertyGrid->SelectedObject = window;
+			//propertyGrid->SelectedObject = window;
+
+			//SetFormTitle(true);
 		}
 	
 	public:
 		CWindow^ window;
 		rapidjson::Document* document;
-		String^ filename;
+	private: System::Windows::Forms::SaveFileDialog^  saveFileDialog;
+	private: System::Windows::Forms::ToolStripMenuItem^  saveAsToolStripMenuItem;
+	private: System::Windows::Forms::OpenFileDialog^  openFileDialog;
+	public:
+		String^ fileNameShort = nullptr;
+		String^ fileName = nullptr;
+		String^ filePath = nullptr;
 
+		void SetFormTitle(bool edited);
+		void NewFile();
 		void SaveToFile();
+		void SaveAsFile();
+		void LoadFromFile();
 		void ViewPreviewMode();
 
 	private: System::Windows::Forms::MenuStrip^  menuStripMain;
@@ -102,8 +114,11 @@ namespace MAM_FormEditor {
 			this->newToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->loadToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->saveToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->saveAsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->viewToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->previewModeToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->saveFileDialog = (gcnew System::Windows::Forms::SaveFileDialog());
+			this->openFileDialog = (gcnew System::Windows::Forms::OpenFileDialog());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->splitContainer))->BeginInit();
 			this->splitContainer->Panel1->SuspendLayout();
 			this->splitContainer->Panel2->SuspendLayout();
@@ -243,7 +258,7 @@ namespace MAM_FormEditor {
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->pbDrawWindow->Location = System::Drawing::Point(0, 0);
 			this->pbDrawWindow->Name = L"pbDrawWindow";
-			this->pbDrawWindow->Size = System::Drawing::Size(465, 334);
+			this->pbDrawWindow->Size = System::Drawing::Size(477, 334);
 			this->pbDrawWindow->TabIndex = 0;
 			this->pbDrawWindow->TabStop = false;
 			this->pbDrawWindow->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MainForm::pbDrawWindow_Paint);
@@ -267,9 +282,9 @@ namespace MAM_FormEditor {
 			// 
 			// fileToolStripMenuItem
 			// 
-			this->fileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
+			this->fileToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {
 				this->newToolStripMenuItem,
-					this->loadToolStripMenuItem, this->saveToolStripMenuItem
+					this->loadToolStripMenuItem, this->saveToolStripMenuItem, this->saveAsToolStripMenuItem
 			});
 			this->fileToolStripMenuItem->Name = L"fileToolStripMenuItem";
 			this->fileToolStripMenuItem->Size = System::Drawing::Size(37, 20);
@@ -278,21 +293,30 @@ namespace MAM_FormEditor {
 			// newToolStripMenuItem
 			// 
 			this->newToolStripMenuItem->Name = L"newToolStripMenuItem";
-			this->newToolStripMenuItem->Size = System::Drawing::Size(100, 22);
+			this->newToolStripMenuItem->Size = System::Drawing::Size(152, 22);
 			this->newToolStripMenuItem->Text = L"New";
+			this->newToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::newToolStripMenuItem_Click);
 			// 
 			// loadToolStripMenuItem
 			// 
 			this->loadToolStripMenuItem->Name = L"loadToolStripMenuItem";
-			this->loadToolStripMenuItem->Size = System::Drawing::Size(100, 22);
+			this->loadToolStripMenuItem->Size = System::Drawing::Size(152, 22);
 			this->loadToolStripMenuItem->Text = L"Load";
+			this->loadToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::loadToolStripMenuItem_Click);
 			// 
 			// saveToolStripMenuItem
 			// 
 			this->saveToolStripMenuItem->Name = L"saveToolStripMenuItem";
-			this->saveToolStripMenuItem->Size = System::Drawing::Size(100, 22);
+			this->saveToolStripMenuItem->Size = System::Drawing::Size(152, 22);
 			this->saveToolStripMenuItem->Text = L"Save";
 			this->saveToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::saveToolStripMenuItem_Click);
+			// 
+			// saveAsToolStripMenuItem
+			// 
+			this->saveAsToolStripMenuItem->Name = L"saveAsToolStripMenuItem";
+			this->saveAsToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->saveAsToolStripMenuItem->Text = L"Save As";
+			this->saveAsToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::saveAsToolStripMenuItem_Click);
 			// 
 			// viewToolStripMenuItem
 			// 
@@ -305,9 +329,21 @@ namespace MAM_FormEditor {
 			// 
 			this->previewModeToolStripMenuItem->CheckOnClick = true;
 			this->previewModeToolStripMenuItem->Name = L"previewModeToolStripMenuItem";
-			this->previewModeToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->previewModeToolStripMenuItem->Size = System::Drawing::Size(149, 22);
 			this->previewModeToolStripMenuItem->Text = L"Preview Mode";
 			this->previewModeToolStripMenuItem->CheckedChanged += gcnew System::EventHandler(this, &MainForm::previewModeToolStripMenuItem_CheckedChanged);
+			// 
+			// saveFileDialog
+			// 
+			this->saveFileDialog->DefaultExt = L"JSON";
+			this->saveFileDialog->Filter = L"JSON Files|*.JSON";
+			this->saveFileDialog->Title = L"Save Form";
+			// 
+			// openFileDialog
+			// 
+			this->openFileDialog->DefaultExt = L"JSON";
+			this->openFileDialog->Filter = L"JSON File|*.JSON";
+			this->openFileDialog->Title = L"Load Form";
 			// 
 			// MainForm
 			// 
@@ -343,20 +379,21 @@ namespace MAM_FormEditor {
 		return splitContainer->Panel2;
 	}
 private: System::Void pbDrawWindow_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e) {
-	window->Draw(pbDrawWindow);
+	if (window) window->Draw(pbDrawWindow);
 }
 private: System::Void pbDrawWindow_MouseMove(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
-	Cursor = window->MouseMove(e);
+	if (window) Cursor = window->MouseMove(e);
 }
 private: System::Void pbDrawWindow_MouseUp(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
-	window->MouseUp(e);
+	if (window) window->MouseUp(e);
 	propertyGrid->Refresh();
 }
 private: System::Void pbDrawWindow_MouseDown(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
-	window->MouseDown(e);
+	if (window) window->MouseDown(e);
 }
 
 private: System::Void pbDrawWindow_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
+	if (!window) return;
 	Object^ focus;
 	int addMode = 0;
 
@@ -377,12 +414,21 @@ private: System::Void pbDrawWindow_MouseClick(System::Object^  sender, System::W
 private: System::Void saveToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 	SaveToFile();
 }
+private: System::Void saveAsToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+	SaveAsFile();
+}
+private: System::Void loadToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+	LoadFromFile();
+}
 private: System::Void previewModeToolStripMenuItem_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
 	ViewPreviewMode();
 }
 private: System::Void propertyGrid_SelectedObjectsChanged(System::Object^  sender, System::EventArgs^  e) {
 	if (propertyGrid->SelectedObject == window) labelWidgetName->Text = "Window";
 	else labelWidgetName->Text = ((CWidget^)propertyGrid->SelectedObject)->Name;
+}
+private: System::Void newToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+	NewFile();
 }
 };
 }

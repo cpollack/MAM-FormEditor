@@ -8,8 +8,8 @@ using namespace System::Windows::Forms;
 
 bool previewMode;
 
-[STAThread]
-void Main(array<String^>^ args)
+/*[STAThread]
+int Main(array<String^>^ args)
 {
 	previewMode = false;
 
@@ -18,4 +18,21 @@ void Main(array<String^>^ args)
 
 	MAM_FormEditor::MainForm form;
 	Application::Run(%form);
+
+	return 0;
+}*/
+
+[STAThread]
+INT WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+	PSTR lpCmdLine, INT nCmdShow)
+{
+	previewMode = false;
+
+	Application::EnableVisualStyles();
+	Application::SetCompatibleTextRenderingDefault(false);
+
+	MAM_FormEditor::MainForm form;
+	Application::Run(%form);
+
+	return 0;
 }

@@ -2,7 +2,9 @@
 #include "GlobalLib.h"
 #include "MainForm.h"
 
+#include "Label.h"
 #include "CheckBox.h"
+#include "RadioButton.h"
 #include "Button.h"
 
 using namespace System::Windows::Forms;
@@ -62,6 +64,51 @@ rapidjson::Document* CWindow::Save(rapidjson::Document* document) {
 
 	return document;
 }
+
+
+void CWindow::Load(rapidjson::Document* document) {
+	if (!document->IsObject()) return;
+
+	if (!document->HasMember("Window")) return;
+	Value vDocObject = document->GetObject();
+	Value vWindow = vDocObject["Window"].GetObject();
+
+	if (vWindow.HasMember("Width")) Width = vWindow["Width"].GetInt();
+	if (vWindow.HasMember("Height")) Height = vWindow["Height"].GetInt();
+	if (vWindow.HasMember("Title")) Title = gcnew String(vWindow["Title"].GetString());
+	if (vWindow.HasMember("CloseButton")) CloseButton = vWindow["CloseButton"].GetBool();
+
+	if (vWindow.HasMember("Widgets")) {
+		Value vWidgets = vWindow["Widgets"].GetArray();
+		if (vWidgets.IsArray()) {
+			for (rapidjson::SizeType i = 0; i < vWidgets.Size(); i++) {
+				Value vWidget = vWidgets[i].GetObject();
+				LoadWidgetByType(&vWidget);
+			}
+		}
+	}
+
+	return;
+}
+
+
+void CWindow::LoadWidgetByType(rapidjson::Value* vWidget) {
+	if (!vWidget->IsObject()) return;
+	Value widget = vWidget->GetObject();
+
+	int type;
+	if (!widget.HasMember("Type")) return;
+	type = widget["Type"].GetInt();
+
+	CWidget ^addWidget = nullptr;
+	switch (type) {
+	case wtLabel:
+		addWidget = gcnew CLabel(&widget);
+		break;
+	}
+	if (addWidget) widgets->Add(addWidget);
+}
+
 
 void CWindow::Draw(PictureBox ^drawable) {
 	System::Drawing::Rectangle drawRect;
@@ -262,10 +309,15 @@ Object^ CWindow::Click(System::Windows::Forms::MouseEventArgs^ e, int addMode) {
 	if (addMode != amNone) {
 		CWidget^ addWidget = nullptr;
 		switch (addMode) {
+		case amLabel:
+			addWidget = gcnew CLabel("lbl1", click.X, click.Y);
+			break;
 		case amCheckbox:
 			addWidget = gcnew CCheckBox("cb1", click.X, click.Y);
 			break;
-
+		case amRadio:
+			addWidget = gcnew CRadioButton("rb1", click.X, click.Y);
+			break;
 		case amButton:
 			addWidget = gcnew CButton("btn1", click.X, click.Y);
 			break;

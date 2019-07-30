@@ -34,6 +34,8 @@ public:
 	CWindow();
 	void CWindow::Draw(System::Windows::Forms::PictureBox^ drawable);
 	rapidjson::Document* CWindow::Save(rapidjson::Document* document);
+	void CWindow::Load(rapidjson::Document* document);
+	void CWindow::LoadWidgetByType(rapidjson::Value* vWidget);
 
 	//Events
 	System::Windows::Forms::Cursor^ CWindow::MouseMove(System::Windows::Forms::MouseEventArgs^ e);

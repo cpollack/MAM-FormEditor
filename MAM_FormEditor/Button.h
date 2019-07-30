@@ -9,6 +9,7 @@ public:
 
 public:
 	CButton(System::String^ name, int x, int y);
+	virtual void Save(rapidjson::Document* document, rapidjson::Value* vWidget) override;
 	virtual void Draw(System::Drawing::Graphics^ gr, System::Drawing::Point pos) override;
 
 	System::Drawing::Point MouseDrag(System::Drawing::Point dragPos, System::Drawing::Point wPos, System::Drawing::Point dragOffset, int dragMode) override;

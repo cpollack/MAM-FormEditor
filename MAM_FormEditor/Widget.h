@@ -29,6 +29,7 @@ public:
 	int widgetType;
 
 	CWidget();
+	CWidget(rapidjson::Value* vWidget);
 	virtual void Draw(System::Drawing::Graphics^ gr, System::Drawing::Point pos) abstract;
 	virtual void Save(rapidjson::Document* document, rapidjson::Value* vWidget);
 
