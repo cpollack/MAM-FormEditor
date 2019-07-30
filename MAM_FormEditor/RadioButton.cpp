@@ -27,6 +27,28 @@ CRadioButton::CRadioButton(System::String^ name, int x, int y) {
 	dashedPen->DashPattern = gcnew array<float>(2) { 2.0f, 3.0f };
 }
 
+CRadioButton::CRadioButton(rapidjson::Value* vWidget) : CWidget(vWidget) {
+	widgetType = wtRadioButton;
+	MIN_HEIGHT = 13;
+	MIN_WIDTH = 20;
+
+	Width = DEFAULT_WIDTH;
+	Height = DEFAULT_HEIGHT;
+
+	rb = Image::FromFile("ico\\rb.png");
+
+	textFormat = gcnew StringFormat;
+	textFormat->Alignment = StringAlignment::Near;
+	textFormat->LineAlignment = StringAlignment::Center;
+
+	dashedPen = gcnew Pen(Color::FromArgb(0, 0, 0));
+	dashedPen->DashStyle = Drawing2D::DashStyle::Dash;
+	dashedPen->DashPattern = gcnew array<float>(2) { 2.0f, 3.0f };
+
+	if (vWidget->HasMember("Text")) Text = gcnew System::String((*vWidget)["Text"].GetString());
+	else Text = Name;
+}
+
 void CRadioButton::Save(rapidjson::Document* document, rapidjson::Value* vWidget) {
 	CWidget::Save(document, vWidget);
 	Document::AllocatorType& allocator = document->GetAllocator();

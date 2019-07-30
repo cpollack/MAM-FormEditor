@@ -21,12 +21,22 @@ void MainForm::NewFile() {
 	if (window) delete window;
 	window = gcnew CWindow();
 
-	if(fileNameShort) delete fileNameShort;
-	if (fileName) delete fileName;
-	if (filePath) delete filePath;
+	if (fileNameShort) {
+		delete fileNameShort; 
+		fileNameShort = nullptr;
+	}
+	if (fileName) {
+		delete fileName;
+		fileName = nullptr;
+	}
+	if (filePath) {
+		delete filePath;
+		filePath = nullptr;
+	}
 
 	SetFormTitle(true);
 	pbDrawWindow->Refresh(); //Required to get the pb to draw the image
+	propertyGrid->SelectedObject = window;
 }
 
 
@@ -56,7 +66,7 @@ void MainForm::SaveToFile() {
 
 void MainForm::SaveAsFile() {
 	if (!window) return;
-	if (saveFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+	if (saveFileDialog->ShowDialog(this) == System::Windows::Forms::DialogResult::OK)
 	{
 		String ^fullFileName = saveFileDialog->FileName;
 		array<System::String ^> ^splitFile = fullFileName->Split('\\');
@@ -86,7 +96,7 @@ void MainForm::SaveAsFile() {
 
 
 void MainForm::LoadFromFile() {
-	if (openFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
+	if (openFileDialog->ShowDialog(this) == System::Windows::Forms::DialogResult::OK) {
 		String ^fullFileName = openFileDialog->FileName;
 		array<System::String ^> ^splitFile = fullFileName->Split('\\');
 		String ^nameExt = splitFile[splitFile->Length - 1];
@@ -113,6 +123,7 @@ void MainForm::LoadFromFile() {
 
 		propertyGrid->SelectedObject = window;
 		SetFormTitle(false);
+		pbDrawWindow->Refresh(); //Required to get the pb to draw the image
 	}
 }
 

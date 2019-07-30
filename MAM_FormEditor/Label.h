@@ -9,10 +9,28 @@ public:
 		System::String^ get() {
 			return text;
 		}
-
 		void set(System::String^ value) {
 			text = value;
-			CreateLabelTexture();
+			if (loaded) CreateLabelTexture();
+		}
+	}
+
+	property int Width {
+		virtual int get() override {
+			return width;
+		}
+		virtual void set(int value) override {
+			width = value;
+			if (loaded) CreateLabelTexture();
+		}
+	}
+	property int Height {
+		virtual int get() override {
+			return height;
+		}
+		virtual void set(int value) override {
+			height = value;
+			if (loaded) CreateLabelTexture();
 		}
 	}
 
@@ -25,6 +43,8 @@ public:
 private:
 	const int DEFAULT_WIDTH = 50;
 	const int DEFAULT_HEIGHT = 14;
+	bool loaded = false;
+
 	System::Drawing::Image^ lbl = nullptr;
 	System::String^ text;
 

@@ -9,6 +9,7 @@ public:
 
 public:
 	CCheckBox(System::String^ name, int x, int y);
+	CCheckBox(rapidjson::Value* vWidget);
 	virtual void Save(rapidjson::Document* document, rapidjson::Value* vWidget) override;
 	virtual void Draw(System::Drawing::Graphics^ gr, System::Drawing::Point pos) override;
 

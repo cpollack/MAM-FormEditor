@@ -20,13 +20,29 @@ public: //Properties
 	[Category("Main"), Description("Y coordinate of widget on form")]
 	property int Y;
 	[Category("Main"), Description("Width of the widget in pixels")]
-	property int Width;
+	property int Width
+	{
+		virtual int get() {
+			return width;
+		};
+		virtual void set(int value) {
+			width = value;
+		};
+	}
 	[Category("Main"), Description("Height of the widget in pixels")]
-	property int Height;
+	property int Height {
+		virtual int get() {
+			return height;
+		};
+		virtual void set(int value) {
+			height = value;
+		};
+	}
 	//[DisplayName("Test Property")]
 
 public:
 	int widgetType;
+	int width, height;
 
 	CWidget();
 	CWidget(rapidjson::Value* vWidget);

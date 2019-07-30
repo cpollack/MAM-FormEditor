@@ -42,6 +42,9 @@ namespace MAM_FormEditor {
 		CWindow^ window;
 		rapidjson::Document* document;
 	private: System::Windows::Forms::SaveFileDialog^  saveFileDialog;
+	public:
+
+
 	private: System::Windows::Forms::ToolStripMenuItem^  saveAsToolStripMenuItem;
 	private: System::Windows::Forms::OpenFileDialog^  openFileDialog;
 	public:
@@ -258,7 +261,7 @@ namespace MAM_FormEditor {
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->pbDrawWindow->Location = System::Drawing::Point(0, 0);
 			this->pbDrawWindow->Name = L"pbDrawWindow";
-			this->pbDrawWindow->Size = System::Drawing::Size(477, 334);
+			this->pbDrawWindow->Size = System::Drawing::Size(447, 334);
 			this->pbDrawWindow->TabIndex = 0;
 			this->pbDrawWindow->TabStop = false;
 			this->pbDrawWindow->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MainForm::pbDrawWindow_Paint);
@@ -293,28 +296,28 @@ namespace MAM_FormEditor {
 			// newToolStripMenuItem
 			// 
 			this->newToolStripMenuItem->Name = L"newToolStripMenuItem";
-			this->newToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->newToolStripMenuItem->Size = System::Drawing::Size(114, 22);
 			this->newToolStripMenuItem->Text = L"New";
 			this->newToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::newToolStripMenuItem_Click);
 			// 
 			// loadToolStripMenuItem
 			// 
 			this->loadToolStripMenuItem->Name = L"loadToolStripMenuItem";
-			this->loadToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->loadToolStripMenuItem->Size = System::Drawing::Size(114, 22);
 			this->loadToolStripMenuItem->Text = L"Load";
 			this->loadToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::loadToolStripMenuItem_Click);
 			// 
 			// saveToolStripMenuItem
 			// 
 			this->saveToolStripMenuItem->Name = L"saveToolStripMenuItem";
-			this->saveToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->saveToolStripMenuItem->Size = System::Drawing::Size(114, 22);
 			this->saveToolStripMenuItem->Text = L"Save";
 			this->saveToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::saveToolStripMenuItem_Click);
 			// 
 			// saveAsToolStripMenuItem
 			// 
 			this->saveAsToolStripMenuItem->Name = L"saveAsToolStripMenuItem";
-			this->saveAsToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->saveAsToolStripMenuItem->Size = System::Drawing::Size(114, 22);
 			this->saveAsToolStripMenuItem->Text = L"Save As";
 			this->saveAsToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::saveAsToolStripMenuItem_Click);
 			// 

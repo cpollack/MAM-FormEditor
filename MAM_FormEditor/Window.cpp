@@ -105,6 +105,15 @@ void CWindow::LoadWidgetByType(rapidjson::Value* vWidget) {
 	case wtLabel:
 		addWidget = gcnew CLabel(&widget);
 		break;
+	case wtCheckBox:
+		addWidget = gcnew CCheckBox(&widget);
+		break;
+	case wtRadioButton:
+		addWidget = gcnew CRadioButton(&widget);
+		break;
+	case wtButton:
+		addWidget = gcnew CButton(&widget);
+		break;
 	}
 	if (addWidget) widgets->Add(addWidget);
 }

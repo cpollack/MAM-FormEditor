@@ -27,6 +27,28 @@ CCheckBox::CCheckBox(System::String^ name, int x, int y) {
 	dashedPen->DashPattern = gcnew array<float>(2) {2.0f, 3.0f};
 }
 
+CCheckBox::CCheckBox(rapidjson::Value* vWidget) : CWidget(vWidget) {
+	widgetType = wtCheckBox;
+	MIN_HEIGHT = 13;
+	MIN_WIDTH = 20;
+
+	Width = DEFAULT_WIDTH;
+	Height = DEFAULT_HEIGHT;
+
+	cb = Image::FromFile("ico\\cb.bmp");
+
+	textFormat = gcnew StringFormat;
+	textFormat->Alignment = StringAlignment::Near;
+	textFormat->LineAlignment = StringAlignment::Center;
+
+	dashedPen = gcnew Pen(Color::FromArgb(0, 0, 0));
+	dashedPen->DashStyle = Drawing2D::DashStyle::Dash;
+	dashedPen->DashPattern = gcnew array<float>(2) { 2.0f, 3.0f };
+
+	if (vWidget->HasMember("Text")) Text = gcnew System::String((*vWidget)["Text"].GetString());
+	else Text = Name;
+}
+
 void CCheckBox::Save(rapidjson::Document* document, rapidjson::Value* vWidget) {
 	CWidget::Save(document, vWidget);
 	Document::AllocatorType& allocator = document->GetAllocator();

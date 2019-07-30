@@ -89,6 +89,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Jonathis\Source\Repos\MAM-FormEditor\MAM_FormEditor\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies />
@@ -154,6 +155,7 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="RadioButton.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Widget.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
@@ -176,6 +178,9 @@
     <Image Include="res\TopCenter_s.bmp" />
     <Image Include="res\TopLeft_s.bmp" />
     <Image Include="res\TopRight_s.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MAM_FormEditor.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

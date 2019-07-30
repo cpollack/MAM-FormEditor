@@ -28,6 +28,7 @@ CLabel::CLabel(System::String^ name, int x, int y) {
 
 	Text = name;
 	CreateLabelTexture();
+	loaded = true;
 }
 
 CLabel::CLabel(rapidjson::Value* vWidget) : CWidget(vWidget) {
@@ -50,6 +51,7 @@ CLabel::CLabel(rapidjson::Value* vWidget) : CWidget(vWidget) {
 	if (vWidget->HasMember("Text")) Text = gcnew System::String((*vWidget)["Text"].GetString());
 	else Text = Name;
 	CreateLabelTexture();
+	loaded = true;
 }
 
 void CLabel::Save(rapidjson::Document* document, rapidjson::Value* vWidget) {
