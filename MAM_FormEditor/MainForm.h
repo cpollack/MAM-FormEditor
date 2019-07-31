@@ -50,6 +50,8 @@ namespace MAM_FormEditor {
 	public:
 		String^ fileNameShort = nullptr;
 		String^ fileName = nullptr;
+	private: System::Windows::Forms::RadioButton^  addPanel;
+	public:
 		String^ filePath = nullptr;
 
 		void SetFormTitle(bool edited);
@@ -122,6 +124,7 @@ namespace MAM_FormEditor {
 			this->previewModeToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->saveFileDialog = (gcnew System::Windows::Forms::SaveFileDialog());
 			this->openFileDialog = (gcnew System::Windows::Forms::OpenFileDialog());
+			this->addPanel = (gcnew System::Windows::Forms::RadioButton());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->splitContainer))->BeginInit();
 			this->splitContainer->Panel1->SuspendLayout();
 			this->splitContainer->Panel2->SuspendLayout();
@@ -195,6 +198,7 @@ namespace MAM_FormEditor {
 			// splitContainerEditor.Panel1
 			// 
 			this->splitContainerEditor->Panel1->BackColor = System::Drawing::SystemColors::Control;
+			this->splitContainerEditor->Panel1->Controls->Add(this->addPanel);
 			this->splitContainerEditor->Panel1->Controls->Add(this->addButton);
 			this->splitContainerEditor->Panel1->Controls->Add(this->addRadioButton);
 			this->splitContainerEditor->Panel1->Controls->Add(this->addCheckbox);
@@ -261,7 +265,7 @@ namespace MAM_FormEditor {
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->pbDrawWindow->Location = System::Drawing::Point(0, 0);
 			this->pbDrawWindow->Name = L"pbDrawWindow";
-			this->pbDrawWindow->Size = System::Drawing::Size(447, 334);
+			this->pbDrawWindow->Size = System::Drawing::Size(450, 334);
 			this->pbDrawWindow->TabIndex = 0;
 			this->pbDrawWindow->TabStop = false;
 			this->pbDrawWindow->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MainForm::pbDrawWindow_Paint);
@@ -348,6 +352,17 @@ namespace MAM_FormEditor {
 			this->openFileDialog->Filter = L"JSON File|*.JSON";
 			this->openFileDialog->Title = L"Load Form";
 			// 
+			// addPanel
+			// 
+			this->addPanel->Appearance = System::Windows::Forms::Appearance::Button;
+			this->addPanel->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"addPanel.Image")));
+			this->addPanel->Location = System::Drawing::Point(0, 129);
+			this->addPanel->Name = L"addPanel";
+			this->addPanel->Size = System::Drawing::Size(23, 24);
+			this->addPanel->TabIndex = 11;
+			this->addPanel->TabStop = true;
+			this->addPanel->UseVisualStyleBackColor = true;
+			// 
 			// MainForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -404,6 +419,7 @@ private: System::Void pbDrawWindow_MouseClick(System::Object^  sender, System::W
 	else if (addCheckbox->Checked) addMode = amCheckbox;
 	else if (addRadioButton->Checked) addMode = amRadio;
 	else if (addButton->Checked) addMode = amButton;
+	else if (addPanel->Checked) addMode = amPanel;
 
 	focus = window->Click(e, addMode);
 	if (focus) propertyGrid->SelectedObject = focus;

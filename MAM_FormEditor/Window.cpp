@@ -6,6 +6,7 @@
 #include "CheckBox.h"
 #include "RadioButton.h"
 #include "Button.h"
+#include "Panel.h"
 
 using namespace System::Windows::Forms;
 using namespace System::Drawing;
@@ -330,6 +331,8 @@ Object^ CWindow::Click(System::Windows::Forms::MouseEventArgs^ e, int addMode) {
 		case amButton:
 			addWidget = gcnew CButton("btn1", click.X, click.Y);
 			break;
+		case amPanel:
+			addWidget = gcnew CPanel("pnl1", click.X, click.Y);
 		}
 		
 		if (addWidget) {

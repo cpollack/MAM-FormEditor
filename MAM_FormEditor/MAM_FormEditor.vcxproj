@@ -123,9 +123,11 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\Jonathis\Source\Repos\MAM-FormEditor\MAM_FormEditor\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies />
+      <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -141,6 +143,7 @@
     <ClCompile Include="GlobalLib.cpp" />
     <ClCompile Include="Label.cpp" />
     <ClCompile Include="MainForm.cpp" />
+    <ClCompile Include="Panel.cpp" />
     <ClCompile Include="RadioButton.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Widget.cpp" />
@@ -154,6 +157,7 @@
     <ClInclude Include="MainForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="Panel.h" />
     <ClInclude Include="RadioButton.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Widget.h" />
@@ -167,6 +171,7 @@
   <ItemGroup>
     <Image Include="ico\cb.bmp" />
     <Image Include="ico\cb_2.bmp" />
+    <Image Include="ico\pnl.png" />
     <Image Include="ico\rb.bmp" />
     <Image Include="ico\rb_2.bmp" />
     <Image Include="res\BottomCenter.bmp" />

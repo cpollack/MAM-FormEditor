@@ -8,7 +8,8 @@ enum WidgetType {
 	wtLabel,
 	wtCheckBox,
 	wtRadioButton,
-	wtButton
+	wtButton,
+	wtPanel
 };
 
 public ref class CWidget {

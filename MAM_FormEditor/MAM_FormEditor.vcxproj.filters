@@ -51,6 +51,9 @@
     <ClCompile Include="Widget.cpp">
       <Filter>Source Files\Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="Panel.cpp">
+      <Filter>Source Files\Widgets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainForm.h">
@@ -78,6 +81,9 @@
       <Filter>Header Files\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="RadioButton.h">
+      <Filter>Header Files\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel.h">
       <Filter>Header Files\Widgets</Filter>
     </ClInclude>
   </ItemGroup>
@@ -119,6 +125,9 @@
       <Filter>ico</Filter>
     </Image>
     <Image Include="ico\rb_2.bmp">
+      <Filter>ico</Filter>
+    </Image>
+    <Image Include="ico\pnl.png">
       <Filter>ico</Filter>
     </Image>
   </ItemGroup>
