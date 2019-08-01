@@ -9,7 +9,10 @@ enum DragMode {
 	dmE,
 	dmN,
 	dmS,
-	//corner drag?
+	dmNW,
+	dmNE,
+	dmSW,
+	dmSE
 };
 
 enum AddMode {

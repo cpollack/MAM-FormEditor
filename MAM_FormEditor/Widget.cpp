@@ -115,7 +115,6 @@ Point CWidget::MouseDrag(Point dragPos, Point wPos, Point dragOffset, int dragMo
 	case dmDrag:
 		X = dragPos.X - dragOffset.X - wPos.X;
 		Y = dragPos.Y - dragOffset.Y - wPos.Y;
-		dragSubwidgets(X - origX, Y - origY);
 		break;
 	case dmN:
 		adjustHeight = dragPos.Y - dragOffset.Y - position.Y;
@@ -142,6 +141,8 @@ Point CWidget::MouseDrag(Point dragPos, Point wPos, Point dragOffset, int dragMo
 		dragOffset.X += adjustWidth;
 		break;
 	}
+
+	if (X != origX || Y != origY) dragSubwidgets(X - origX, Y - origY);
 	return dragOffset;
 }
 

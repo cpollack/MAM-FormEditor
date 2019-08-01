@@ -197,12 +197,18 @@ Cursor^ CWindow::MouseMove(System::Windows::Forms::MouseEventArgs^ e) {
 		if (e->X >= position.X && e->X <= position.X + Width
 			&& e->Y >= position.Y && e->Y <= position.Y + Height) {
 
-			if (e->X >= position.X && e->X <= position.X + 2
-				|| e->X >= position.X + Width - 2 && e->X <= position.X + Width) {
-				cursor = Cursors::SizeWE;
+			if (e->X >= position.X && e->X <= position.X + 4) {
+				if (e->Y >= position.Y && e->Y <= position.Y + 4) cursor = Cursors::SizeNWSE;
+				else if (e->Y >= position.Y + Height - 4 && e->Y <= position.Y + Height) cursor = Cursors::SizeNESW;
+				else cursor = Cursors::SizeWE;
 			}
-			else if (e->Y >= position.Y && e->Y <= position.Y + 2
-				|| e->Y >= position.Y + Height - 2 && e->Y <= position.Y + Height) {
+			else if (e->X >= position.X + Width - 4 && e->X <= position.X + Width) {
+				if (e->Y >= position.Y && e->Y <= position.Y + 4) cursor = Cursors::SizeNESW;
+				else if (e->Y >= position.Y + Height - 4 && e->Y <= position.Y + Height) cursor = Cursors::SizeNWSE;
+				else cursor = Cursors::SizeWE;
+			} 
+			else if (e->Y >= position.Y && e->Y <= position.Y + 4
+				|| e->Y >= position.Y + Height - 4 && e->Y <= position.Y + Height) {
 				cursor = Cursors::SizeNS;
 			}
 		}
@@ -246,6 +252,41 @@ Cursor^ CWindow::MouseMove(System::Windows::Forms::MouseEventArgs^ e) {
 				Width += adjustWidth;
 				dragOffset.X += adjustWidth;
 				break;
+			case dmNW:
+				adjustHeight = e->Y - position.Y - dragOffset.Y;
+				adjustWidth = e->X - position.X - dragOffset.X;
+				position = Point(position.X + adjustWidth, position.Y + adjustHeight);
+				Width -= adjustWidth;
+				Height -= adjustHeight;
+				dragOffset.Y = e->Y - position.Y;
+				dragOffset.X = e->X - position.X;
+				break;
+			case dmNE:
+				adjustWidth = e->X - position.X - dragOffset.X;
+				adjustHeight = e->Y - position.Y - dragOffset.Y;
+				position = Point(position.X, position.Y + adjustHeight);
+				Width += adjustWidth;
+				Height -= adjustHeight;
+				dragOffset.X += adjustWidth;
+				dragOffset.Y = e->Y - position.Y;
+				break;
+			case dmSW:
+				adjustWidth = e->X - position.X - dragOffset.X;
+				adjustHeight = e->Y - position.Y - dragOffset.Y;
+				position = Point(position.X + adjustWidth, position.Y);
+				Width -= adjustWidth;
+				Height += adjustHeight;
+				dragOffset.X = e->X - position.X;
+				dragOffset.Y += adjustHeight;
+				break;
+			case dmSE:
+				adjustWidth = e->X - position.X - dragOffset.X;
+				adjustHeight = e->Y - position.Y - dragOffset.Y;
+				Width += adjustWidth;
+				Height += adjustHeight;
+				dragOffset.X += adjustWidth;
+				dragOffset.Y += adjustHeight;
+				break;
 			}
 		}
 	}
@@ -263,19 +304,23 @@ void CWindow::MouseDown(System::Windows::Forms::MouseEventArgs^ e) {
 	}
 
 	//Check for window drag conditions
-	if (e->X >= position.X && e->X <= position.X + 2) {
-		dragMode = dmW;
+	if (e->X >= position.X && e->X <= position.X + 4) {
+		if (e->Y >= position.Y && e->Y <= position.Y + 4) dragMode = dmNW;
+		else if (e->Y >= position.Y + Height - 4 && e->Y <= position.Y + Height) dragMode = dmSW;
+		else dragMode = dmW;
 	} 
-	else if (e->X >= position.X + Width - 2 && e->X <= position.X + Width) {
-		dragMode = dmE;
+	else if (e->X >= position.X + Width - 4 && e->X <= position.X + Width) {
+		if (e->Y >= position.Y && e->Y <= position.Y + 4) dragMode = dmNE;
+		else if (e->Y >= position.Y + Height - 4 && e->Y <= position.Y + Height) dragMode = dmSE;
+		else dragMode = dmE;
 	}
-	else if (e->Y >= position.Y && e->Y <= position.Y + 2) {
+	else if (e->Y >= position.Y && e->Y <= position.Y + 4) {
 		dragMode = dmN;
 	}
-	else if (e->Y >= position.Y + Height - 2 && e->Y <= position.Y + Height) {
+	else if (e->Y >= position.Y + Height - 4 && e->Y <= position.Y + Height) {
 		dragMode = dmS;
 	}
-	else if (e->Y > position.Y + 2 && e->Y <= position.Y + top->Height) {
+	else if (e->Y > position.Y + 4 && e->Y <= position.Y + top->Height) {
 		dragMode = dmDrag;
 	}
 
