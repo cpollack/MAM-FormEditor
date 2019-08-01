@@ -59,6 +59,9 @@ public:
 	System::Windows::Forms::Cursor^ MouseMove(System::Windows::Forms::MouseEventArgs^ e, System::Drawing::Point wPos);
 	virtual System::Drawing::Point MouseDrag(System::Drawing::Point dragPos, System::Drawing::Point wPos, System::Drawing::Point dragOffset, int dragMode);
 
+private:
+	void dragSubwidgets(int adjustX, int adjustY);
+
 protected:
 	int MIN_HEIGHT = 2;
 	int MIN_WIDTH = 5;

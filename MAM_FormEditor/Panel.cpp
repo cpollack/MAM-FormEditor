@@ -86,8 +86,11 @@ void CPanel::CreatePanelImage() {
 }
 
 void CPanel::CreateCaptionTexture() {
+	if (cpt) {
+		delete cpt;
+		cpt = nullptr;
+	}
 	if (Caption->Length == 0) return;
-	if (cpt) delete cpt;
 
 	Graphics ^gr = Graphics::FromImage(pnl);
 	gr->TextRenderingHint = System::Drawing::Text::TextRenderingHint::AntiAlias;
