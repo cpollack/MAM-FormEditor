@@ -63,16 +63,20 @@ int CWidget::MouseDown(System::Windows::Forms::MouseEventArgs^ e, System::Drawin
 	int dragMode = dmNone;
 	Point position(wPos.X + X, wPos.Y + Y);
 
-	if (e->X >= position.X && e->X <= position.X + 2) {
-		dragMode = dmW;
+	if (e->X >= position.X && e->X <= position.X + 4) {
+		if (e->Y >= position.Y && e->Y <= position.Y + 4) dragMode = dmNW;
+		else if (e->Y >= position.Y + Height - 4 && e->Y <= position.Y + Height) dragMode = dmSW;
+		else dragMode = dmW;
 	}
-	else if (e->X >= position.X + Width - 2 && e->X <= position.X + Width) {
-		dragMode = dmE;
+	else if (e->X >= position.X + Width - 4 && e->X <= position.X + Width) {
+		if (e->Y >= position.Y && e->Y <= position.Y + 4) dragMode = dmNE;
+		else if (e->Y >= position.Y + Height - 4 && e->Y <= position.Y + Height) dragMode = dmSE;
+		else dragMode = dmE;
 	}
-	else if (e->Y >= position.Y && e->Y <= position.Y + 2) {
+	else if (e->Y >= position.Y && e->Y <= position.Y + 4) {
 		dragMode = dmN;
 	}
-	else if (e->Y >= position.Y + Height - 2 && e->Y <= position.Y + Height) {
+	else if (e->Y >= position.Y + Height - 4 && e->Y <= position.Y + Height) {
 		dragMode = dmS;
 	}
 	else {
@@ -90,12 +94,18 @@ Cursor^ CWidget::MouseMove(MouseEventArgs^ e, Point wPos) {
 	if (e->X >= position.X && e->X <= position.X + Width
 		&& e->Y >= position.Y && e->Y <= position.Y + Height) {
 
-		if (e->X >= position.X && e->X <= position.X + 2
-			|| e->X >= position.X + Width - 2 && e->X <= position.X + Width) {
-			cursor = Cursors::SizeWE;
+		if (e->X >= position.X && e->X <= position.X + 4) {
+			if (e->Y >= position.Y && e->Y <= position.Y + 4) cursor = Cursors::SizeNWSE;
+			else if (e->Y >= position.Y + Height - 4 && e->Y <= position.Y + Height) cursor = Cursors::SizeNESW;
+			else cursor = Cursors::SizeWE;
 		}
-		else if (e->Y >= position.Y && e->Y <= position.Y + 2
-			|| e->Y >= position.Y + Height - 2 && e->Y <= position.Y + Height) {
+		else if (e->X >= position.X + Width - 4 && e->X <= position.X + Width) {
+			if (e->Y >= position.Y && e->Y <= position.Y + 4) cursor = Cursors::SizeNESW;
+			else if (e->Y >= position.Y + Height - 4 && e->Y <= position.Y + Height) cursor = Cursors::SizeNWSE;
+			else cursor = Cursors::SizeWE;
+		}
+		else if (e->Y >= position.Y && e->Y <= position.Y + 4
+			|| e->Y >= position.Y + Height - 4 && e->Y <= position.Y + Height) {
 			cursor = Cursors::SizeNS;
 		}
 	}
@@ -139,6 +149,46 @@ Point CWidget::MouseDrag(Point dragPos, Point wPos, Point dragOffset, int dragMo
 		if (Width + adjustWidth < MIN_WIDTH) adjustWidth = MIN_WIDTH - Width;
 		Width += adjustWidth;
 		dragOffset.X += adjustWidth;
+		break;
+	case dmNW:
+		adjustWidth = dragPos.X - dragOffset.X - position.X;
+		adjustHeight = dragPos.Y - dragOffset.Y - position.Y;
+		if (Width - adjustWidth < MIN_WIDTH) adjustWidth = Width - MIN_WIDTH;
+		if (Height - adjustHeight < MIN_HEIGHT) adjustHeight = Height - MIN_HEIGHT;
+		X = X + adjustWidth;
+		Y = Y + adjustHeight;
+		Width -= adjustWidth;
+		Height -= adjustHeight;
+		break;
+	case dmNE:
+		adjustWidth = dragPos.X - dragOffset.X - position.X;
+		adjustHeight = dragPos.Y - dragOffset.Y - position.Y;
+		if (Width + adjustWidth < MIN_WIDTH) adjustWidth = MIN_WIDTH - Width;
+		if (Height - adjustHeight < MIN_HEIGHT) adjustHeight = Height - MIN_HEIGHT;
+		Y = Y + adjustHeight;
+		Width += adjustWidth;
+		Height -= adjustHeight;
+		dragOffset.X += adjustWidth;
+		break;
+	case dmSW:
+		adjustWidth = dragPos.X - dragOffset.X - position.X;
+		adjustHeight = dragPos.Y - dragOffset.Y - position.Y;
+		if (Width - adjustWidth < MIN_WIDTH) adjustWidth = Width - MIN_WIDTH;
+		if (Height + adjustHeight < MIN_HEIGHT) adjustHeight = MIN_HEIGHT - Height;
+		Width -= adjustWidth;
+		Height += adjustHeight;
+		X = X + adjustWidth;
+		dragOffset.Y += adjustHeight;
+		break;
+	case dmSE:
+		adjustWidth = dragPos.X - dragOffset.X - position.X;
+		adjustHeight = dragPos.Y - dragOffset.Y - position.Y;
+		if (Width + adjustWidth < MIN_WIDTH) adjustWidth = MIN_WIDTH - Width;
+		if (Height + adjustHeight < MIN_HEIGHT) adjustHeight = MIN_HEIGHT - Height;
+		Width += adjustWidth;
+		Height += adjustHeight;
+		dragOffset.X += adjustWidth;
+		dragOffset.Y += adjustHeight;
 		break;
 	}
 
