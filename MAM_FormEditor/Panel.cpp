@@ -2,19 +2,42 @@
 #include "GlobalLib.h"
 
 using namespace System::Drawing;
+using namespace System::Collections;
 using namespace rapidjson;
 
 CPanel::CPanel(System::String^ name, int x, int y) {
-	widgetType = wtPanel;
-	MIN_HEIGHT = 30;
-	MIN_WIDTH = 20;
-
+	init();
 	Name = name;
 	Caption = "";
 	X = x;
 	Y = y;
 	Width = DEFAULT_WIDTH;
 	Height = DEFAULT_HEIGHT;
+
+	CreatePanelImage();
+	CreateCaptionTexture();
+	loaded = true;
+}
+
+CPanel::CPanel(rapidjson::Value* vWidget) : CWidget(vWidget) {
+	init();
+	if (!vWidget->IsObject()) return;
+
+	if (vWidget->HasMember("Caption")) Caption = gcnew System::String((*vWidget)["Caption"].GetString());
+	else Caption = "";
+
+	CreatePanelImage();
+	CreateCaptionTexture();
+	loaded = true;
+}
+
+void CPanel::init() {
+	widgetType = wtPanel;
+	MIN_HEIGHT = 30;
+	MIN_WIDTH = 20;
+
+	container = true;
+	widgets = gcnew ArrayList;
 
 	unsigned int uiColor = 0x3A5121;
 	bgColor = gcnew SolidBrush(Color::FromArgb(uiColor & 0xFF, (uiColor & 0xFF00) >> 8, (uiColor & 0xFF0000) >> 16));
@@ -25,33 +48,6 @@ CPanel::CPanel(System::String^ name, int x, int y) {
 	textFormat = gcnew StringFormat(StringFormat::GenericTypographic);
 	textFormat->Alignment = StringAlignment::Near;
 	textFormat->LineAlignment = StringAlignment::Near;
-
-	CreatePanelImage();
-	CreateCaptionTexture();
-	loaded = true;
-}
-
-CPanel::CPanel(rapidjson::Value* vWidget) : CWidget(vWidget) {
-	if (!vWidget->IsObject()) return;
-
-	widgetType = wtPanel;
-	MIN_HEIGHT = 20;
-	MIN_WIDTH = 20;
-
-	unsigned int uiColor = 0x3A5121;
-	bgColor = gcnew SolidBrush(Color::FromArgb(uiColor & 0xFF, (uiColor & 0xFF00) >> 8, (uiColor & 0xFF0000) >> 16));
-	fontBrush = gcnew SolidBrush(Color::FromArgb(0xAA, 0xD5, 0xFF));
-
-	textFormat = gcnew StringFormat(StringFormat::GenericTypographic);
-	textFormat->Alignment = StringAlignment::Near;
-	textFormat->LineAlignment = StringAlignment::Near;
-
-	if (vWidget->HasMember("Caption")) Caption = gcnew System::String((*vWidget)["Caption"].GetString());
-	else Caption = "";
-
-	CreatePanelImage();
-	CreateCaptionTexture();
-	loaded = true;
 }
 
 void CPanel::Save(rapidjson::Document* document, rapidjson::Value* vWidget) {
@@ -90,6 +86,7 @@ void CPanel::CreatePanelImage() {
 }
 
 void CPanel::CreateCaptionTexture() {
+	if (Caption->Length == 0) return;
 	if (cpt) delete cpt;
 
 	Graphics ^gr = Graphics::FromImage(pnl);
@@ -108,6 +105,10 @@ void CPanel::Draw(Graphics^ gr, Point pos) {
 
 	gr->DrawImage(pnl, widgetPos);
 	if (cpt) gr->DrawImage(cpt, Point(widgetPos.X + 5, widgetPos.Y));
+
+	for each(CWidget^ w in widgets) {
+		w->Draw(gr, pos);
+	}
 }
 
 Point CPanel::MouseDrag(Point dragPos, Point wPos, Point dragOffset, int dragMode) {

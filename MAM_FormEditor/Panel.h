@@ -40,6 +40,7 @@ public:
 public:
 	CPanel(System::String^ name, int x, int y);
 	CPanel(rapidjson::Value* vWidget);
+	void init();
 	virtual void Save(rapidjson::Document* document, rapidjson::Value* vWidget) override;
 	virtual void Draw(System::Drawing::Graphics^ gr, System::Drawing::Point pos) override;
 	

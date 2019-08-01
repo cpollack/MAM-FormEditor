@@ -40,18 +40,11 @@ namespace MAM_FormEditor {
 	
 	public:
 		CWindow^ window;
+		RadioButton^ addSelection = nullptr;
+
 		rapidjson::Document* document;
-	private: System::Windows::Forms::SaveFileDialog^  saveFileDialog;
-	public:
-
-
-	private: System::Windows::Forms::ToolStripMenuItem^  saveAsToolStripMenuItem;
-	private: System::Windows::Forms::OpenFileDialog^  openFileDialog;
-	public:
 		String^ fileNameShort = nullptr;
 		String^ fileName = nullptr;
-	private: System::Windows::Forms::RadioButton^  addPanel;
-	public:
 		String^ filePath = nullptr;
 
 		void SetFormTitle(bool edited);
@@ -60,7 +53,11 @@ namespace MAM_FormEditor {
 		void SaveAsFile();
 		void LoadFromFile();
 		void ViewPreviewMode();
+		void ToggleAddSelection(RadioButton ^rb);
 
+	private: System::Windows::Forms::SaveFileDialog^  saveFileDialog;
+	private: System::Windows::Forms::ToolStripMenuItem^  saveAsToolStripMenuItem;
+	private: System::Windows::Forms::OpenFileDialog^  openFileDialog;
 	private: System::Windows::Forms::MenuStrip^  menuStripMain;
 	private: System::Windows::Forms::ToolStripMenuItem^  fileToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  newToolStripMenuItem;
@@ -73,6 +70,7 @@ namespace MAM_FormEditor {
 	private: System::Windows::Forms::RadioButton^  addCheckbox;
 	private: System::Windows::Forms::RadioButton^  addLabel;
 	private: System::Windows::Forms::RadioButton^  addButton;
+	private: System::Windows::Forms::RadioButton^  addPanel;
 	private: System::Windows::Forms::SplitContainer^  splitContainerEditor;
 
 	protected:
@@ -109,6 +107,7 @@ namespace MAM_FormEditor {
 			this->propertyGrid = (gcnew System::Windows::Forms::PropertyGrid());
 			this->labelWidgetName = (gcnew System::Windows::Forms::Label());
 			this->splitContainerEditor = (gcnew System::Windows::Forms::SplitContainer());
+			this->addPanel = (gcnew System::Windows::Forms::RadioButton());
 			this->addButton = (gcnew System::Windows::Forms::RadioButton());
 			this->addRadioButton = (gcnew System::Windows::Forms::RadioButton());
 			this->addCheckbox = (gcnew System::Windows::Forms::RadioButton());
@@ -124,7 +123,6 @@ namespace MAM_FormEditor {
 			this->previewModeToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->saveFileDialog = (gcnew System::Windows::Forms::SaveFileDialog());
 			this->openFileDialog = (gcnew System::Windows::Forms::OpenFileDialog());
-			this->addPanel = (gcnew System::Windows::Forms::RadioButton());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->splitContainer))->BeginInit();
 			this->splitContainer->Panel1->SuspendLayout();
 			this->splitContainer->Panel2->SuspendLayout();
@@ -213,6 +211,18 @@ namespace MAM_FormEditor {
 			this->splitContainerEditor->SplitterWidth = 1;
 			this->splitContainerEditor->TabIndex = 1;
 			// 
+			// addPanel
+			// 
+			this->addPanel->Appearance = System::Windows::Forms::Appearance::Button;
+			this->addPanel->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"addPanel.Image")));
+			this->addPanel->Location = System::Drawing::Point(0, 129);
+			this->addPanel->Name = L"addPanel";
+			this->addPanel->Size = System::Drawing::Size(23, 24);
+			this->addPanel->TabIndex = 11;
+			this->addPanel->TabStop = true;
+			this->addPanel->UseVisualStyleBackColor = true;
+			this->addPanel->Click += gcnew System::EventHandler(this, &MainForm::addPanel_Click);
+			// 
 			// addButton
 			// 
 			this->addButton->Appearance = System::Windows::Forms::Appearance::Button;
@@ -224,6 +234,7 @@ namespace MAM_FormEditor {
 			this->addButton->TabIndex = 10;
 			this->addButton->TabStop = true;
 			this->addButton->UseVisualStyleBackColor = true;
+			this->addButton->Click += gcnew System::EventHandler(this, &MainForm::addButton_Click);
 			// 
 			// addRadioButton
 			// 
@@ -235,6 +246,7 @@ namespace MAM_FormEditor {
 			this->addRadioButton->TabIndex = 9;
 			this->addRadioButton->TabStop = true;
 			this->addRadioButton->UseVisualStyleBackColor = true;
+			this->addRadioButton->Click += gcnew System::EventHandler(this, &MainForm::addRadioButton_Click);
 			// 
 			// addCheckbox
 			// 
@@ -246,6 +258,7 @@ namespace MAM_FormEditor {
 			this->addCheckbox->TabIndex = 8;
 			this->addCheckbox->TabStop = true;
 			this->addCheckbox->UseVisualStyleBackColor = true;
+			this->addCheckbox->Click += gcnew System::EventHandler(this, &MainForm::addCheckbox_Click);
 			// 
 			// addLabel
 			// 
@@ -257,6 +270,7 @@ namespace MAM_FormEditor {
 			this->addLabel->TabIndex = 7;
 			this->addLabel->TabStop = true;
 			this->addLabel->UseVisualStyleBackColor = true;
+			this->addLabel->Click += gcnew System::EventHandler(this, &MainForm::addLabel_Click);
 			// 
 			// pbDrawWindow
 			// 
@@ -265,7 +279,7 @@ namespace MAM_FormEditor {
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->pbDrawWindow->Location = System::Drawing::Point(0, 0);
 			this->pbDrawWindow->Name = L"pbDrawWindow";
-			this->pbDrawWindow->Size = System::Drawing::Size(450, 334);
+			this->pbDrawWindow->Size = System::Drawing::Size(456, 334);
 			this->pbDrawWindow->TabIndex = 0;
 			this->pbDrawWindow->TabStop = false;
 			this->pbDrawWindow->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MainForm::pbDrawWindow_Paint);
@@ -352,17 +366,6 @@ namespace MAM_FormEditor {
 			this->openFileDialog->Filter = L"JSON File|*.JSON";
 			this->openFileDialog->Title = L"Load Form";
 			// 
-			// addPanel
-			// 
-			this->addPanel->Appearance = System::Windows::Forms::Appearance::Button;
-			this->addPanel->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"addPanel.Image")));
-			this->addPanel->Location = System::Drawing::Point(0, 129);
-			this->addPanel->Name = L"addPanel";
-			this->addPanel->Size = System::Drawing::Size(23, 24);
-			this->addPanel->TabIndex = 11;
-			this->addPanel->TabStop = true;
-			this->addPanel->UseVisualStyleBackColor = true;
-			// 
 			// MainForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -428,6 +431,7 @@ private: System::Void pbDrawWindow_MouseClick(System::Object^  sender, System::W
 	for each (RadioButton^ rb in splitContainerEditor->Panel1->Controls) {
 		rb->Checked = false;
 	}
+	addSelection = nullptr;
 }
 
 private: System::Void saveToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -448,6 +452,21 @@ private: System::Void propertyGrid_SelectedObjectsChanged(System::Object^  sende
 }
 private: System::Void newToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 	NewFile();
+}
+private: System::Void addLabel_Click(System::Object^  sender, System::EventArgs^  e) {
+	ToggleAddSelection(addLabel);
+}
+private: System::Void addCheckbox_Click(System::Object^  sender, System::EventArgs^  e) {
+	ToggleAddSelection(addCheckbox);
+}
+private: System::Void addRadioButton_Click(System::Object^  sender, System::EventArgs^  e) {
+	ToggleAddSelection(addRadioButton);
+}
+private: System::Void addButton_Click(System::Object^  sender, System::EventArgs^  e) {
+	ToggleAddSelection(addButton);
+}
+private: System::Void addPanel_Click(System::Object^  sender, System::EventArgs^  e) {
+	ToggleAddSelection(addPanel);
 }
 };
 }

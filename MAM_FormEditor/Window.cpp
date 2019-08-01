@@ -115,6 +115,9 @@ void CWindow::LoadWidgetByType(rapidjson::Value* vWidget) {
 	case wtButton:
 		addWidget = gcnew CButton(&widget);
 		break;
+	case wtPanel:
+		addWidget = gcnew CPanel(&widget);
+		break;
 	}
 	if (addWidget) widgets->Add(addWidget);
 }
@@ -308,11 +311,14 @@ Object^ CWindow::Click(System::Windows::Forms::MouseEventArgs^ e, int addMode) {
 	focus = nullptr;
 
 	//Iterate widgets and see if one was clicked.
-	for each (CWidget^ w in widgets) {
-		if (w->DoesPointIntersect(click)) {
-			focus = w;
-			return w;
+	CWidget^ container = nullptr;
+	CWidget^ selectedWidget = getWidgetAtPoint(widgets, click);
+	if (selectedWidget) {
+		if (!selectedWidget->container || (selectedWidget->container && addMode == amNone)) {
+			focus = selectedWidget;
+			return selectedWidget;
 		}
+		container = selectedWidget;
 	}
 
 	//If no widget was clicked, check if in add mode
@@ -336,11 +342,34 @@ Object^ CWindow::Click(System::Windows::Forms::MouseEventArgs^ e, int addMode) {
 		}
 		
 		if (addWidget) {
-			widgets->Add(addWidget);
+			if (container) {
+				container->widgets->Add(addWidget);
+				addWidget->containedBy = container;
+			}
+			else widgets->Add(addWidget);
 			focus = addWidget;
 			return addWidget;
 		}
+		
 	}
 
 	return this;
+}
+
+CWidget^ CWindow::getWidgetAtPoint(ArrayList ^widgets, Point p) {
+	CWidget^ selectedWidget = nullptr;
+	for each (CWidget^ w in widgets) {
+		if (w->DoesPointIntersect(p)) {
+			if (w->container) {
+				selectedWidget = getWidgetAtPoint(w->widgets, p);
+				if (!selectedWidget) selectedWidget = w;
+				break;
+			}
+			else {
+				return w;
+			}
+		}
+	}
+
+	return selectedWidget;
 }

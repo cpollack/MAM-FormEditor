@@ -45,6 +45,10 @@ public:
 	int widgetType;
 	int width, height;
 
+	bool container = false;
+	System::Collections::ArrayList ^widgets = nullptr;
+	CWidget ^containedBy = nullptr;
+
 	CWidget();
 	CWidget(rapidjson::Value* vWidget);
 	virtual void Draw(System::Drawing::Graphics^ gr, System::Drawing::Point pos) abstract;

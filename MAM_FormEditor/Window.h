@@ -58,4 +58,6 @@ private:
 	System::Drawing::Image ^topLeft, ^topRight, ^bottomLeft, ^bottomRight;
 	System::Drawing::Image ^close;
 	int MIN_LEFT, MAX_RIGHT, MIN_TOP, MAX_BOTTOM;
+
+	CWidget^ getWidgetAtPoint(System::Collections::ArrayList ^widgets, System::Drawing::Point p);
 };

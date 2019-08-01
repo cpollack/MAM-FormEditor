@@ -131,3 +131,11 @@ void MainForm::LoadFromFile() {
 void MainForm::ViewPreviewMode() {
 	previewMode = previewModeToolStripMenuItem->Checked;
 }
+
+void MainForm::ToggleAddSelection(RadioButton ^rb) {
+	if (addSelection == rb) {
+		rb->Checked = false;
+		addSelection = nullptr;
+	}
+	else addSelection = rb;
+}
