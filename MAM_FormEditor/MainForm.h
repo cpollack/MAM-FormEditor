@@ -45,6 +45,10 @@ namespace MAM_FormEditor {
 		rapidjson::Document* document;
 		String^ fileNameShort = nullptr;
 		String^ fileName = nullptr;
+	private: System::Windows::Forms::RadioButton^  addField;
+	private: System::Windows::Forms::RadioButton^  addImageBox;
+	private: System::Windows::Forms::RadioButton^  addDropDown;
+	public:
 		String^ filePath = nullptr;
 
 		void SetFormTitle(bool edited);
@@ -107,6 +111,9 @@ namespace MAM_FormEditor {
 			this->propertyGrid = (gcnew System::Windows::Forms::PropertyGrid());
 			this->labelWidgetName = (gcnew System::Windows::Forms::Label());
 			this->splitContainerEditor = (gcnew System::Windows::Forms::SplitContainer());
+			this->addImageBox = (gcnew System::Windows::Forms::RadioButton());
+			this->addDropDown = (gcnew System::Windows::Forms::RadioButton());
+			this->addField = (gcnew System::Windows::Forms::RadioButton());
 			this->addPanel = (gcnew System::Windows::Forms::RadioButton());
 			this->addButton = (gcnew System::Windows::Forms::RadioButton());
 			this->addRadioButton = (gcnew System::Windows::Forms::RadioButton());
@@ -166,6 +173,7 @@ namespace MAM_FormEditor {
 				| System::Windows::Forms::AnchorStyles::Left)
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->propertyGrid->BackColor = System::Drawing::SystemColors::Control;
+			this->propertyGrid->CausesValidation = false;
 			this->propertyGrid->Location = System::Drawing::Point(3, 25);
 			this->propertyGrid->Name = L"propertyGrid";
 			this->propertyGrid->Size = System::Drawing::Size(205, 306);
@@ -196,6 +204,9 @@ namespace MAM_FormEditor {
 			// splitContainerEditor.Panel1
 			// 
 			this->splitContainerEditor->Panel1->BackColor = System::Drawing::SystemColors::Control;
+			this->splitContainerEditor->Panel1->Controls->Add(this->addImageBox);
+			this->splitContainerEditor->Panel1->Controls->Add(this->addDropDown);
+			this->splitContainerEditor->Panel1->Controls->Add(this->addField);
 			this->splitContainerEditor->Panel1->Controls->Add(this->addPanel);
 			this->splitContainerEditor->Panel1->Controls->Add(this->addButton);
 			this->splitContainerEditor->Panel1->Controls->Add(this->addRadioButton);
@@ -211,11 +222,50 @@ namespace MAM_FormEditor {
 			this->splitContainerEditor->SplitterWidth = 1;
 			this->splitContainerEditor->TabIndex = 1;
 			// 
+			// addImageBox
+			// 
+			this->addImageBox->Appearance = System::Windows::Forms::Appearance::Button;
+			this->addImageBox->BackgroundImageLayout = System::Windows::Forms::ImageLayout::None;
+			this->addImageBox->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"addImageBox.Image")));
+			this->addImageBox->Location = System::Drawing::Point(0, 189);
+			this->addImageBox->Name = L"addImageBox";
+			this->addImageBox->Size = System::Drawing::Size(23, 24);
+			this->addImageBox->TabIndex = 14;
+			this->addImageBox->TabStop = true;
+			this->addImageBox->UseVisualStyleBackColor = true;
+			this->addImageBox->Click += gcnew System::EventHandler(this, &MainForm::addImageBox_Click);
+			// 
+			// addDropDown
+			// 
+			this->addDropDown->Appearance = System::Windows::Forms::Appearance::Button;
+			this->addDropDown->BackgroundImageLayout = System::Windows::Forms::ImageLayout::None;
+			this->addDropDown->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"addDropDown.Image")));
+			this->addDropDown->Location = System::Drawing::Point(0, 159);
+			this->addDropDown->Name = L"addDropDown";
+			this->addDropDown->Size = System::Drawing::Size(23, 24);
+			this->addDropDown->TabIndex = 13;
+			this->addDropDown->TabStop = true;
+			this->addDropDown->UseVisualStyleBackColor = true;
+			this->addDropDown->Click += gcnew System::EventHandler(this, &MainForm::addDropDown_Click);
+			// 
+			// addField
+			// 
+			this->addField->Appearance = System::Windows::Forms::Appearance::Button;
+			this->addField->BackgroundImageLayout = System::Windows::Forms::ImageLayout::None;
+			this->addField->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"addField.Image")));
+			this->addField->Location = System::Drawing::Point(0, 129);
+			this->addField->Name = L"addField";
+			this->addField->Size = System::Drawing::Size(23, 24);
+			this->addField->TabIndex = 12;
+			this->addField->TabStop = true;
+			this->addField->UseVisualStyleBackColor = true;
+			this->addField->Click += gcnew System::EventHandler(this, &MainForm::addField_Click);
+			// 
 			// addPanel
 			// 
 			this->addPanel->Appearance = System::Windows::Forms::Appearance::Button;
 			this->addPanel->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"addPanel.Image")));
-			this->addPanel->Location = System::Drawing::Point(0, 129);
+			this->addPanel->Location = System::Drawing::Point(0, 219);
 			this->addPanel->Name = L"addPanel";
 			this->addPanel->Size = System::Drawing::Size(23, 24);
 			this->addPanel->TabIndex = 11;
@@ -279,7 +329,7 @@ namespace MAM_FormEditor {
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->pbDrawWindow->Location = System::Drawing::Point(0, 0);
 			this->pbDrawWindow->Name = L"pbDrawWindow";
-			this->pbDrawWindow->Size = System::Drawing::Size(456, 334);
+			this->pbDrawWindow->Size = System::Drawing::Size(444, 334);
 			this->pbDrawWindow->TabIndex = 0;
 			this->pbDrawWindow->TabStop = false;
 			this->pbDrawWindow->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MainForm::pbDrawWindow_Paint);
@@ -418,11 +468,14 @@ private: System::Void pbDrawWindow_MouseClick(System::Object^  sender, System::W
 	Object^ focus;
 	int addMode = 0;
 
-	if (addLabel->Checked) addMode = amLabel;
-	else if (addCheckbox->Checked) addMode = amCheckbox;
-	else if (addRadioButton->Checked) addMode = amRadio;
-	else if (addButton->Checked) addMode = amButton;
-	else if (addPanel->Checked) addMode = amPanel;
+	if (addLabel->Checked) addMode = wtLabel;
+	else if (addCheckbox->Checked) addMode = wtCheckBox;
+	else if (addRadioButton->Checked) addMode = wtRadioButton;
+	else if (addButton->Checked) addMode = wtButton;
+	else if (addPanel->Checked) addMode = wtPanel;
+	else if (addField->Checked) addMode = wtField;
+	else if (addDropDown->Checked) addMode = wtDropDown;
+	else if (addImageBox->Checked) addMode = wtImageBox;
 
 	focus = window->Click(e, addMode);
 	if (focus) propertyGrid->SelectedObject = focus;
@@ -467,6 +520,15 @@ private: System::Void addButton_Click(System::Object^  sender, System::EventArgs
 }
 private: System::Void addPanel_Click(System::Object^  sender, System::EventArgs^  e) {
 	ToggleAddSelection(addPanel);
+}
+private: System::Void addField_Click(System::Object^  sender, System::EventArgs^  e) {
+	ToggleAddSelection(addField);
+}
+private: System::Void addDropDown_Click(System::Object^  sender, System::EventArgs^  e) {
+	ToggleAddSelection(addDropDown);
+}
+private: System::Void addImageBox_Click(System::Object^  sender, System::EventArgs^  e) {
+	ToggleAddSelection(addImageBox);
 }
 };
 }

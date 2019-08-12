@@ -115,6 +115,21 @@ void CLabel::CreateLabelTexture() {
 	//Trim the end of the string and show ... if the whole string does not fit?
 	//SizeF sizeF = gr->MeasureString(Text, font, Point(0, 0), textFormat);
 
-	gr->DrawString(drawText, font, fontBrush, Point(0, Height / 2), textFormat);
+	int hOffset;
+	SizeF txtSize = gr->MeasureString(drawText, font, Point(0, 0), textFormat);
+
+	switch (alignment) {
+	case LabelAlignment::laLeft:
+		hOffset = 0;
+		break;
+	case LabelAlignment::laRight:
+		hOffset = Width - txtSize.Width;
+		break;
+	case LabelAlignment::laCenter:
+		hOffset = (Width / 2) - (txtSize.Width / 2);
+		break;
+	}
+
+	gr->DrawString(drawText, font, fontBrush, Point(hOffset, Height / 2), textFormat);
 	if (drawUnderline) gr->DrawLine(underlinePen, underline.X, 13.0, underline.X + underline.Width, 13.0);
 }

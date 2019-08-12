@@ -15,15 +15,6 @@ enum DragMode {
 	dmSE
 };
 
-enum AddMode {
-	amNone,
-	amLabel,
-	amCheckbox,
-	amRadio,
-	amButton,
-	amPanel
-};
-
 ref class CWidget;
 
 public ref class CWindow {

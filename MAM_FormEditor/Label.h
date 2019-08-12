@@ -2,6 +2,16 @@
 
 #include "Widget.h"
 
+using System::ComponentModel::DescriptionAttribute;
+
+//[System::ComponentModel::TypeConverter( EnumUnderConvertor::typeid)]
+public enum class LabelAlignment
+{
+	laLeft,
+	laCenter,
+	laRight
+};
+
 public ref class CLabel : public CWidget {
 public:
 	[Category("Main"), Description("Descriptive label of the checkbox")]
@@ -11,6 +21,16 @@ public:
 		}
 		void set(System::String^ value) {
 			text = value;
+			if (loaded) CreateLabelTexture();
+		}
+	}
+	[Category("Main"), Description("Horizontal alignment of the label's text.")]
+	property LabelAlignment Alignment {
+		LabelAlignment get() {
+			return alignment;
+		}
+		void set(LabelAlignment value) {
+			alignment = value;
 			if (loaded) CreateLabelTexture();
 		}
 	}
@@ -47,6 +67,7 @@ private:
 
 	System::Drawing::Image^ lbl = nullptr;
 	System::String^ text;
+	LabelAlignment alignment = LabelAlignment::laLeft;
 
 	System::Drawing::StringFormat^ textFormat;
 	System::Drawing::Pen^ dashedPen;

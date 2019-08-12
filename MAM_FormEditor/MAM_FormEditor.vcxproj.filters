@@ -54,6 +54,15 @@
     <ClCompile Include="Panel.cpp">
       <Filter>Source Files\Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="Field.cpp">
+      <Filter>Source Files\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageBox.cpp">
+      <Filter>Source Files\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="DropDown.cpp">
+      <Filter>Source Files\Widgets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainForm.h">
@@ -84,6 +93,15 @@
       <Filter>Header Files\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="Panel.h">
+      <Filter>Header Files\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Field.h">
+      <Filter>Header Files\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="DropDown.h">
+      <Filter>Header Files\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageBox.h">
       <Filter>Header Files\Widgets</Filter>
     </ClInclude>
   </ItemGroup>
@@ -128,6 +146,15 @@
       <Filter>ico</Filter>
     </Image>
     <Image Include="ico\pnl.png">
+      <Filter>ico</Filter>
+    </Image>
+    <Image Include="ico\fld.png">
+      <Filter>ico</Filter>
+    </Image>
+    <Image Include="ico\dd.png">
+      <Filter>ico</Filter>
+    </Image>
+    <Image Include="ico\img.png">
       <Filter>ico</Filter>
     </Image>
   </ItemGroup>

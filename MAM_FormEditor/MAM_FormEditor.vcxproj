@@ -140,7 +140,10 @@
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CheckBox.cpp" />
+    <ClCompile Include="DropDown.cpp" />
+    <ClCompile Include="Field.cpp" />
     <ClCompile Include="GlobalLib.cpp" />
+    <ClCompile Include="ImageBox.cpp" />
     <ClCompile Include="Label.cpp" />
     <ClCompile Include="MainForm.cpp" />
     <ClCompile Include="Panel.cpp" />
@@ -152,7 +155,10 @@
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="CheckBox.h" />
+    <ClInclude Include="DropDown.h" />
+    <ClInclude Include="Field.h" />
     <ClInclude Include="GlobalLib.h" />
+    <ClInclude Include="ImageBox.h" />
     <ClInclude Include="Label.h" />
     <ClInclude Include="MainForm.h">
       <FileType>CppForm</FileType>
@@ -171,6 +177,9 @@
   <ItemGroup>
     <Image Include="ico\cb.bmp" />
     <Image Include="ico\cb_2.bmp" />
+    <Image Include="ico\dd.png" />
+    <Image Include="ico\fld.png" />
+    <Image Include="ico\img.png" />
     <Image Include="ico\pnl.png" />
     <Image Include="ico\rb.bmp" />
     <Image Include="ico\rb_2.bmp" />

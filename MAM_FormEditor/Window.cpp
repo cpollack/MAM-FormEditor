@@ -7,6 +7,9 @@
 #include "RadioButton.h"
 #include "Button.h"
 #include "Panel.h"
+#include "Field.h"
+#include "ImageBox.h"
+#include "DropDown.h"
 
 using namespace System::Windows::Forms;
 using namespace System::Drawing;
@@ -44,6 +47,11 @@ rapidjson::Document* CWindow::Save(rapidjson::Document* document) {
 		vHeight.SetInt(Height);
 		vWin.AddMember("Height", vHeight, allocator);
 
+		Value vName(kStringType);
+		std::string strName = textToString(Name);
+		vName.SetString(strName.c_str(), strName.length(), allocator);
+		vWin.AddMember("Name", vName, allocator);
+
 		Value vTitle(kStringType);
 		std::string strTitle = textToString(Title);
 		vTitle.SetString(strTitle.c_str(), strTitle.length(), allocator);
@@ -76,6 +84,7 @@ void CWindow::Load(rapidjson::Document* document) {
 
 	if (vWindow.HasMember("Width")) Width = vWindow["Width"].GetInt();
 	if (vWindow.HasMember("Height")) Height = vWindow["Height"].GetInt();
+	if (vWindow.HasMember("Name")) Name = gcnew String(vWindow["Name"].GetString());
 	if (vWindow.HasMember("Title")) Title = gcnew String(vWindow["Title"].GetString());
 	if (vWindow.HasMember("CloseButton")) CloseButton = vWindow["CloseButton"].GetBool();
 
@@ -117,6 +126,12 @@ void CWindow::LoadWidgetByType(rapidjson::Value* vWidget) {
 		break;
 	case wtPanel:
 		addWidget = gcnew CPanel(&widget);
+		break;
+	case wtDropDown:
+		addWidget = gcnew CDropDown(&widget);
+		break;
+	case wtImageBox:
+		addWidget = gcnew CImageBox(&widget);
 		break;
 	}
 	if (addWidget) widgets->Add(addWidget);
@@ -359,7 +374,7 @@ Object^ CWindow::Click(System::Windows::Forms::MouseEventArgs^ e, int addMode) {
 	CWidget^ container = nullptr;
 	CWidget^ selectedWidget = getWidgetAtPoint(widgets, click);
 	if (selectedWidget) {
-		if (!selectedWidget->container || (selectedWidget->container && addMode == amNone)) {
+		if (!selectedWidget->container || (selectedWidget->container && addMode == wtWidget)) {
 			focus = selectedWidget;
 			return selectedWidget;
 		}
@@ -367,23 +382,33 @@ Object^ CWindow::Click(System::Windows::Forms::MouseEventArgs^ e, int addMode) {
 	}
 
 	//If no widget was clicked, check if in add mode
-	if (addMode != amNone) {
+	if (addMode != wtWidget) {
 		CWidget^ addWidget = nullptr;
 		switch (addMode) {
-		case amLabel:
+		case wtLabel:
 			addWidget = gcnew CLabel("lbl1", click.X, click.Y);
 			break;
-		case amCheckbox:
+		case wtCheckBox:
 			addWidget = gcnew CCheckBox("cb1", click.X, click.Y);
 			break;
-		case amRadio:
+		case wtRadioButton:
 			addWidget = gcnew CRadioButton("rb1", click.X, click.Y);
 			break;
-		case amButton:
+		case wtButton:
 			addWidget = gcnew CButton("btn1", click.X, click.Y);
 			break;
-		case amPanel:
+		case wtPanel:
 			addWidget = gcnew CPanel("pnl1", click.X, click.Y);
+			break;
+		case wtField:
+			addWidget = gcnew CField("fld1", click.X, click.Y);
+			break;
+		case wtDropDown:
+			addWidget = gcnew CDropDown("dd1", click.X, click.Y);
+			break;
+		case wtImageBox:
+			addWidget = gcnew CImageBox("img1", click.X, click.Y);
+			break;
 		}
 		
 		if (addWidget) {

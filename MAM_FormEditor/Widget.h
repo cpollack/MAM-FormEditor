@@ -5,11 +5,50 @@
 using namespace System::ComponentModel;
 
 enum WidgetType {
+	wtWidget = 0,
 	wtLabel,
 	wtCheckBox,
 	wtRadioButton,
 	wtButton,
-	wtPanel
+	wtPanel,
+	wtField,
+	wtDropDown,
+	wtImageBox,
+	wtTabControl,
+	wtGauge,
+	wtListBox,
+	wtGridBox
+};
+
+ref class EnumUnderConvertor : public System::ComponentModel::EnumConverter
+{
+private:
+	System::Type^ _enumType;
+public:
+	EnumUnderConvertor(System::Type^ type) : System::ComponentModel::EnumConverter(type)
+	{
+		_enumType = type;
+	}
+
+	bool CanConvertTo(System::ComponentModel::ITypeDescriptorContext^ context, System::Type^ destType)override
+	{
+		return destType == System::String::typeid;
+	}
+
+	System::Object^ ConvertTo(System::ComponentModel::ITypeDescriptorContext^ context, System::Globalization::CultureInfo^ culture, System::Object^ value, System::Type^ destType)override
+	{
+		return value->ToString()->Replace("_", " ");
+	}
+
+	bool CanConvertFrom(System::ComponentModel::ITypeDescriptorContext^ context, System::Type^ srcType)override
+	{
+		return srcType == System::String::typeid;
+	}
+
+	System::Object^ ConvertFrom(System::ComponentModel::ITypeDescriptorContext^ context, System::Globalization::CultureInfo^ culture, System::Object^ value)override
+	{
+		return System::Enum::Parse(_enumType, ((System::String^)value)->Replace(" ", "_")->Replace(",_", ", "));
+	}
 };
 
 public ref class CWidget {
