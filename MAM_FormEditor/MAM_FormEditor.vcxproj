@@ -142,6 +142,7 @@
     <ClCompile Include="CheckBox.cpp" />
     <ClCompile Include="DropDown.cpp" />
     <ClCompile Include="Field.cpp" />
+    <ClCompile Include="Gauge.cpp" />
     <ClCompile Include="GlobalLib.cpp" />
     <ClCompile Include="ImageBox.cpp" />
     <ClCompile Include="Label.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="CheckBox.h" />
     <ClInclude Include="DropDown.h" />
     <ClInclude Include="Field.h" />
+    <ClInclude Include="Gauge.h" />
     <ClInclude Include="GlobalLib.h" />
     <ClInclude Include="ImageBox.h" />
     <ClInclude Include="Label.h" />
@@ -179,6 +181,7 @@
     <Image Include="ico\cb_2.bmp" />
     <Image Include="ico\dd.png" />
     <Image Include="ico\fld.png" />
+    <Image Include="ico\gge.png" />
     <Image Include="ico\img.png" />
     <Image Include="ico\pnl.png" />
     <Image Include="ico\rb.bmp" />

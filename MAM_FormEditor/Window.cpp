@@ -10,6 +10,7 @@
 #include "Field.h"
 #include "ImageBox.h"
 #include "DropDown.h"
+#include "Gauge.h"
 
 using namespace System::Windows::Forms;
 using namespace System::Drawing;
@@ -132,6 +133,9 @@ void CWindow::LoadWidgetByType(rapidjson::Value* vWidget) {
 		break;
 	case wtImageBox:
 		addWidget = gcnew CImageBox(&widget);
+		break;
+	case wtGauge:
+		addWidget = gcnew CGauge(&widget);
 		break;
 	}
 	if (addWidget) widgets->Add(addWidget);
@@ -408,6 +412,9 @@ Object^ CWindow::Click(System::Windows::Forms::MouseEventArgs^ e, int addMode) {
 			break;
 		case wtImageBox:
 			addWidget = gcnew CImageBox("img1", click.X, click.Y);
+			break;
+		case wtGauge:
+			addWidget = gcnew CGauge("gge1", click.X, click.Y);
 			break;
 		}
 		

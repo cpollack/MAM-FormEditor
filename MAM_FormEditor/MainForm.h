@@ -48,6 +48,7 @@ namespace MAM_FormEditor {
 	private: System::Windows::Forms::RadioButton^  addField;
 	private: System::Windows::Forms::RadioButton^  addImageBox;
 	private: System::Windows::Forms::RadioButton^  addDropDown;
+	private: System::Windows::Forms::RadioButton^  addGauge;
 	public:
 		String^ filePath = nullptr;
 
@@ -130,6 +131,7 @@ namespace MAM_FormEditor {
 			this->previewModeToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->saveFileDialog = (gcnew System::Windows::Forms::SaveFileDialog());
 			this->openFileDialog = (gcnew System::Windows::Forms::OpenFileDialog());
+			this->addGauge = (gcnew System::Windows::Forms::RadioButton());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->splitContainer))->BeginInit();
 			this->splitContainer->Panel1->SuspendLayout();
 			this->splitContainer->Panel2->SuspendLayout();
@@ -204,6 +206,7 @@ namespace MAM_FormEditor {
 			// splitContainerEditor.Panel1
 			// 
 			this->splitContainerEditor->Panel1->BackColor = System::Drawing::SystemColors::Control;
+			this->splitContainerEditor->Panel1->Controls->Add(this->addGauge);
 			this->splitContainerEditor->Panel1->Controls->Add(this->addImageBox);
 			this->splitContainerEditor->Panel1->Controls->Add(this->addDropDown);
 			this->splitContainerEditor->Panel1->Controls->Add(this->addField);
@@ -227,7 +230,7 @@ namespace MAM_FormEditor {
 			this->addImageBox->Appearance = System::Windows::Forms::Appearance::Button;
 			this->addImageBox->BackgroundImageLayout = System::Windows::Forms::ImageLayout::None;
 			this->addImageBox->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"addImageBox.Image")));
-			this->addImageBox->Location = System::Drawing::Point(0, 189);
+			this->addImageBox->Location = System::Drawing::Point(0, 219);
 			this->addImageBox->Name = L"addImageBox";
 			this->addImageBox->Size = System::Drawing::Size(23, 24);
 			this->addImageBox->TabIndex = 14;
@@ -265,7 +268,7 @@ namespace MAM_FormEditor {
 			// 
 			this->addPanel->Appearance = System::Windows::Forms::Appearance::Button;
 			this->addPanel->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"addPanel.Image")));
-			this->addPanel->Location = System::Drawing::Point(0, 219);
+			this->addPanel->Location = System::Drawing::Point(0, 249);
 			this->addPanel->Name = L"addPanel";
 			this->addPanel->Size = System::Drawing::Size(23, 24);
 			this->addPanel->TabIndex = 11;
@@ -329,7 +332,7 @@ namespace MAM_FormEditor {
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->pbDrawWindow->Location = System::Drawing::Point(0, 0);
 			this->pbDrawWindow->Name = L"pbDrawWindow";
-			this->pbDrawWindow->Size = System::Drawing::Size(444, 334);
+			this->pbDrawWindow->Size = System::Drawing::Size(447, 334);
 			this->pbDrawWindow->TabIndex = 0;
 			this->pbDrawWindow->TabStop = false;
 			this->pbDrawWindow->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MainForm::pbDrawWindow_Paint);
@@ -416,6 +419,19 @@ namespace MAM_FormEditor {
 			this->openFileDialog->Filter = L"JSON File|*.JSON";
 			this->openFileDialog->Title = L"Load Form";
 			// 
+			// addGauge
+			// 
+			this->addGauge->Appearance = System::Windows::Forms::Appearance::Button;
+			this->addGauge->BackgroundImageLayout = System::Windows::Forms::ImageLayout::None;
+			this->addGauge->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"addGauge.Image")));
+			this->addGauge->Location = System::Drawing::Point(0, 189);
+			this->addGauge->Name = L"addGauge";
+			this->addGauge->Size = System::Drawing::Size(23, 24);
+			this->addGauge->TabIndex = 15;
+			this->addGauge->TabStop = true;
+			this->addGauge->UseVisualStyleBackColor = true;
+			this->addGauge->Click += gcnew System::EventHandler(this, &MainForm::addGauge_Click);
+			// 
 			// MainForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -476,6 +492,7 @@ private: System::Void pbDrawWindow_MouseClick(System::Object^  sender, System::W
 	else if (addField->Checked) addMode = wtField;
 	else if (addDropDown->Checked) addMode = wtDropDown;
 	else if (addImageBox->Checked) addMode = wtImageBox;
+	else if (addGauge->Checked) addMode = wtGauge;
 
 	focus = window->Click(e, addMode);
 	if (focus) propertyGrid->SelectedObject = focus;
@@ -529,6 +546,9 @@ private: System::Void addDropDown_Click(System::Object^  sender, System::EventAr
 }
 private: System::Void addImageBox_Click(System::Object^  sender, System::EventArgs^  e) {
 	ToggleAddSelection(addImageBox);
+}
+private: System::Void addGauge_Click(System::Object^  sender, System::EventArgs^  e) {
+	ToggleAddSelection(addGauge);
 }
 };
 }

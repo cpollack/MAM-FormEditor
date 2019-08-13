@@ -48,6 +48,9 @@ CLabel::CLabel(rapidjson::Value* vWidget) : CWidget(vWidget) {
 
 	underlinePen = gcnew Pen(fontBrush->Color);
 
+	if (vWidget->HasMember("Alignment")) Alignment = (LabelAlignment)((*vWidget)["Alignment"].GetInt());
+	else Alignment = LabelAlignment::laLeft;
+
 	if (vWidget->HasMember("Text")) Text = gcnew System::String((*vWidget)["Text"].GetString());
 	else Text = Name;
 	CreateLabelTexture();
@@ -61,6 +64,10 @@ void CLabel::Save(rapidjson::Document* document, rapidjson::Value* vWidget) {
 	Value vtext(kStringType);
 	vtext.SetString(textToString(Text).c_str(), Text->Length, allocator);
 	vWidget->AddMember("Text", vtext, allocator);
+
+	Value vAlign(kNumberType);
+	vAlign.SetInt((int)Alignment);
+	vWidget->AddMember("Alignment", vAlign, allocator);
 }
 
 void CLabel::Draw(Graphics^ gr, Point pos) {

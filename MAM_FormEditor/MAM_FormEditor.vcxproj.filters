@@ -63,6 +63,9 @@
     <ClCompile Include="DropDown.cpp">
       <Filter>Source Files\Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="Gauge.cpp">
+      <Filter>Source Files\Widgets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainForm.h">
@@ -102,6 +105,9 @@
       <Filter>Header Files\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="ImageBox.h">
+      <Filter>Header Files\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="Gauge.h">
       <Filter>Header Files\Widgets</Filter>
     </ClInclude>
   </ItemGroup>
@@ -155,6 +161,9 @@
       <Filter>ico</Filter>
     </Image>
     <Image Include="ico\img.png">
+      <Filter>ico</Filter>
+    </Image>
+    <Image Include="ico\gge.png">
       <Filter>ico</Filter>
     </Image>
   </ItemGroup>

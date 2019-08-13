@@ -4,7 +4,7 @@
 
 public ref class CField : public CWidget {
 public:
-	[Category("Main"), DisplayName("Default Value"), Description("Descriptive label of the checkbox")]
+	[Category("Main"), DisplayName("Default Value"), Description("Content of the field")]
 	property System::String^ Value {
 		System::String^ get() {
 			return value;

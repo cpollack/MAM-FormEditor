@@ -24,7 +24,7 @@ CField::CField(System::String^ name, int x, int y) {
 CField::CField(rapidjson::Value* vWidget) : CWidget(vWidget) {
 	if (!vWidget->IsObject()) return;
 
-	widgetType = wtLabel;
+	widgetType = wtField;
 	MIN_HEIGHT = 13;
 	MIN_WIDTH = 20;
 
