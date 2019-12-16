@@ -78,6 +78,10 @@ public: //Properties
 			height = value;
 		};
 	}
+
+	[Category("Main"), Description("Widget is assigned to this tab.")]
+	property int TabItem;
+
 	//[DisplayName("Test Property")]
 
 public:

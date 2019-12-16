@@ -36,6 +36,11 @@ public:
 
 	[Category("Behavior"), DisplayName("Is Password"), Description("Treat field as a password and mask its value.")]
 	property bool IsPassword;
+	[Category("Behavior"), DisplayName("Max Length"), Description("Maximum amount of characters allowed, 0 for unlimited.")]
+	property int MaxLength;
+
+	[Category("Appearance"), DisplayName("Thick Border"), Description("Use a two pixel border width.")]
+	property bool ThickBorder;
 
 public:
 	CField(System::String^ name, int x, int y);
@@ -45,7 +50,7 @@ public:
 
 private:
 	const int DEFAULT_WIDTH = 50;
-	const int DEFAULT_HEIGHT = 14;
+	const int DEFAULT_HEIGHT = 24;
 	bool loaded = false;
 
 	System::Drawing::Image^ fld = nullptr;

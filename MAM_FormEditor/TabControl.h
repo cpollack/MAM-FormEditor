@@ -2,18 +2,21 @@
 
 #include "Widget.h"
 
-public ref class CButton : public CWidget {
+public ref class CTabControl : public CWidget {
 public:
-	[Category("Main"), Description("Text of the Button")]
-	property System::String^ Text {
+	/*[Category("Main"), Description("Header caption of the panel")]
+	property System::String^ Caption {
 		System::String^ get() {
-			return text;
+			return caption;
 		}
 		void set(System::String^ value) {
-			text = value;
-			if (loaded) CreateLabelTexture();
+			caption = value;
+			if (loaded) {
+				CreatePanelImage();
+				CreateCaptionTexture();
+			}
 		}
-	}
+	}*/
 
 	property int Width {
 		virtual int get() override {
@@ -21,10 +24,7 @@ public:
 		}
 		virtual void set(int value) override {
 			width = value;
-			if (loaded) {
-				CreateButtonImage();
-				CreateLabelTexture();
-			}
+			if (loaded) CreateTabControlImage();
 		}
 	}
 	property int Height {
@@ -33,34 +33,34 @@ public:
 		}
 		virtual void set(int value) override {
 			height = value;
-			if (loaded) {
-				CreateButtonImage();
-				CreateLabelTexture();
-			}
+			if (loaded) CreateTabControlImage();
 		}
 	}
 
+	property bool TopTabs;
+
 public:
-	CButton(System::String^ name, int x, int y);
-	CButton(rapidjson::Value* vWidget);
+	CTabControl(System::String^ name, int x, int y);
+	CTabControl(rapidjson::Value* vWidget);
+	void init();
 	virtual void Save(rapidjson::Document* document, rapidjson::Value* vWidget) override;
 	virtual void Draw(System::Drawing::Graphics^ gr, System::Drawing::Point pos) override;
 
 	System::Drawing::Point MouseDrag(System::Drawing::Point dragPos, System::Drawing::Point wPos, System::Drawing::Point dragOffset, int dragMode) override;
 
 private:
-	const int DEFAULT_WIDTH = 72;
-	const int DEFAULT_HEIGHT = 24;
+	const int DEFAULT_WIDTH = 50;
+	const int DEFAULT_HEIGHT = 50;
 	bool loaded = false;
 
-	System::Drawing::Image^ btn = nullptr;
-	System::Drawing::Pen ^borderColor;
-	System::Drawing::SolidBrush ^buttonColor;
-	void CreateButtonImage();
+	System::Drawing::Image^ tab = nullptr;
+	System::Drawing::Image^ cpt = nullptr;
+	//System::String^ caption;
 
-	System::String^ text;
-	System::Drawing::Image^ lbl = nullptr;
 	System::Drawing::StringFormat^ textFormat;
-	System::Drawing::Pen^ underlinePen;
-	void CButton::CreateLabelTexture();
+	System::Drawing::SolidBrush ^bgColor;
+	System::Drawing::Pen ^whitePen, ^darkPen;
+
+	void CreateTabControlImage();
+	void CreateTabControlTexture();
 };

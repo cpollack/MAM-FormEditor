@@ -94,7 +94,8 @@ void CWindow::Load(rapidjson::Document* document) {
 		if (vWidgets.IsArray()) {
 			for (rapidjson::SizeType i = 0; i < vWidgets.Size(); i++) {
 				Value vWidget = vWidgets[i].GetObject();
-				LoadWidgetByType(&vWidget);
+				CWidget ^addWidget = LoadWidgetByType(&vWidget);
+				if (addWidget) widgets->Add(addWidget);
 			}
 		}
 	}
@@ -103,7 +104,7 @@ void CWindow::Load(rapidjson::Document* document) {
 }
 
 
-void CWindow::LoadWidgetByType(rapidjson::Value* vWidget) {
+/*void CWindow::LoadWidgetByType(rapidjson::Value* vWidget) {
 	if (!vWidget->IsObject()) return;
 	Value widget = vWidget->GetObject();
 
@@ -128,6 +129,9 @@ void CWindow::LoadWidgetByType(rapidjson::Value* vWidget) {
 	case wtPanel:
 		addWidget = gcnew CPanel(&widget);
 		break;
+	case wtField:
+		addWidget = gcnew CField(&widget);
+		break;
 	case wtDropDown:
 		addWidget = gcnew CDropDown(&widget);
 		break;
@@ -139,7 +143,7 @@ void CWindow::LoadWidgetByType(rapidjson::Value* vWidget) {
 		break;
 	}
 	if (addWidget) widgets->Add(addWidget);
-}
+}*/
 
 
 void CWindow::Draw(PictureBox ^drawable) {

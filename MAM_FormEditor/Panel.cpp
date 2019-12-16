@@ -26,6 +26,17 @@ CPanel::CPanel(rapidjson::Value* vWidget) : CWidget(vWidget) {
 	if (vWidget->HasMember("Caption")) Caption = gcnew System::String((*vWidget)["Caption"].GetString());
 	else Caption = "";
 
+	if (vWidget->HasMember("Widgets")) {
+		Value vWidgets = (*vWidget)["Widgets"].GetArray();
+		if (vWidgets.IsArray()) {
+			for (rapidjson::SizeType i = 0; i < vWidgets.Size(); i++) {
+				Value vWidget = vWidgets[i].GetObject();
+				CWidget ^addWidget = LoadWidgetByType(&vWidget);
+				if (addWidget) widgets->Add(addWidget);
+			}
+		}
+	}
+
 	CreatePanelImage();
 	CreateCaptionTexture();
 	loaded = true;
@@ -43,7 +54,6 @@ void CPanel::init() {
 	bgColor = gcnew SolidBrush(Color::FromArgb(uiColor & 0xFF, (uiColor & 0xFF00) >> 8, (uiColor & 0xFF0000) >> 16));
 	whitePen = gcnew Pen(Color::FromArgb(0xFF, 0xFF, 0xFF, 0xFF));
 	darkPen = gcnew Pen(Color::FromArgb(0xFF, 0xA0, 0xA0, 0xA0));
-	fontBrush = gcnew SolidBrush(Color::FromArgb(0xAA, 0xD5, 0xFF));
 
 	textFormat = gcnew StringFormat(StringFormat::GenericTypographic);
 	textFormat->Alignment = StringAlignment::Near;
@@ -59,6 +69,15 @@ void CPanel::Save(rapidjson::Document* document, rapidjson::Value* vWidget) {
 		vtext.SetString(textToString(Caption).c_str(), Caption->Length, allocator);
 		vWidget->AddMember("Caption", vtext, allocator);
 	}
+
+	Value vWidgets(kArrayType);
+	for each (CWidget^ w in widgets) {
+		Value* vWidget = new Value(kObjectType);
+		w->Save(document, vWidget);
+		vWidgets.PushBack(*vWidget, allocator);
+		delete vWidget;
+	}
+	vWidget->AddMember("Widgets", vWidgets, allocator);
 }
 
 void CPanel::CreatePanelImage() {

@@ -10,6 +10,7 @@ using namespace rapidjson;
 CWidget::CWidget() {
 	font = gcnew Font("Verdana", 12, GraphicsUnit::Pixel);
 	fontBrush = gcnew SolidBrush(Color::FromArgb(0xAD, 0xE9, 0xCD));
+	TabItem = 0;
 }
 
 CWidget::CWidget(rapidjson::Value* vWidget) {
@@ -20,7 +21,11 @@ CWidget::CWidget(rapidjson::Value* vWidget) {
 	if (vWidget->HasMember("X")) X = (*vWidget)["X"].GetInt();
 	if (vWidget->HasMember("Y")) Y = (*vWidget)["Y"].GetInt();
 	if (vWidget->HasMember("Width")) Width = (*vWidget)["Width"].GetInt();
+	else Width = 0;
 	if (vWidget->HasMember("Height")) Height = (*vWidget)["Height"].GetInt();
+	else Height = 0;
+	if (vWidget->HasMember("TabItem")) TabItem = (*vWidget)["TabItem"].GetInt();
+	else TabItem = 0;
 
 	font = gcnew Font("Verdana", 12, GraphicsUnit::Pixel);
 	fontBrush = gcnew SolidBrush(Color::FromArgb(0xAD, 0xE9, 0xCD));

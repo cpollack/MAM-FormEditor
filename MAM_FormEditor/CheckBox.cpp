@@ -32,8 +32,8 @@ CCheckBox::CCheckBox(rapidjson::Value* vWidget) : CWidget(vWidget) {
 	MIN_HEIGHT = 13;
 	MIN_WIDTH = 20;
 
-	Width = DEFAULT_WIDTH;
-	Height = DEFAULT_HEIGHT;
+	if (Width == 0) Width = DEFAULT_WIDTH;
+	if (Height == 0) Height = DEFAULT_HEIGHT;
 
 	cb = Image::FromFile("ico\\cb.bmp");
 

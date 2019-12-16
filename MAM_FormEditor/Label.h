@@ -12,6 +12,13 @@ public enum class LabelAlignment
 	laRight
 };
 
+public enum class LabelVAlignment
+{
+	lvaTop,
+	lvaCenter,
+	lvaBottom
+};
+
 public ref class CLabel : public CWidget {
 public:
 	[Category("Main"), Description("Descriptive label of the checkbox")]
@@ -24,13 +31,23 @@ public:
 			if (loaded) CreateLabelTexture();
 		}
 	}
-	[Category("Main"), Description("Horizontal alignment of the label's text.")]
+	[Category("Behavior"), Description("Horizontal alignment of the label's text.")]
 	property LabelAlignment Alignment {
 		LabelAlignment get() {
 			return alignment;
 		}
 		void set(LabelAlignment value) {
 			alignment = value;
+			if (loaded) CreateLabelTexture();
+		}
+	}
+	[Category("Behavior"), Description("Verticle alignment of the label's text.")]
+	property LabelVAlignment VAlignment {
+		LabelVAlignment get() {
+			return valignment;
+		}
+		void set(LabelVAlignment value) {
+			valignment = value;
 			if (loaded) CreateLabelTexture();
 		}
 	}
@@ -53,6 +70,16 @@ public:
 			if (loaded) CreateLabelTexture();
 		}
 	}
+	[Category("Appearance"), Description("Display a horizontal underlined directly below the text.")]
+	property bool Underlined {
+		virtual bool get() override {
+			return underlined;
+		}
+		virtual void set(bool value) override {
+			underlined = value;
+			if (loaded) CreateLabelTexture();
+		}
+	}
 
 public:
 	CLabel(System::String^ name, int x, int y);
@@ -68,6 +95,8 @@ private:
 	System::Drawing::Image^ lbl = nullptr;
 	System::String^ text;
 	LabelAlignment alignment = LabelAlignment::laLeft;
+	LabelVAlignment valignment = LabelVAlignment::lvaTop;
+	bool underlined;
 
 	System::Drawing::StringFormat^ textFormat;
 	System::Drawing::Pen^ dashedPen;

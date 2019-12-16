@@ -50,7 +50,10 @@ CLabel::CLabel(rapidjson::Value* vWidget) : CWidget(vWidget) {
 
 	if (vWidget->HasMember("Alignment")) Alignment = (LabelAlignment)((*vWidget)["Alignment"].GetInt());
 	else Alignment = LabelAlignment::laLeft;
+	if (vWidget->HasMember("VAlignment")) VAlignment = (LabelVAlignment)((*vWidget)["VAlignment"].GetInt());
+	else VAlignment = LabelVAlignment::lvaTop;
 
+	if (vWidget->HasMember("Underlined")) Underlined = (*vWidget)["Underlined"].GetBool();
 	if (vWidget->HasMember("Text")) Text = gcnew System::String((*vWidget)["Text"].GetString());
 	else Text = Name;
 	CreateLabelTexture();
@@ -68,6 +71,12 @@ void CLabel::Save(rapidjson::Document* document, rapidjson::Value* vWidget) {
 	Value vAlign(kNumberType);
 	vAlign.SetInt((int)Alignment);
 	vWidget->AddMember("Alignment", vAlign, allocator);
+	Value vVAlign(kNumberType);
+	vVAlign.SetInt((int)VAlignment);
+	vWidget->AddMember("VAlignment", vVAlign, allocator);
+
+	rapidjson::Value vUnderlined(Underlined);
+	vWidget->AddMember("Underlined", vUnderlined, allocator);
 }
 
 void CLabel::Draw(Graphics^ gr, Point pos) {
@@ -86,35 +95,19 @@ void CLabel::CreateLabelTexture() {
 	//gr->PageUnit = GraphicsUnit::Pixel;
 	gr->TextRenderingHint = System::Drawing::Text::TextRenderingHint::AntiAlias;
 
-	bool drawUnderline = false;
+	bool drawUnderline = false, drawUnderlineChar = false;
 	System::String ^drawText = Text;
 
 	//check text for ampersand and get position and size of character to underscore
-	RectangleF underline;
+	RectangleF underline, underlineChar;
 	if (Text->Contains("&")) {
 		int pos = Text->IndexOf("&");
 		System::String^ prefix = Text->Substring(0, pos);
 		System::String^ nextChar = Text->Substring(pos + 1, 1);
 		SizeF prefixSize = gr->MeasureString(prefix, font, Point(0,0), textFormat);
 		SizeF charSize = gr->MeasureString(nextChar, font, Point(0, 0), textFormat);
-		underline = RectangleF(prefixSize.Width, prefixSize.Height, charSize.Width, 1);
-		drawUnderline = true;
-
-		/* Experimental WIN32 GDI measuring gave string measures too wide
-		//include library: Gdi32.lib
-		HDC hdc = (HDC)gr->GetHdc().ToPointer();
-		HGDIOBJ hgdiobj = (void*)font->ToHfont().ToPointer();
-		System::IntPtr h_OldFont = (System::IntPtr)WIN32::SelectObject(hdc, hgdiobj);
-
-		WIN32::SIZE prefixSize, charSize;		
-		char c = Text[pos+1];
-		WIN32::GetTextExtentPoint32(hdc, (LPCWSTR)&c, 1, &charSize);
-		std::string strPrefix = textToString(prefix);
-		WIN32::GetTextExtentPoint32(hdc, (LPCWSTR)strPrefix.c_str(), strPrefix.length(), &prefixSize);
-		
-		WIN32::SelectObject(hdc, (HGDIOBJ)h_OldFont);
-		gr->ReleaseHdc();
-		underline = RectangleF(prefixSize.cx + 1, prefixSize.cy, charSize.cx - 1, 1);*/
+		underlineChar = RectangleF(prefixSize.Width, prefixSize.Height, charSize.Width, 1);
+		drawUnderlineChar = true;
 
 		drawText = drawText->Replace("&", "");
 	}
@@ -122,8 +115,13 @@ void CLabel::CreateLabelTexture() {
 	//Trim the end of the string and show ... if the whole string does not fit?
 	//SizeF sizeF = gr->MeasureString(Text, font, Point(0, 0), textFormat);
 
-	int hOffset;
+	int hOffset, vOffset;
 	SizeF txtSize = gr->MeasureString(drawText, font, Point(0, 0), textFormat);
+
+	if (Underlined) {
+		underline = RectangleF(0, txtSize.Height, txtSize.Width, 1);
+		drawUnderline = true;
+	}
 
 	switch (alignment) {
 	case LabelAlignment::laLeft:
@@ -137,6 +135,20 @@ void CLabel::CreateLabelTexture() {
 		break;
 	}
 
-	gr->DrawString(drawText, font, fontBrush, Point(hOffset, Height / 2), textFormat);
+	vOffset = txtSize.Height / 2;
+	switch (valignment) {
+	case LabelVAlignment::lvaTop:
+		vOffset += 0;
+		break;
+	case LabelVAlignment::lvaBottom:
+		vOffset += Height - txtSize.Height;
+		break;
+	case LabelVAlignment::lvaCenter:
+		vOffset += (Height / 2) - (txtSize.Height / 2);
+		break;
+	}
+
+	gr->DrawString(drawText, font, fontBrush, Point(hOffset, vOffset), textFormat);
 	if (drawUnderline) gr->DrawLine(underlinePen, underline.X, 13.0, underline.X + underline.Width, 13.0);
+	if (drawUnderlineChar) gr->DrawLine(underlinePen, underlineChar.X, 13.0, underlineChar.X + underlineChar.Width, 13.0);
 }

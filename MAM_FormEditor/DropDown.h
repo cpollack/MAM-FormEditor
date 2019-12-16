@@ -34,6 +34,9 @@ public:
 		}
 	}
 
+	[Category("Appearance"), DisplayName("Detailed"), Description("Render the dropdown with a detailed appearance.")]
+	property bool Detailed;
+
 public:
 	CDropDown(System::String^ name, int x, int y);
 	CDropDown(rapidjson::Value* vWidget);
@@ -55,4 +58,7 @@ private:
 	System::Drawing::Image^ lbl = nullptr;
 	System::Drawing::StringFormat^ textFormat;
 	//void CreateValueTexture();
+
+	System::Drawing::Pen ^whitePen, ^light2Pen, ^dark1Pen, ^dark2Pen, ^blackPen;
+	System::Drawing::SolidBrush ^light1Brush;
 };

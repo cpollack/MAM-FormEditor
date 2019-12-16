@@ -23,7 +23,7 @@ CImageBox::CImageBox(rapidjson::Value* vWidget) : CWidget(vWidget) {
 	else SkinImage = "";
 
 	if (vWidget->HasMember("Bordered")) Bordered = (*vWidget)["Bordered"].GetBool();
-	if (vWidget->HasMember("BlackBackground")) Bordered = (*vWidget)["BlackBackground"].GetBool();
+	if (vWidget->HasMember("BlackBackground")) BlackBackground = (*vWidget)["BlackBackground"].GetBool();
 
 	init();
 	CreateImageTexture();
