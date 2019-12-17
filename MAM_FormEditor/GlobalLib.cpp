@@ -12,6 +12,8 @@
 #include "Panel.h"
 #include "RadioButton.h"
 
+using namespace System;
+using namespace System::Windows::Forms;
 using namespace rapidjson;
 
 std::string textToString(System::String^ text) {
@@ -58,4 +60,10 @@ CWidget^ LoadWidgetByType(rapidjson::Value* vWidget) {
 		break;
 	}
 	return addWidget;
+}
+
+void doMessageBoxError(std::string title, std::string message) {
+	System::String^ mbTitle = gcnew String(title.c_str());
+	System::String^ mbMessage = gcnew String(message.c_str());
+	MessageBox::Show(mbMessage, mbTitle, MessageBoxButtons::OK, MessageBoxIcon::Error);
 }
