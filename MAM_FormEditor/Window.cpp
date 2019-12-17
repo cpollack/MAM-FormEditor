@@ -11,6 +11,7 @@
 #include "ImageBox.h"
 #include "DropDown.h"
 #include "Gauge.h"
+#include "TabControl.h"
 
 using namespace System::Windows::Forms;
 using namespace System::Drawing;
@@ -22,7 +23,8 @@ CWindow::CWindow() {
 	position = Point(10, 10);
 
 	widgets = gcnew ArrayList();
-	Title = "";
+	Title = "New Form";
+	Name = "newForm";
 	
 	top = Image::FromFile("res\\TopCenter_s.bmp");
 	bottom = Image::FromFile("res\\BottomCenter.bmp");
@@ -417,8 +419,11 @@ Object^ CWindow::Click(System::Windows::Forms::MouseEventArgs^ e, int addMode) {
 		case wtImageBox:
 			addWidget = gcnew CImageBox("img1", click.X, click.Y);
 			break;
+		case wtTabControl:
+			addWidget = gcnew CTabControl("tab1", click.X, click.Y);
+			break;
 		case wtGauge:
-			addWidget = gcnew CGauge("gge1", click.X, click.Y);
+			addWidget = gcnew CGauge("gauge1", click.X, click.Y);
 			break;
 		}
 		
@@ -426,6 +431,9 @@ Object^ CWindow::Click(System::Windows::Forms::MouseEventArgs^ e, int addMode) {
 			if (container) {
 				container->widgets->Add(addWidget);
 				addWidget->containedBy = container;
+				if (container->widgetType == wtTabControl) {
+					addWidget->TabItem = ((CTabControl^)container)->VisibleTab;
+				}
 			}
 			else widgets->Add(addWidget);
 			focus = addWidget;

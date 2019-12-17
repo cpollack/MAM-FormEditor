@@ -49,6 +49,7 @@ namespace MAM_FormEditor {
 	private: System::Windows::Forms::RadioButton^  addImageBox;
 	private: System::Windows::Forms::RadioButton^  addDropDown;
 	private: System::Windows::Forms::RadioButton^  addGauge;
+	private: System::Windows::Forms::RadioButton^  addTab;
 	public:
 		String^ filePath = nullptr;
 
@@ -112,6 +113,7 @@ namespace MAM_FormEditor {
 			this->propertyGrid = (gcnew System::Windows::Forms::PropertyGrid());
 			this->labelWidgetName = (gcnew System::Windows::Forms::Label());
 			this->splitContainerEditor = (gcnew System::Windows::Forms::SplitContainer());
+			this->addGauge = (gcnew System::Windows::Forms::RadioButton());
 			this->addImageBox = (gcnew System::Windows::Forms::RadioButton());
 			this->addDropDown = (gcnew System::Windows::Forms::RadioButton());
 			this->addField = (gcnew System::Windows::Forms::RadioButton());
@@ -131,7 +133,7 @@ namespace MAM_FormEditor {
 			this->previewModeToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->saveFileDialog = (gcnew System::Windows::Forms::SaveFileDialog());
 			this->openFileDialog = (gcnew System::Windows::Forms::OpenFileDialog());
-			this->addGauge = (gcnew System::Windows::Forms::RadioButton());
+			this->addTab = (gcnew System::Windows::Forms::RadioButton());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->splitContainer))->BeginInit();
 			this->splitContainer->Panel1->SuspendLayout();
 			this->splitContainer->Panel2->SuspendLayout();
@@ -206,6 +208,7 @@ namespace MAM_FormEditor {
 			// splitContainerEditor.Panel1
 			// 
 			this->splitContainerEditor->Panel1->BackColor = System::Drawing::SystemColors::Control;
+			this->splitContainerEditor->Panel1->Controls->Add(this->addTab);
 			this->splitContainerEditor->Panel1->Controls->Add(this->addGauge);
 			this->splitContainerEditor->Panel1->Controls->Add(this->addImageBox);
 			this->splitContainerEditor->Panel1->Controls->Add(this->addDropDown);
@@ -224,6 +227,19 @@ namespace MAM_FormEditor {
 			this->splitContainerEditor->SplitterDistance = 25;
 			this->splitContainerEditor->SplitterWidth = 1;
 			this->splitContainerEditor->TabIndex = 1;
+			// 
+			// addGauge
+			// 
+			this->addGauge->Appearance = System::Windows::Forms::Appearance::Button;
+			this->addGauge->BackgroundImageLayout = System::Windows::Forms::ImageLayout::None;
+			this->addGauge->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"addGauge.Image")));
+			this->addGauge->Location = System::Drawing::Point(0, 189);
+			this->addGauge->Name = L"addGauge";
+			this->addGauge->Size = System::Drawing::Size(23, 24);
+			this->addGauge->TabIndex = 15;
+			this->addGauge->TabStop = true;
+			this->addGauge->UseVisualStyleBackColor = true;
+			this->addGauge->Click += gcnew System::EventHandler(this, &MainForm::addGauge_Click);
 			// 
 			// addImageBox
 			// 
@@ -332,7 +348,7 @@ namespace MAM_FormEditor {
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->pbDrawWindow->Location = System::Drawing::Point(0, 0);
 			this->pbDrawWindow->Name = L"pbDrawWindow";
-			this->pbDrawWindow->Size = System::Drawing::Size(447, 334);
+			this->pbDrawWindow->Size = System::Drawing::Size(450, 334);
 			this->pbDrawWindow->TabIndex = 0;
 			this->pbDrawWindow->TabStop = false;
 			this->pbDrawWindow->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MainForm::pbDrawWindow_Paint);
@@ -419,18 +435,17 @@ namespace MAM_FormEditor {
 			this->openFileDialog->Filter = L"JSON File|*.JSON";
 			this->openFileDialog->Title = L"Load Form";
 			// 
-			// addGauge
+			// addTab
 			// 
-			this->addGauge->Appearance = System::Windows::Forms::Appearance::Button;
-			this->addGauge->BackgroundImageLayout = System::Windows::Forms::ImageLayout::None;
-			this->addGauge->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"addGauge.Image")));
-			this->addGauge->Location = System::Drawing::Point(0, 189);
-			this->addGauge->Name = L"addGauge";
-			this->addGauge->Size = System::Drawing::Size(23, 24);
-			this->addGauge->TabIndex = 15;
-			this->addGauge->TabStop = true;
-			this->addGauge->UseVisualStyleBackColor = true;
-			this->addGauge->Click += gcnew System::EventHandler(this, &MainForm::addGauge_Click);
+			this->addTab->Appearance = System::Windows::Forms::Appearance::Button;
+			this->addTab->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"addTab.Image")));
+			this->addTab->Location = System::Drawing::Point(0, 279);
+			this->addTab->Name = L"addTab";
+			this->addTab->Size = System::Drawing::Size(23, 24);
+			this->addTab->TabIndex = 16;
+			this->addTab->TabStop = true;
+			this->addTab->UseVisualStyleBackColor = true;
+			this->addTab->Click += gcnew System::EventHandler(this, &MainForm::addTab_Click);
 			// 
 			// MainForm
 			// 
@@ -493,6 +508,7 @@ private: System::Void pbDrawWindow_MouseClick(System::Object^  sender, System::W
 	else if (addDropDown->Checked) addMode = wtDropDown;
 	else if (addImageBox->Checked) addMode = wtImageBox;
 	else if (addGauge->Checked) addMode = wtGauge;
+	else if (addTab->Checked) addMode = wtTabControl;
 
 	focus = window->Click(e, addMode);
 	if (focus) propertyGrid->SelectedObject = focus;
@@ -549,6 +565,9 @@ private: System::Void addImageBox_Click(System::Object^  sender, System::EventAr
 }
 private: System::Void addGauge_Click(System::Object^  sender, System::EventArgs^  e) {
 	ToggleAddSelection(addGauge);
+}
+private: System::Void addTab_Click(System::Object^  sender, System::EventArgs^  e) {
+	ToggleAddSelection(addTab);
 }
 };
 }

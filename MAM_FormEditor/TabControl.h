@@ -2,6 +2,16 @@
 
 #include "Widget.h"
 
+using System::ComponentModel::DescriptionAttribute;
+using System::ComponentModel::BrowsableAttribute;
+
+public enum class TabStyle
+{
+	tsSimple,
+	tsDetail,
+	tsButton
+};
+
 public ref class CTabControl : public CWidget {
 public:
 	/*[Category("Main"), Description("Header caption of the panel")]
@@ -37,7 +47,24 @@ public:
 		}
 	}
 
-	property bool TopTabs;
+	[Category("Appearance"), Description("Select a tab styling of simple, detailed, or buttoned")]
+	property TabStyle Style {
+		TabStyle get() {
+			return style;
+		}
+		void set(TabStyle value) {
+			style = value;
+			if (loaded) CreateTabControlImage();
+		}
+	}
+	[Category("Appearance"), Description("Show the Tab Header on the bottom.")]
+	property bool TabsOnBottom;
+	[Category("Appearance"), Description("The current visible tab")]
+	property int VisibleTab;
+
+	
+	[Browsable(false)]
+	property int TabItem;
 
 public:
 	CTabControl(System::String^ name, int x, int y);
@@ -49,18 +76,26 @@ public:
 	System::Drawing::Point MouseDrag(System::Drawing::Point dragPos, System::Drawing::Point wPos, System::Drawing::Point dragOffset, int dragMode) override;
 
 private:
-	const int DEFAULT_WIDTH = 50;
-	const int DEFAULT_HEIGHT = 50;
+	const int DEFAULT_WIDTH = 100;
+	const int DEFAULT_HEIGHT = 100;
+	const int TAB_MIN_WIDTH = 44;
+	const int TAB_SPACER = 4;
+	const int TAB_HEADER_HEIGHT = 16;
 	bool loaded = false;
 
-	System::Drawing::Image^ tab = nullptr;
-	System::Drawing::Image^ cpt = nullptr;
+	System::Drawing::Image^ tabControl = nullptr;
+	//System::Drawing::Image^ cpt = nullptr;
 	//System::String^ caption;
 
 	System::Drawing::StringFormat^ textFormat;
 	System::Drawing::SolidBrush ^bgColor;
-	System::Drawing::Pen ^whitePen, ^darkPen;
+	System::Drawing::Pen ^whitePen, ^lightPen, ^darkPen1, ^darkPen2;
 
+	TabStyle style;
 	void CreateTabControlImage();
-	void CreateTabControlTexture();
+	void DrawSimpleBorder(System::Drawing::Graphics^ gr);
+	void DrawDetailBorder(System::Drawing::Graphics^ gr);
+	void DrawButtonBorder(System::Drawing::Graphics^ gr);
+
+	//void CreateTabTextures();
 };

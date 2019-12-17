@@ -66,6 +66,9 @@
     <ClCompile Include="Gauge.cpp">
       <Filter>Source Files\Widgets</Filter>
     </ClCompile>
+    <ClCompile Include="TabControl.cpp">
+      <Filter>Source Files\Widgets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainForm.h">
@@ -167,6 +170,9 @@
       <Filter>ico</Filter>
     </Image>
     <Image Include="ico\gge.png">
+      <Filter>ico</Filter>
+    </Image>
+    <Image Include="ico\tab.png">
       <Filter>ico</Filter>
     </Image>
   </ItemGroup>

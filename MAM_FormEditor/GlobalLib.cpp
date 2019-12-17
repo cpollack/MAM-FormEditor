@@ -11,6 +11,7 @@
 #include "ImageBox.h"
 #include "Panel.h"
 #include "RadioButton.h"
+#include "TabControl.h"
 
 using namespace System;
 using namespace System::Windows::Forms;
@@ -54,6 +55,9 @@ CWidget^ LoadWidgetByType(rapidjson::Value* vWidget) {
 		break;
 	case wtImageBox:
 		addWidget = gcnew CImageBox(&widget);
+		break;
+	case wtTabControl:
+		addWidget = gcnew CTabControl(&widget);
 		break;
 	case wtGauge:
 		addWidget = gcnew CGauge(&widget);
