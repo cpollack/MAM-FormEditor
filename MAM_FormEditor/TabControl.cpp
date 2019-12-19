@@ -1,8 +1,10 @@
 #include "TabControl.h"
 #include "GlobalLib.h"
 
+using namespace System;
 using namespace System::Drawing;
 using namespace System::Collections;
+using namespace System::Collections::Generic;
 using namespace rapidjson;
 
 CTabControl::CTabControl(System::String^ name, int x, int y) {
@@ -13,6 +15,13 @@ CTabControl::CTabControl(System::String^ name, int x, int y) {
 	Width = DEFAULT_WIDTH;
 	Height = DEFAULT_HEIGHT;
 	Style = TabStyle::tsSimple;
+	tabs = gcnew System::Collections::Generic::List<String^>;
+
+	//Testing
+	tabs->Add(gcnew String("Test"));
+	tabs->Add(gcnew String("Testing Long Tab Just because"));
+	tabs->Add(gcnew String("Tab 3 Neato"));
+	//Testing
 
 	VisibleTab = 0;
 
@@ -32,6 +41,17 @@ CTabControl::CTabControl(rapidjson::Value* vWidget) : CWidget(vWidget) {
 
 	//if (vWidget->HasMember("Caption")) Caption = gcnew System::String((*vWidget)["Caption"].GetString());
 	//else Caption = "";
+
+	if (vWidget->HasMember("Tabs")) {
+		Value vTabs = (*vWidget)["Tabs"].GetArray();
+		if (vTabs.IsArray()) {
+			for (rapidjson::SizeType i = 0; i < vTabs.Size(); i++) {
+				Value vTab = vTabs[i].GetObject();
+				vTab.GetString();
+				tabs->Add(gcnew String(vTab.GetString()));
+			}
+		}
+	}
 
 	if (vWidget->HasMember("Widgets")) {
 		Value vWidgets = (*vWidget)["Widgets"].GetArray();
@@ -138,14 +158,14 @@ void CTabControl::CreateTabControlImage() {
 void CTabControl::DrawSimpleBorder(Graphics^ gr) {
 	Pen^ pen = gcnew Pen(Color::FromArgb(0xFF, 0xA0, 0x96, 0x83));
 
-	gr->DrawRectangle(pen, 0, TAB_HEADER_HEIGHT, Width - 1, Height - 1 - TAB_HEADER_HEIGHT);
+	gr->DrawRectangle(pen, 0, TAB_HEADER_HEIGHT - 1, Width - 1, Height - 2 - TAB_HEADER_HEIGHT);
 }
 
 void CTabControl::DrawDetailBorder(Graphics^ gr) {
-	gr->DrawLine(whitePen, Point(0, TAB_HEADER_HEIGHT), Point(width - 1, TAB_HEADER_HEIGHT));
-	gr->DrawLine(whitePen, Point(0, TAB_HEADER_HEIGHT), Point(0, height - 1));
-	gr->DrawLine(lightPen, Point(1, TAB_HEADER_HEIGHT + 1), Point(width - 2, TAB_HEADER_HEIGHT + 1));
-	gr->DrawLine(lightPen, Point(1, TAB_HEADER_HEIGHT + 1), Point(1, height - 2));
+	gr->DrawLine(whitePen, Point(0, TAB_HEADER_HEIGHT - 1), Point(width - 1, TAB_HEADER_HEIGHT - 1));
+	gr->DrawLine(whitePen, Point(0, TAB_HEADER_HEIGHT - 1), Point(0, height - 1));
+	gr->DrawLine(lightPen, Point(1, TAB_HEADER_HEIGHT), Point(width - 2, TAB_HEADER_HEIGHT));
+	gr->DrawLine(lightPen, Point(1, TAB_HEADER_HEIGHT), Point(1, height - 2));
 
 	gr->DrawLine(darkPen2, Point(0, height - 1), Point(width - 1, height - 1));
 	gr->DrawLine(darkPen2, Point(width - 1, TAB_HEADER_HEIGHT), Point(width - 1, height - 1));
@@ -179,11 +199,78 @@ void CTabControl::Draw(Graphics^ gr, Point pos) {
 	Point widgetPos(pos.X + X, pos.Y + Y);
 
 	gr->DrawImage(tabControl, widgetPos);
-	//if (cpt) gr->DrawImage(cpt, Point(widgetPos.X + 5, widgetPos.Y));
+	DrawTabs(gr, widgetPos);
 
 	for each(CWidget^ w in widgets) {
-		w->Draw(gr, pos);
+		if (VisibleTab == w->TabItem) w->Draw(gr, pos);
 	}
+}
+
+void CTabControl::DrawTabs(Graphics^ gr, Point pos) {
+	int xOffset = 0;
+
+	for (int i = 0; i < tabs->Count; i++) {
+		switch (Style) {
+		case TabStyle::tsSimple:
+			DrawSimpleTab(gr, pos, i);
+			break;
+		case TabStyle::tsDetail:
+			DrawDetailTab(gr, pos, i);
+			break;
+		case TabStyle::tsButton:
+			DrawButtonTab(gr, pos, i);
+			break;
+		}
+	}
+}
+
+void CTabControl::DrawSimpleTab(Graphics^ gr, Point &pos, int index) {
+	SizeF strSize = gr->MeasureString(tabs[index], font, Point(0, 0), textFormat);
+	int tabWidth = strSize.Width;
+	if (tabWidth < TAB_MIN_WIDTH) tabWidth = TAB_MIN_WIDTH;
+
+	Image ^iTab;
+	Graphics^ gr2;
+	if (VisibleTab == index) {
+		if (tabWidth > TAB_MIN_WIDTH) tabWidth = strSize.Width + 16;
+		iTab = gcnew Bitmap(tabWidth, TAB_HEADER_HEIGHT);
+		Point strPoint = Point((iTab->Width / 2) - (strSize.Width / 2), (iTab->Height / 2) - (strSize.Height / 2));
+
+		gr2 = Graphics::FromImage(iTab);
+		gr2->FillRectangle(bgColor, System::Drawing::Rectangle(0, 0, iTab->Width, iTab->Height));
+
+		Pen^ pen = gcnew Pen(Color::FromArgb(0xFF, 0xA0, 0x96, 0x83));
+		gr2->DrawLine(pen, Point(0, 0), Point(0, TAB_HEADER_HEIGHT - 1));
+		gr2->DrawLine(pen, Point(tabWidth - 1, 0), Point(tabWidth - 1, TAB_HEADER_HEIGHT - 1));
+		gr2->DrawLine(pen, Point(0, 0), Point(strPoint.X, 0));
+		gr2->DrawLine(pen, Point(strPoint.X + strSize.Width, 0), Point(tabWidth - 1, 0));
+
+		gr2->DrawString(tabs[index], font, fontBrush, strPoint, textFormat);
+
+		gr->DrawImage(iTab, pos);
+		pos.X += tabWidth + TAB_SPACER;
+	}
+	else {
+		if (tabWidth > TAB_MIN_WIDTH) tabWidth = strSize.Width + 8;
+
+		iTab = gcnew Bitmap(tabWidth, TAB_HEADER_HEIGHT - 1);
+		Point strPoint = Point((iTab->Width / 2) - (strSize.Width / 2), (iTab->Height / 2) - (strSize.Height / 2));
+		gr2 = Graphics::FromImage(iTab);
+
+		SolidBrush ^blueBrush = gcnew SolidBrush(Color::FromArgb(255, 0x30, 0x60, 0x90));
+		gr2->FillRectangle(blueBrush, System::Drawing::Rectangle(0, 0, iTab->Width, iTab->Height));
+
+		gr2->DrawString(tabs[index], font, bgColor, strPoint, textFormat);
+
+		gr->DrawImage(iTab, pos);
+		pos.X += tabWidth + TAB_SPACER;
+	}
+}
+
+void CTabControl::DrawDetailTab(Graphics^ gr, Point &pos, int index) {
+}
+
+void CTabControl::DrawButtonTab(Graphics^ gr, Point &pos, int index) {
 }
 
 Point CTabControl::MouseDrag(Point dragPos, Point wPos, Point dragOffset, int dragMode) {

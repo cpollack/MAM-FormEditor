@@ -83,6 +83,8 @@ private:
 	const int TAB_HEADER_HEIGHT = 16;
 	bool loaded = false;
 
+	System::Collections::Generic::List<System::String^> ^tabs;
+
 	System::Drawing::Image^ tabControl = nullptr;
 	//System::Drawing::Image^ cpt = nullptr;
 	//System::String^ caption;
@@ -97,5 +99,9 @@ private:
 	void DrawDetailBorder(System::Drawing::Graphics^ gr);
 	void DrawButtonBorder(System::Drawing::Graphics^ gr);
 
-	//void CreateTabTextures();
+	void DrawTabs(System::Drawing::Graphics^ gr, System::Drawing::Point pos);
+	void DrawSimpleTab(System::Drawing::Graphics^ gr, System::Drawing::Point &pos, int index);
+	void DrawDetailTab(System::Drawing::Graphics^ gr, System::Drawing::Point &pos, int index);
+	void DrawButtonTab(System::Drawing::Graphics^ gr, System::Drawing::Point &pos, int index);
+	//void CreateTabImages();
 };
