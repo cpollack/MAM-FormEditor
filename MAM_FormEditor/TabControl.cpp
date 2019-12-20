@@ -22,7 +22,7 @@ CTabControl::CTabControl(System::String^ name, int x, int y) {
 
 	tabControl = gcnew Bitmap(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	Graphics^ gr = Graphics::FromImage(tabControl);
-	Width = getControlWidth(gr);
+	Width = GetControlWidth(gr);
 	Height = DEFAULT_HEIGHT;
 	//Testing
 
@@ -227,7 +227,7 @@ void CTabControl::DrawTabs(Graphics^ gr, Point pos) {
 	}
 }
 
-int CTabControl::getTabWidth(Graphics^ gr, int tabIdx) {
+int CTabControl::GetTabWidth(Graphics^ gr, int tabIdx) {
 	SizeF strSize = gr->MeasureString(tabs[tabIdx], font, Point(0, 0), textFormat);
 	
 	if (strSize.Width <= TAB_MIN_WIDTH) {
@@ -238,10 +238,10 @@ int CTabControl::getTabWidth(Graphics^ gr, int tabIdx) {
 	}
 }
 
-int CTabControl::getControlWidth(Graphics^ gr) {
+int CTabControl::GetControlWidth(Graphics^ gr) {
 	int w = 0;
 	for (int i = 0; i < tabs->Count; ++i) {
-		w += getTabWidth(gr, i) + TAB_SPACER;
+		w += GetTabWidth(gr, i) + TAB_SPACER;
 	}
 
 	return w + TAB_SPACER;
@@ -249,7 +249,7 @@ int CTabControl::getControlWidth(Graphics^ gr) {
 
 void CTabControl::DrawSimpleTab(Graphics^ gr, Point &pos, int index) {
 	SizeF strSize = gr->MeasureString(tabs[index], font, Point(0, 0), textFormat);
-	const int tabWidth = getTabWidth(gr, index);
+	const int tabWidth = GetTabWidth(gr, index);
 
 	Image ^iTab;
 	Graphics^ gr2;
@@ -300,7 +300,7 @@ void CTabControl::UpdateVisibleTab(Point onFormMousePos)
 
 		int x = X;
 		for (int i = 0; i < tabs->Count; ++i) {
-			int tabWidth = getTabWidth(gr, i);
+			int tabWidth = GetTabWidth(gr, i);
 
 			if (onFormMousePos.X >= x && onFormMousePos.X <= x + tabWidth) {
 				VisibleTab = i;
