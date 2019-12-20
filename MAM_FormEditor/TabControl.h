@@ -84,8 +84,6 @@ public:
 	virtual void Draw(System::Drawing::Graphics^ gr, System::Drawing::Point pos) override;
 
 	System::Drawing::Point MouseDrag(System::Drawing::Point dragPos, System::Drawing::Point wPos, System::Drawing::Point dragOffset, int dragMode) override;
-	
-	void UpdateVisibleTab(System::Drawing::Point onFormMousePos);
 
 	System::Collections::Generic::List<System::String^> ^tabs;
 
@@ -96,6 +94,7 @@ private:
 	const int TAB_SPACER = 4;
 	const int TAB_SPACER2 = 8;
 	const int TAB_HEADER_HEIGHT = 16;
+	const int TAB_BUTTON_HEIGHT = 20;
 	bool loaded = false;
 
 	System::Drawing::Image^ tabControl = nullptr;

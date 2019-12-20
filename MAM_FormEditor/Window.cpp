@@ -105,6 +105,14 @@ void CWindow::Load(rapidjson::Document* document) {
 	return;
 }
 
+void CWindow::DeleteWidget(CWidget^ widget) {
+	CWidget ^container = widget->containedBy;
+	if (container) {
+		container->widgets->Remove(widget);
+	}
+	delete widget;
+}
+
 
 /*void CWindow::LoadWidgetByType(rapidjson::Value* vWidget) {
 	if (!vWidget->IsObject()) return;

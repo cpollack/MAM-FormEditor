@@ -32,7 +32,10 @@ CPanel::CPanel(rapidjson::Value* vWidget) : CWidget(vWidget) {
 			for (rapidjson::SizeType i = 0; i < vWidgets.Size(); i++) {
 				Value vWidget = vWidgets[i].GetObject();
 				CWidget ^addWidget = LoadWidgetByType(&vWidget);
-				if (addWidget) widgets->Add(addWidget);
+				if (addWidget) {
+					widgets->Add(addWidget);
+					addWidget->containedBy = this;
+				}
 			}
 		}
 	}

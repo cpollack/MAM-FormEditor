@@ -56,6 +56,8 @@ namespace MAM_FormEditor {
 	private: System::Windows::Forms::RadioButton^  addDropDown;
 	private: System::Windows::Forms::RadioButton^  addGauge;
 	private: System::Windows::Forms::RadioButton^  addTab;
+	private: System::Windows::Forms::ContextMenuStrip^  contextMenuStripWidget;
+	private: System::Windows::Forms::ToolStripMenuItem^  deleteWidgetToolStripMenuItem;
 	public:
 		String^ filePath = nullptr;
 
@@ -100,12 +102,13 @@ namespace MAM_FormEditor {
 	private: System::Windows::Forms::PropertyGrid^  propertyGrid;
 	private: System::Windows::Forms::Label^  labelWidgetName;
 	private: System::Windows::Forms::PictureBox^  pbDrawWindow;
+	private: System::ComponentModel::IContainer^  components;
 
 	private:
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -114,6 +117,7 @@ namespace MAM_FormEditor {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->components = (gcnew System::ComponentModel::Container());
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(MainForm::typeid));
 			this->splitContainer = (gcnew System::Windows::Forms::SplitContainer());
 			this->propertyGrid = (gcnew System::Windows::Forms::PropertyGrid());
@@ -140,6 +144,8 @@ namespace MAM_FormEditor {
 			this->previewModeToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->saveFileDialog = (gcnew System::Windows::Forms::SaveFileDialog());
 			this->openFileDialog = (gcnew System::Windows::Forms::OpenFileDialog());
+			this->contextMenuStripWidget = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
+			this->deleteWidgetToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->splitContainer))->BeginInit();
 			this->splitContainer->Panel1->SuspendLayout();
 			this->splitContainer->Panel2->SuspendLayout();
@@ -150,6 +156,7 @@ namespace MAM_FormEditor {
 			this->splitContainerEditor->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pbDrawWindow))->BeginInit();
 			this->menuStripMain->SuspendLayout();
+			this->contextMenuStripWidget->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// splitContainer
@@ -365,9 +372,10 @@ namespace MAM_FormEditor {
 			this->pbDrawWindow->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
 				| System::Windows::Forms::AnchorStyles::Left)
 				| System::Windows::Forms::AnchorStyles::Right));
+			this->pbDrawWindow->ContextMenuStrip = this->contextMenuStripWidget;
 			this->pbDrawWindow->Location = System::Drawing::Point(0, 0);
 			this->pbDrawWindow->Name = L"pbDrawWindow";
-			this->pbDrawWindow->Size = System::Drawing::Size(459, 334);
+			this->pbDrawWindow->Size = System::Drawing::Size(444, 334);
 			this->pbDrawWindow->TabIndex = 0;
 			this->pbDrawWindow->TabStop = false;
 			this->pbDrawWindow->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MainForm::pbDrawWindow_Paint);
@@ -454,6 +462,19 @@ namespace MAM_FormEditor {
 			this->openFileDialog->Filter = L"JSON File|*.JSON";
 			this->openFileDialog->Title = L"Load Form";
 			// 
+			// contextMenuStripWidget
+			// 
+			this->contextMenuStripWidget->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->deleteWidgetToolStripMenuItem });
+			this->contextMenuStripWidget->Name = L"contextMenuStripWidget";
+			this->contextMenuStripWidget->Size = System::Drawing::Size(153, 48);
+			// 
+			// deleteWidgetToolStripMenuItem
+			// 
+			this->deleteWidgetToolStripMenuItem->Name = L"deleteWidgetToolStripMenuItem";
+			this->deleteWidgetToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->deleteWidgetToolStripMenuItem->Text = L"Delete Widget";
+			this->deleteWidgetToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::deleteWidgetToolStripMenuItem_Click);
+			// 
 			// MainForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -477,6 +498,7 @@ namespace MAM_FormEditor {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pbDrawWindow))->EndInit();
 			this->menuStripMain->ResumeLayout(false);
 			this->menuStripMain->PerformLayout();
+			this->contextMenuStripWidget->ResumeLayout(false);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -588,6 +610,10 @@ private: System::Void propertyGrid_SelectedGridItemChanged(System::Object^  send
 		}
 		lastGridItem = gcnew String(s);
 	}
+}
+private: System::Void deleteWidgetToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+	CWidget^ widget = (CWidget^)propertyGrid->SelectedObject;
+	window->DeleteWidget(widget);
 }
 };
 }

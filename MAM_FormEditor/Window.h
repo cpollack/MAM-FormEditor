@@ -32,6 +32,8 @@ public:
 	void CWindow::Load(rapidjson::Document* document);
 	//void CWindow::LoadWidgetByType(rapidjson::Value* vWidget);
 
+	void DeleteWidget(CWidget^ widget);
+
 	//Events
 	System::Windows::Forms::Cursor^ CWindow::MouseMove(System::Windows::Forms::MouseEventArgs^ e);
 	void CWindow::MouseDown(System::Windows::Forms::MouseEventArgs^ e);

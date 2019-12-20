@@ -63,6 +63,7 @@ CWidget^ LoadWidgetByType(rapidjson::Value* vWidget) {
 		addWidget = gcnew CGauge(&widget);
 		break;
 	}
+
 	return addWidget;
 }
 
