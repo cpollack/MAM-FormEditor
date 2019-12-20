@@ -118,6 +118,8 @@ private:
 	void DrawButtonTab(System::Drawing::Graphics^ gr, System::Drawing::Point &pos, int index);
 	//void CreateTabImages();
 
-	int getTabWidth(System::Drawing::Graphics^ gr, int tabidx);
-	int getControlWidth(System::Drawing::Graphics^ gr);
+	void UpdateVisibleTab(System::Drawing::Point onFormMousePos);
+
+	int GetTabWidth(System::Drawing::Graphics^ gr, int tabidx);
+	int GetControlWidth(System::Drawing::Graphics^ gr);
 };
