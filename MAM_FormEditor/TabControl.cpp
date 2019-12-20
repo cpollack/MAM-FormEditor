@@ -12,8 +12,6 @@ CTabControl::CTabControl(System::String^ name, int x, int y) {
 	Name = name;
 	X = x;
 	Y = y;
-	Width = DEFAULT_WIDTH;
-	Height = DEFAULT_HEIGHT;
 	Style = TabStyle::tsSimple;
 	tabs = gcnew System::Collections::Generic::List<String^>;
 
@@ -21,6 +19,11 @@ CTabControl::CTabControl(System::String^ name, int x, int y) {
 	tabs->Add(gcnew String("Test"));
 	tabs->Add(gcnew String("Testing Long Tab Just because"));
 	tabs->Add(gcnew String("Tab 3 Neato"));
+
+	tabControl = gcnew Bitmap(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+	Graphics^ gr = Graphics::FromImage(tabControl);
+	Width = getControlWidth(gr);
+	Height = DEFAULT_HEIGHT;
 	//Testing
 
 	VisibleTab = 0;
@@ -224,15 +227,33 @@ void CTabControl::DrawTabs(Graphics^ gr, Point pos) {
 	}
 }
 
+int CTabControl::getTabWidth(Graphics^ gr, int tabIdx) {
+	SizeF strSize = gr->MeasureString(tabs[tabIdx], font, Point(0, 0), textFormat);
+	
+	if (strSize.Width <= TAB_MIN_WIDTH) {
+		return TAB_MIN_WIDTH;
+	}
+	else {
+		return tabIdx == VisibleTab ? strSize.Width + TAB_SPACER2*2 : strSize.Width + TAB_SPACER2;
+	}
+}
+
+int CTabControl::getControlWidth(Graphics^ gr) {
+	int w = 0;
+	for (int i = 0; i < tabs->Count; ++i) {
+		w += getTabWidth(gr, i) + TAB_SPACER;
+	}
+
+	return w + TAB_SPACER;
+}
+
 void CTabControl::DrawSimpleTab(Graphics^ gr, Point &pos, int index) {
 	SizeF strSize = gr->MeasureString(tabs[index], font, Point(0, 0), textFormat);
-	int tabWidth = strSize.Width;
-	if (tabWidth < TAB_MIN_WIDTH) tabWidth = TAB_MIN_WIDTH;
+	const int tabWidth = getTabWidth(gr, index);
 
 	Image ^iTab;
 	Graphics^ gr2;
 	if (VisibleTab == index) {
-		if (tabWidth > TAB_MIN_WIDTH) tabWidth = strSize.Width + 16;
 		iTab = gcnew Bitmap(tabWidth, TAB_HEADER_HEIGHT);
 		Point strPoint = Point((iTab->Width / 2) - (strSize.Width / 2), (iTab->Height / 2) - (strSize.Height / 2));
 
@@ -251,8 +272,6 @@ void CTabControl::DrawSimpleTab(Graphics^ gr, Point &pos, int index) {
 		pos.X += tabWidth + TAB_SPACER;
 	}
 	else {
-		if (tabWidth > TAB_MIN_WIDTH) tabWidth = strSize.Width + 8;
-
 		iTab = gcnew Bitmap(tabWidth, TAB_HEADER_HEIGHT - 1);
 		Point strPoint = Point((iTab->Width / 2) - (strSize.Width / 2), (iTab->Height / 2) - (strSize.Height / 2));
 		gr2 = Graphics::FromImage(iTab);
@@ -273,6 +292,26 @@ void CTabControl::DrawDetailTab(Graphics^ gr, Point &pos, int index) {
 void CTabControl::DrawButtonTab(Graphics^ gr, Point &pos, int index) {
 }
 
+void CTabControl::UpdateVisibleTab(Point onFormMousePos)
+{
+	if (onFormMousePos.Y >= Y && onFormMousePos.Y <= Y + TAB_HEADER_HEIGHT) {
+		if (!tabControl) doMessageBoxError("CTabControl::MouseDrag", "tabControl is null!");
+		Graphics^ gr = Graphics::FromImage(tabControl);
+
+		int x = X;
+		for (int i = 0; i < tabs->Count; ++i) {
+			int tabWidth = getTabWidth(gr, i);
+
+			if (onFormMousePos.X >= x && onFormMousePos.X <= x + tabWidth) {
+				VisibleTab = i;
+				break;
+			}
+
+			x += tabWidth;
+		}
+	}
+}
+
 Point CTabControl::MouseDrag(Point dragPos, Point wPos, Point dragOffset, int dragMode) {
 	int tWidth = Width;
 	int tHeight = Height;
@@ -280,6 +319,8 @@ Point CTabControl::MouseDrag(Point dragPos, Point wPos, Point dragOffset, int dr
 	Point rPoint = CWidget::MouseDrag(dragPos, wPos, dragOffset, dragMode);
 
 	if (tWidth != Width || tHeight != Height) CreateTabControlImage();
+
+	UpdateVisibleTab(Point(dragPos.X - wPos.X, dragPos.Y - wPos.Y));
 
 	return rPoint;
 }

@@ -74,12 +74,15 @@ public:
 	virtual void Draw(System::Drawing::Graphics^ gr, System::Drawing::Point pos) override;
 
 	System::Drawing::Point MouseDrag(System::Drawing::Point dragPos, System::Drawing::Point wPos, System::Drawing::Point dragOffset, int dragMode) override;
+	
+	void UpdateVisibleTab(Point onFormMousePos);
 
 private:
 	const int DEFAULT_WIDTH = 100;
 	const int DEFAULT_HEIGHT = 100;
 	const int TAB_MIN_WIDTH = 44;
 	const int TAB_SPACER = 4;
+	const int TAB_SPACER2 = 8;
 	const int TAB_HEADER_HEIGHT = 16;
 	bool loaded = false;
 
@@ -104,4 +107,7 @@ private:
 	void DrawDetailTab(System::Drawing::Graphics^ gr, System::Drawing::Point &pos, int index);
 	void DrawButtonTab(System::Drawing::Graphics^ gr, System::Drawing::Point &pos, int index);
 	//void CreateTabImages();
+
+	int getTabWidth(System::Drawing::Graphics^ gr, int tabidx);
+	int getControlWidth(System::Drawing::Graphics^ gr);
 };
