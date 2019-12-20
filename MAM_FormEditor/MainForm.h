@@ -5,8 +5,11 @@
 #include "rapidjson/filewritestream.h"
 #include "rapidjson/filereadstream.h"
 
+#include "ListForm.h"
+
 #include "Window.h"
 #include "CheckBox.h"
+#include "TabControl.h"
 
 namespace MAM_FormEditor {
 
@@ -36,11 +39,14 @@ namespace MAM_FormEditor {
 			//propertyGrid->SelectedObject = window;
 
 			//SetFormTitle(true);
+
+			//lastGridItem = gcnew String("");
 		}
 	
 	public:
 		CWindow^ window;
 		RadioButton^ addSelection = nullptr;
+		String^ lastGridItem;
 
 		rapidjson::Document* document;
 		String^ fileNameShort = nullptr;
@@ -113,6 +119,7 @@ namespace MAM_FormEditor {
 			this->propertyGrid = (gcnew System::Windows::Forms::PropertyGrid());
 			this->labelWidgetName = (gcnew System::Windows::Forms::Label());
 			this->splitContainerEditor = (gcnew System::Windows::Forms::SplitContainer());
+			this->addTab = (gcnew System::Windows::Forms::RadioButton());
 			this->addGauge = (gcnew System::Windows::Forms::RadioButton());
 			this->addImageBox = (gcnew System::Windows::Forms::RadioButton());
 			this->addDropDown = (gcnew System::Windows::Forms::RadioButton());
@@ -133,7 +140,6 @@ namespace MAM_FormEditor {
 			this->previewModeToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->saveFileDialog = (gcnew System::Windows::Forms::SaveFileDialog());
 			this->openFileDialog = (gcnew System::Windows::Forms::OpenFileDialog());
-			this->addTab = (gcnew System::Windows::Forms::RadioButton());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->splitContainer))->BeginInit();
 			this->splitContainer->Panel1->SuspendLayout();
 			this->splitContainer->Panel2->SuspendLayout();
@@ -182,6 +188,7 @@ namespace MAM_FormEditor {
 			this->propertyGrid->Name = L"propertyGrid";
 			this->propertyGrid->Size = System::Drawing::Size(205, 306);
 			this->propertyGrid->TabIndex = 1;
+			this->propertyGrid->SelectedGridItemChanged += gcnew System::Windows::Forms::SelectedGridItemChangedEventHandler(this, &MainForm::propertyGrid_SelectedGridItemChanged);
 			this->propertyGrid->SelectedObjectsChanged += gcnew System::EventHandler(this, &MainForm::propertyGrid_SelectedObjectsChanged);
 			// 
 			// labelWidgetName
@@ -227,6 +234,18 @@ namespace MAM_FormEditor {
 			this->splitContainerEditor->SplitterDistance = 25;
 			this->splitContainerEditor->SplitterWidth = 1;
 			this->splitContainerEditor->TabIndex = 1;
+			// 
+			// addTab
+			// 
+			this->addTab->Appearance = System::Windows::Forms::Appearance::Button;
+			this->addTab->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"addTab.Image")));
+			this->addTab->Location = System::Drawing::Point(0, 279);
+			this->addTab->Name = L"addTab";
+			this->addTab->Size = System::Drawing::Size(23, 24);
+			this->addTab->TabIndex = 16;
+			this->addTab->TabStop = true;
+			this->addTab->UseVisualStyleBackColor = true;
+			this->addTab->Click += gcnew System::EventHandler(this, &MainForm::addTab_Click);
 			// 
 			// addGauge
 			// 
@@ -348,7 +367,7 @@ namespace MAM_FormEditor {
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->pbDrawWindow->Location = System::Drawing::Point(0, 0);
 			this->pbDrawWindow->Name = L"pbDrawWindow";
-			this->pbDrawWindow->Size = System::Drawing::Size(450, 334);
+			this->pbDrawWindow->Size = System::Drawing::Size(459, 334);
 			this->pbDrawWindow->TabIndex = 0;
 			this->pbDrawWindow->TabStop = false;
 			this->pbDrawWindow->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MainForm::pbDrawWindow_Paint);
@@ -434,18 +453,6 @@ namespace MAM_FormEditor {
 			this->openFileDialog->DefaultExt = L"JSON";
 			this->openFileDialog->Filter = L"JSON File|*.JSON";
 			this->openFileDialog->Title = L"Load Form";
-			// 
-			// addTab
-			// 
-			this->addTab->Appearance = System::Windows::Forms::Appearance::Button;
-			this->addTab->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"addTab.Image")));
-			this->addTab->Location = System::Drawing::Point(0, 279);
-			this->addTab->Name = L"addTab";
-			this->addTab->Size = System::Drawing::Size(23, 24);
-			this->addTab->TabIndex = 16;
-			this->addTab->TabStop = true;
-			this->addTab->UseVisualStyleBackColor = true;
-			this->addTab->Click += gcnew System::EventHandler(this, &MainForm::addTab_Click);
 			// 
 			// MainForm
 			// 
@@ -568,6 +575,19 @@ private: System::Void addGauge_Click(System::Object^  sender, System::EventArgs^
 }
 private: System::Void addTab_Click(System::Object^  sender, System::EventArgs^  e) {
 	ToggleAddSelection(addTab);
+}
+private: System::Void propertyGrid_SelectedGridItemChanged(System::Object^  sender, System::Windows::Forms::SelectedGridItemChangedEventArgs^  e) {
+	if (String::Compare(e->NewSelection->Label, e->OldSelection->Label) == 0) return;
+	CWidget^ widget = (CWidget^)propertyGrid->SelectedObject;
+	if (widget->widgetType == wtTabControl) {
+		//check clicked property
+		String^ s = propertyGrid->SelectedGridItem->Label;
+		if (String::Compare(s,"Tabs") == 0 && String::Compare(s, lastGridItem) != 0) {
+			ListForm^ lForm = gcnew ListForm(this, widget->Name, (((CTabControl^)widget)->tabs));
+			lForm->Show();
+		}
+		lastGridItem = gcnew String(s);
+	}
 }
 };
 }

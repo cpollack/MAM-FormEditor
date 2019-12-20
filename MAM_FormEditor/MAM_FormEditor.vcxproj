@@ -146,6 +146,7 @@
     <ClCompile Include="GlobalLib.cpp" />
     <ClCompile Include="ImageBox.cpp" />
     <ClCompile Include="Label.cpp" />
+    <ClCompile Include="ListForm.cpp" />
     <ClCompile Include="MainForm.cpp" />
     <ClCompile Include="Panel.cpp" />
     <ClCompile Include="RadioButton.cpp" />
@@ -163,6 +164,9 @@
     <ClInclude Include="GlobalLib.h" />
     <ClInclude Include="ImageBox.h" />
     <ClInclude Include="Label.h" />
+    <ClInclude Include="ListForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="MainForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
@@ -174,6 +178,9 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ListForm.resx">
+      <DependentUpon>ListForm.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.h</DependentUpon>
     </EmbeddedResource>

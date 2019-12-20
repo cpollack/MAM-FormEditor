@@ -66,6 +66,16 @@ public:
 	[Browsable(false)]
 	property int TabItem;
 
+	//[ReadOnly(true)]
+	property System::String^ Tabs {
+		System::String^ get() {
+			System::String ^string;
+			string = tabs->Count.ToString() + " tabs.";
+			return string;
+		}
+		void set(System::String ^s) {}
+	}
+
 public:
 	CTabControl(System::String^ name, int x, int y);
 	CTabControl(rapidjson::Value* vWidget);
@@ -75,7 +85,9 @@ public:
 
 	System::Drawing::Point MouseDrag(System::Drawing::Point dragPos, System::Drawing::Point wPos, System::Drawing::Point dragOffset, int dragMode) override;
 	
-	void UpdateVisibleTab(Point onFormMousePos);
+	void UpdateVisibleTab(System::Drawing::Point onFormMousePos);
+
+	System::Collections::Generic::List<System::String^> ^tabs;
 
 private:
 	const int DEFAULT_WIDTH = 100;
@@ -85,8 +97,6 @@ private:
 	const int TAB_SPACER2 = 8;
 	const int TAB_HEADER_HEIGHT = 16;
 	bool loaded = false;
-
-	System::Collections::Generic::List<System::String^> ^tabs;
 
 	System::Drawing::Image^ tabControl = nullptr;
 	//System::Drawing::Image^ cpt = nullptr;
