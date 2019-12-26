@@ -57,6 +57,10 @@ void CWidget::Save(rapidjson::Document* document, rapidjson::Value* vWidget) {
 	Value vY(kNumberType);
 	vY.SetInt(Y);
 	vWidget->AddMember("Y", vY, allocator);
+
+	Value vTabItem(kNumberType);
+	vTabItem.SetInt(TabItem);
+	vWidget->AddMember("TabItem", vTabItem, allocator);
 }
 
 bool CWidget::DoesPointIntersect(Point point) {

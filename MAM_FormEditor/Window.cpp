@@ -456,6 +456,10 @@ Object^ CWindow::Click(System::Windows::Forms::MouseEventArgs^ e, int addMode) {
 CWidget^ CWindow::getWidgetAtPoint(ArrayList ^widgets, Point p) {
 	CWidget^ selectedWidget = nullptr;
 	for each (CWidget^ w in widgets) {
+		if (w->containedBy) {
+			CWidget^ container = w->containedBy;
+			if (container->widgetType == wtTabControl && ((CTabControl^)container)->VisibleTab != w->TabItem) continue;
+		}
 		if (w->DoesPointIntersect(p)) {
 			if (w->container) {
 				selectedWidget = getWidgetAtPoint(w->widgets, p);
