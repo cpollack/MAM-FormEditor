@@ -599,7 +599,7 @@ private: System::Void addTab_Click(System::Object^  sender, System::EventArgs^  
 	ToggleAddSelection(addTab);
 }
 private: System::Void propertyGrid_SelectedGridItemChanged(System::Object^  sender, System::Windows::Forms::SelectedGridItemChangedEventArgs^  e) {
-	if (String::Compare(e->NewSelection->Label, e->OldSelection->Label) == 0) return;
+	if (!e->OldSelection || String::Compare(e->NewSelection->Label, e->OldSelection->Label) == 0) return;
 	CWidget^ widget = (CWidget^)propertyGrid->SelectedObject;
 	if (widget->widgetType == wtTabControl) {
 		//check clicked property
