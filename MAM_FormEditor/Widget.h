@@ -82,6 +82,9 @@ public: //Properties
 	[Category("Main"), Description("Widget is assigned to this tab.")]
 	property int TabItem;
 
+	[Category("Main"), Description("Widget can be edited or clicked.")]
+	property bool ReadOnly;
+
 	//[DisplayName("Test Property")]
 
 public:

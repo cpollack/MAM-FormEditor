@@ -26,6 +26,7 @@ CWidget::CWidget(rapidjson::Value* vWidget) {
 	else Height = 0;
 	if (vWidget->HasMember("TabItem")) TabItem = (*vWidget)["TabItem"].GetInt();
 	else TabItem = 0;
+	if (vWidget->HasMember("ReadOnly")) ReadOnly = (*vWidget)["ReadOnly"].GetBool();
 
 	font = gcnew Font("Verdana", 12, GraphicsUnit::Pixel);
 	fontBrush = gcnew SolidBrush(Color::FromArgb(0xAD, 0xE9, 0xCD));
@@ -61,6 +62,9 @@ void CWidget::Save(rapidjson::Document* document, rapidjson::Value* vWidget) {
 	Value vTabItem(kNumberType);
 	vTabItem.SetInt(TabItem);
 	vWidget->AddMember("TabItem", vTabItem, allocator);
+
+	rapidjson::Value vReadOnly(ReadOnly);
+	vWidget->AddMember("ReadOnly", vReadOnly, allocator);
 }
 
 bool CWidget::DoesPointIntersect(Point point) {
