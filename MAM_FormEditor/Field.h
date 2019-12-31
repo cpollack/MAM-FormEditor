@@ -36,6 +36,8 @@ public:
 
 	[Category("Behavior"), DisplayName("Is Password"), Description("Treat field as a password and mask its value.")]
 	property bool IsPassword;
+	[Category("Behavior"), DisplayName("Numeric"), Description("Only allow numbers 0 - 9.")]
+	property bool Numeric;
 	[Category("Behavior"), DisplayName("Max Length"), Description("Maximum amount of characters allowed, 0 for unlimited.")]
 	property int MaxLength;
 

@@ -34,6 +34,7 @@ CField::CField(rapidjson::Value* vWidget) : CWidget(vWidget) {
 
 	if (vWidget->HasMember("Value")) Value = gcnew System::String((*vWidget)["Value"].GetString());
 	if (vWidget->HasMember("IsPassword")) IsPassword = (*vWidget)["IsPassword"].GetBool();
+	if (vWidget->HasMember("Numeric")) Numeric = (*vWidget)["Numeric"].GetBool();
 	if (vWidget->HasMember("MaxLength")) MaxLength = (*vWidget)["MaxLength"].GetInt();
 	if (vWidget->HasMember("ThickBorder")) ThickBorder = (*vWidget)["ThickBorder"].GetBool();
 	CreateFieldTexture();
@@ -64,6 +65,9 @@ void CField::Save(rapidjson::Document* document, rapidjson::Value* vWidget) {
 
 	rapidjson::Value vIsPass(IsPassword);
 	vWidget->AddMember("IsPassword", vIsPass, allocator);
+
+	rapidjson::Value vNumeric(Numeric);
+	vWidget->AddMember("Numeric", vNumeric, allocator);
 
 	rapidjson::Value vMaxLength(kNumberType);
 	vMaxLength.SetInt(MaxLength);
