@@ -110,7 +110,10 @@ void CWindow::DeleteWidget(CWidget^ widget) {
 	if (container) {
 		container->widgets->Remove(widget);
 	}
-	delete widget;
+	else {
+		widgets->Remove(widget);
+		delete widget;
+	}
 }
 
 
