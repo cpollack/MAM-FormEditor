@@ -2,6 +2,19 @@
 
 #include "Widget.h"
 
+public enum class ImageAnchor
+{
+	iaTopLeft,
+	iaCenterLeft,
+	iaBottomLeft,
+	iaTopMiddle,
+	iaCenter,
+	iaBottomMiddle,
+	iaTopRight,
+	iaCenterRight,
+	iaBottomRight
+};
+
 public ref class CImageBox : public CWidget {
 public:
 	property int Width {
@@ -38,6 +51,16 @@ public:
 	[Category("Appearance"), Description("Encase the image in a 1 pixel border.")]
 	property bool Bordered;
 
+	[Category("Behavior"), Description("Anchor the Image to this point of the widget's rectangle.")]
+	property ImageAnchor Anchor {
+		ImageAnchor get() {
+			return anchor;
+		}
+		void set(ImageAnchor value) {
+			anchor = value;
+		}
+	}
+
 public:
 	CImageBox(System::String^ name, int x, int y);
 	CImageBox(rapidjson::Value* vWidget);
@@ -48,6 +71,7 @@ private:
 	const int DEFAULT_WIDTH = 40;
 	const int DEFAULT_HEIGHT = 40;
 	bool loaded = false;
+	ImageAnchor anchor = ImageAnchor::iaTopLeft;
 
 	//System::Drawing::Image^ bx = nullptr;
 	System::String ^skinImage;

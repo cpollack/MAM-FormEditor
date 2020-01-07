@@ -25,6 +25,9 @@ CImageBox::CImageBox(rapidjson::Value* vWidget) : CWidget(vWidget) {
 	if (vWidget->HasMember("Bordered")) Bordered = (*vWidget)["Bordered"].GetBool();
 	if (vWidget->HasMember("BlackBackground")) BlackBackground = (*vWidget)["BlackBackground"].GetBool();
 
+	if (vWidget->HasMember("Anchor")) Anchor = (ImageAnchor)((*vWidget)["Anchor"].GetInt());
+	else Anchor = ImageAnchor::iaTopLeft;
+
 	init();
 	CreateImageTexture();
 	loaded = true;
@@ -58,6 +61,10 @@ void CImageBox::Save(rapidjson::Document* document, rapidjson::Value* vWidget) {
 
 	Value vBlackBackground(BlackBackground);
 	vWidget->AddMember("BlackBackground", vBlackBackground, allocator);
+
+	Value vAnchor(kNumberType);
+	vAnchor.SetInt((int)Anchor);
+	vWidget->AddMember("Anchor", vAnchor, allocator);
 }
 
 void CImageBox::CreateImageTexture() {
