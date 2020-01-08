@@ -54,6 +54,7 @@ CLabel::CLabel(rapidjson::Value* vWidget) : CWidget(vWidget) {
 	else VAlignment = LabelVAlignment::lvaTop;
 
 	if (vWidget->HasMember("Underlined")) Underlined = (*vWidget)["Underlined"].GetBool();
+	if (vWidget->HasMember("Multiline")) Multiline = (*vWidget)["Multiline"].GetBool();
 	if (vWidget->HasMember("Text")) Text = gcnew System::String((*vWidget)["Text"].GetString());
 	else Text = Name;
 	CreateLabelTexture();
@@ -77,6 +78,9 @@ void CLabel::Save(rapidjson::Document* document, rapidjson::Value* vWidget) {
 
 	rapidjson::Value vUnderlined(Underlined);
 	vWidget->AddMember("Underlined", vUnderlined, allocator);
+
+	rapidjson::Value vMultiline(Multiline);
+	vWidget->AddMember("Multiline", vMultiline, allocator);
 }
 
 void CLabel::Draw(Graphics^ gr, Point pos) {

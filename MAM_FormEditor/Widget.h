@@ -82,6 +82,9 @@ public: //Properties
 	[Category("Main"), Description("Widget is assigned to this tab.")]
 	property int TabItem;
 
+	[Category("Main"), Description("Widget rendering Depth. Negative is 'above surface', while positive is deeper below.")]
+	property int Depth;
+
 	[Category("Main"), Description("Widget can be edited or clicked.")]
 	property bool ReadOnly;
 

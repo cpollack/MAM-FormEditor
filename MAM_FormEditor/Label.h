@@ -81,6 +81,9 @@ public:
 		}
 	}
 
+	[Category("Behavior"), Description("This is a multiline label using width as the line width.")]
+	property bool Multiline;
+
 public:
 	CLabel(System::String^ name, int x, int y);
 	CLabel(rapidjson::Value* vWidget);

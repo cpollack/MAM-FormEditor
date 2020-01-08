@@ -26,6 +26,8 @@ CWidget::CWidget(rapidjson::Value* vWidget) {
 	else Height = 0;
 	if (vWidget->HasMember("TabItem")) TabItem = (*vWidget)["TabItem"].GetInt();
 	else TabItem = 0;
+	if (vWidget->HasMember("Depth")) Depth = (*vWidget)["Depth"].GetInt();
+	else Depth = 0;
 	if (vWidget->HasMember("ReadOnly")) ReadOnly = (*vWidget)["ReadOnly"].GetBool();
 
 	font = gcnew Font("Verdana", 12, GraphicsUnit::Pixel);
@@ -62,6 +64,10 @@ void CWidget::Save(rapidjson::Document* document, rapidjson::Value* vWidget) {
 	Value vTabItem(kNumberType);
 	vTabItem.SetInt(TabItem);
 	vWidget->AddMember("TabItem", vTabItem, allocator);
+
+	Value vDepth(kNumberType);
+	vDepth.SetInt(Depth);
+	vWidget->AddMember("Depth", vDepth, allocator);
 
 	rapidjson::Value vReadOnly(ReadOnly);
 	vWidget->AddMember("ReadOnly", vReadOnly, allocator);
