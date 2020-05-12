@@ -46,6 +46,16 @@ public:
 			if (loaded) CreateImageTexture();
 		}
 	}
+	[Category("Appearance"), DisplayName("Data Image"), Description("Specify the name and extensive of an image from the file path.")]
+	property System::String^ DataImage {
+		System::String^ get() {
+			return dataImage;
+		}
+		void set(System::String^ value) {
+			dataImage = value;
+			if (loaded) CreateImageTexture();
+		}
+	}
 	[Category("Appearance"), DisplayName("Black Background"), Description("Draw the image on a solid black background.")]
 	property bool BlackBackground;
 	[Category("Appearance"), Description("Encase the image in a 1 pixel border.")]
@@ -75,6 +85,7 @@ private:
 
 	//System::Drawing::Image^ bx = nullptr;
 	System::String ^skinImage;
+	System::String ^dataImage;
 	System::Drawing::Image^ img = nullptr;
 
 	System::Drawing::SolidBrush ^bgColor, ^blackBrush;

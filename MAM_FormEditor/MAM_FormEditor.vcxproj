@@ -146,6 +146,7 @@
     <ClCompile Include="GlobalLib.cpp" />
     <ClCompile Include="ImageBox.cpp" />
     <ClCompile Include="Label.cpp" />
+    <ClCompile Include="ListBox.cpp" />
     <ClCompile Include="ListForm.cpp" />
     <ClCompile Include="MainForm.cpp" />
     <ClCompile Include="Panel.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="GlobalLib.h" />
     <ClInclude Include="ImageBox.h" />
     <ClInclude Include="Label.h" />
+    <ClInclude Include="ListBox.h" />
     <ClInclude Include="ListForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>

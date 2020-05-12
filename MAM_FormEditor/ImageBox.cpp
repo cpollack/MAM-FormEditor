@@ -22,6 +22,9 @@ CImageBox::CImageBox(rapidjson::Value* vWidget) : CWidget(vWidget) {
 	if (vWidget->HasMember("SkinImage")) SkinImage = gcnew System::String((*vWidget)["SkinImage"].GetString());
 	else SkinImage = "";
 
+	if (vWidget->HasMember("DataImage")) DataImage = gcnew System::String((*vWidget)["DataImage"].GetString());
+	else DataImage = "";
+
 	if (vWidget->HasMember("Bordered")) Bordered = (*vWidget)["Bordered"].GetBool();
 	if (vWidget->HasMember("BlackBackground")) BlackBackground = (*vWidget)["BlackBackground"].GetBool();
 
@@ -56,6 +59,10 @@ void CImageBox::Save(rapidjson::Document* document, rapidjson::Value* vWidget) {
 	vSkinImg.SetString(textToString(SkinImage).c_str(), SkinImage->Length, allocator);
 	vWidget->AddMember("SkinImage", vSkinImg, allocator);
 
+	Value vDataImg(kStringType);
+	vDataImg.SetString(textToString(DataImage).c_str(), DataImage->Length, allocator);
+	vWidget->AddMember("DataImage", vDataImg, allocator);
+
 	Value vBordered(Bordered);
 	vWidget->AddMember("Bordered", Bordered, allocator);
 
@@ -72,9 +79,14 @@ void CImageBox::CreateImageTexture() {
 		delete img;
 		img = nullptr;
 	}
-	if (SkinImage->Length == 0) return;
-
-	System::String^ filePath = "res\\" + SkinImage;
+	System::String ^filePath;
+	if (DataImage && DataImage->Length >= 0) {
+		filePath = DataImage;
+	}
+	else if (SkinImage && SkinImage->Length >= 0) {
+		filePath = "res\\" + SkinImage;
+	}
+	else return;
 
 	if (!System::IO::File::Exists(filePath)) return;
 	img = Image::FromFile(filePath);

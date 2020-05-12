@@ -12,6 +12,7 @@
 #include "DropDown.h"
 #include "Gauge.h"
 #include "TabControl.h"
+#include "ListBox.h"
 
 using namespace System::Windows::Forms;
 using namespace System::Drawing;
@@ -435,6 +436,9 @@ Object^ CWindow::Click(System::Windows::Forms::MouseEventArgs^ e, int addMode) {
 			break;
 		case wtGauge:
 			addWidget = gcnew CGauge("gauge1", click.X, click.Y);
+			break;
+		case wtListBox:
+			addWidget = gcnew CListBox("list1", click.X, click.Y);
 			break;
 		}
 		

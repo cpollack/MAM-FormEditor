@@ -12,6 +12,7 @@
 #include "Panel.h"
 #include "RadioButton.h"
 #include "TabControl.h"
+#include "ListBox.h"
 
 using namespace System;
 using namespace System::Windows::Forms;
@@ -61,6 +62,9 @@ CWidget^ LoadWidgetByType(rapidjson::Value* vWidget) {
 		break;
 	case wtGauge:
 		addWidget = gcnew CGauge(&widget);
+		break;
+	case wtListBox:
+		addWidget = gcnew CListBox(&widget);
 		break;
 	}
 

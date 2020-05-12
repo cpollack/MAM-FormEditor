@@ -58,6 +58,7 @@ namespace MAM_FormEditor {
 	private: System::Windows::Forms::RadioButton^  addTab;
 	private: System::Windows::Forms::ContextMenuStrip^  contextMenuStripWidget;
 	private: System::Windows::Forms::ToolStripMenuItem^  deleteWidgetToolStripMenuItem;
+	private: System::Windows::Forms::RadioButton^  addListBox;
 	public:
 		String^ filePath = nullptr;
 
@@ -146,6 +147,7 @@ namespace MAM_FormEditor {
 			this->previewModeToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->saveFileDialog = (gcnew System::Windows::Forms::SaveFileDialog());
 			this->openFileDialog = (gcnew System::Windows::Forms::OpenFileDialog());
+			this->addListBox = (gcnew System::Windows::Forms::RadioButton());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->splitContainer))->BeginInit();
 			this->splitContainer->Panel1->SuspendLayout();
 			this->splitContainer->Panel2->SuspendLayout();
@@ -222,6 +224,7 @@ namespace MAM_FormEditor {
 			// splitContainerEditor.Panel1
 			// 
 			this->splitContainerEditor->Panel1->BackColor = System::Drawing::SystemColors::Control;
+			this->splitContainerEditor->Panel1->Controls->Add(this->addListBox);
 			this->splitContainerEditor->Panel1->Controls->Add(this->addTab);
 			this->splitContainerEditor->Panel1->Controls->Add(this->addGauge);
 			this->splitContainerEditor->Panel1->Controls->Add(this->addImageBox);
@@ -246,7 +249,7 @@ namespace MAM_FormEditor {
 			// 
 			this->addTab->Appearance = System::Windows::Forms::Appearance::Button;
 			this->addTab->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"addTab.Image")));
-			this->addTab->Location = System::Drawing::Point(0, 279);
+			this->addTab->Location = System::Drawing::Point(-1, 309);
 			this->addTab->Name = L"addTab";
 			this->addTab->Size = System::Drawing::Size(23, 24);
 			this->addTab->TabIndex = 16;
@@ -375,7 +378,7 @@ namespace MAM_FormEditor {
 			this->pbDrawWindow->ContextMenuStrip = this->contextMenuStripWidget;
 			this->pbDrawWindow->Location = System::Drawing::Point(0, 0);
 			this->pbDrawWindow->Name = L"pbDrawWindow";
-			this->pbDrawWindow->Size = System::Drawing::Size(547, 533);
+			this->pbDrawWindow->Size = System::Drawing::Size(550, 533);
 			this->pbDrawWindow->TabIndex = 0;
 			this->pbDrawWindow->TabStop = false;
 			this->pbDrawWindow->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MainForm::pbDrawWindow_Paint);
@@ -475,6 +478,18 @@ namespace MAM_FormEditor {
 			this->openFileDialog->Filter = L"JSON File|*.JSON";
 			this->openFileDialog->Title = L"Load Form";
 			// 
+			// addListBox
+			// 
+			this->addListBox->Appearance = System::Windows::Forms::Appearance::Button;
+			this->addListBox->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"addListBox.Image")));
+			this->addListBox->Location = System::Drawing::Point(0, 279);
+			this->addListBox->Name = L"addListBox";
+			this->addListBox->Size = System::Drawing::Size(23, 24);
+			this->addListBox->TabIndex = 17;
+			this->addListBox->TabStop = true;
+			this->addListBox->UseVisualStyleBackColor = true;
+			this->addListBox->Click += gcnew System::EventHandler(this, &MainForm::addListBox_Click);
+			// 
 			// MainForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -538,6 +553,7 @@ private: System::Void pbDrawWindow_MouseClick(System::Object^  sender, System::W
 	else if (addImageBox->Checked) addMode = wtImageBox;
 	else if (addGauge->Checked) addMode = wtGauge;
 	else if (addTab->Checked) addMode = wtTabControl;
+	else if (addListBox->Checked) addMode = wtListBox;
 
 	focus = window->Click(e, addMode);
 	if (focus) propertyGrid->SelectedObject = focus;
@@ -598,9 +614,12 @@ private: System::Void addGauge_Click(System::Object^  sender, System::EventArgs^
 private: System::Void addTab_Click(System::Object^  sender, System::EventArgs^  e) {
 	ToggleAddSelection(addTab);
 }
+private: System::Void addListBox_Click(System::Object^  sender, System::EventArgs^  e) {
+	ToggleAddSelection(addListBox);
+}
 private: System::Void propertyGrid_SelectedGridItemChanged(System::Object^  sender, System::Windows::Forms::SelectedGridItemChangedEventArgs^  e) {
 	if (!e->OldSelection || String::Compare(e->NewSelection->Label, e->OldSelection->Label) == 0) return;
-	if (propertyGrid->SelectedObject != CWidget::typeid) return;
+	//if (propertyGrid->SelectedObject != CWidget::typeid) return;
 	CWidget^ widget = (CWidget^)propertyGrid->SelectedObject;
 	if (widget->widgetType == wtTabControl) {
 		//check clicked property
