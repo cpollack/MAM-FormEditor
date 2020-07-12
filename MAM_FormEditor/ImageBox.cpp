@@ -56,10 +56,12 @@ void CImageBox::Save(rapidjson::Document* document, rapidjson::Value* vWidget) {
 	Document::AllocatorType& allocator = document->GetAllocator();
 
 	Value vSkinImg(kStringType);
+	if (!SkinImage) SkinImage = "";
 	vSkinImg.SetString(textToString(SkinImage).c_str(), SkinImage->Length, allocator);
 	vWidget->AddMember("SkinImage", vSkinImg, allocator);
 
 	Value vDataImg(kStringType);
+	if (!DataImage) DataImage = "";
 	vDataImg.SetString(textToString(DataImage).c_str(), DataImage->Length, allocator);
 	vWidget->AddMember("DataImage", vDataImg, allocator);
 
