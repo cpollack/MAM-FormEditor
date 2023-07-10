@@ -206,6 +206,7 @@ void CWindow::Draw(PictureBox ^drawable) {
 	format->Alignment = StringAlignment::Center;
 	format->LineAlignment = StringAlignment::Center;
 	gr->DrawString(Title, gcnew Font("Verdana", 8), gcnew SolidBrush(Color::FromArgb(0xAD, 0xE9, 0xCD)), Point(position.X + (Width / 2), position.Y + 16), format);
+	delete format;
 
 	if (CloseButton) {
 		RectangleF closeRect = RectangleF(position.X + (Width - close->Width - 9), position.Y + 9, close->Width, close->Height);
@@ -220,7 +221,10 @@ void CWindow::Draw(PictureBox ^drawable) {
 	if (focus) {
 		SolidBrush ^bgColor = gcnew SolidBrush(Color::FromArgb(50, 255, 255, 153));
 		gr->FillRectangle(bgColor, System::Drawing::Rectangle(position.X + focus->X, position.Y + focus->Y, focus->Width, focus->Height));
+		delete bgColor;
 	}
+
+	delete gr;
 }
 
 Cursor^ CWindow::MouseMove(System::Windows::Forms::MouseEventArgs^ e) {
