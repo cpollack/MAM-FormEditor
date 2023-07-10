@@ -51,6 +51,8 @@ CButton::CButton(rapidjson::Value* vWidget) : CWidget(vWidget) {
 	if (vWidget->HasMember("Text")) Text = gcnew System::String((*vWidget)["Text"].GetString());
 	else Text = Name;
 
+	if (vWidget->HasMember("Toggle")) Toggle = (*vWidget)["Toggle"].GetBool();
+
 	CreateButtonImage();
 	CreateLabelTexture();
 	loaded = true;
@@ -63,6 +65,9 @@ void CButton::Save(rapidjson::Document* document, rapidjson::Value* vWidget) {
 	Value vtext(kStringType);
 	vtext.SetString(textToString(Text).c_str(), Text->Length, allocator);
 	vWidget->AddMember("Text", vtext, allocator);
+
+	rapidjson::Value vToggle(Toggle);
+	vWidget->AddMember("Toggle", vToggle, allocator);
 }
 
 void CButton::CreateButtonImage() {

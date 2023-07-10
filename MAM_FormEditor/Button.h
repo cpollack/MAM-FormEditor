@@ -40,6 +40,9 @@ public:
 		}
 	}
 
+	[Category("Main"), Description("The button is a toggle button")]
+	property bool Toggle;
+
 public:
 	CButton(System::String^ name, int x, int y);
 	CButton(rapidjson::Value* vWidget);
