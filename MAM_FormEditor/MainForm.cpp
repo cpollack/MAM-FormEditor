@@ -4,6 +4,11 @@
 
 using namespace MAM_FormEditor;
 
+#include "rapidjson/document.h"
+#include "rapidjson/prettywriter.h"
+#include "rapidjson/filewritestream.h"
+#include "rapidjson/filereadstream.h"
+
 
 void MainForm::SetFormTitle(bool edited) {
 	String^ title = "MAM Form Editor";

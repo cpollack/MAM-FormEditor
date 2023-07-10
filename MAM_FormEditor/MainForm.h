@@ -1,10 +1,5 @@
 #pragma once
 
-#include "rapidjson/document.h"
-#include "rapidjson/prettywriter.h"
-#include "rapidjson/filewritestream.h"
-#include "rapidjson/filereadstream.h"
-
 #include "ListForm.h"
 
 #include "Window.h"
@@ -619,7 +614,13 @@ private: System::Void addListBox_Click(System::Object^  sender, System::EventArg
 }
 private: System::Void propertyGrid_SelectedGridItemChanged(System::Object^  sender, System::Windows::Forms::SelectedGridItemChangedEventArgs^  e) {
 	if (!e->OldSelection || String::Compare(e->NewSelection->Label, e->OldSelection->Label) == 0) return;
-	//if (propertyGrid->SelectedObject != CWidget::typeid) return;
+
+	//Was a widget or the window clicked?
+	if (propertyGrid->SelectedObject != CWidget::typeid)
+	{
+		return;
+	}
+
 	CWidget^ widget = (CWidget^)propertyGrid->SelectedObject;
 	if (widget->widgetType == wtTabControl) {
 		//check clicked property
